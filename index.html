@@ -1,0 +1,1683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumaya — Retreats, Trainings & Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F9F6EF;
+    --bg-2: #FFF6E9;
+    --bg-3: #F2EDE2;
+    --surface: #FFFFFF;
+    --text: #1D1D21;
+    --text-muted: #5C5C5C;
+    --text-subtle: #8A8A8A;
+    --border: rgba(29, 29, 33, 0.09);
+    --border-strong: rgba(29, 29, 33, 0.18);
+    --orange-50: #FAF3EA;
+    --orange-100: #F1E3CE;
+    --orange-300: #D9A672;
+    --orange-500: #A9651E;
+    --orange-700: #6B3E11;
+    --orange-900: #3F290E;
+    --olive-50: #F5F6F0;
+    --olive-100: #E3E4D5;
+    --olive-300: #B7B89E;
+    --olive-500: #6A6D4E;
+    --olive-700: #3A3C2A;
+    --olive-900: #12130C;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(29,29,33,0.04), 0 2px 6px rgba(29,29,33,0.04);
+    --shadow-md: 0 4px 14px rgba(29,29,33,0.06), 0 10px 30px rgba(29,29,33,0.05);
+    --shadow-lg: 0 20px 60px rgba(29,29,33,0.10);
+    --shadow-pill: 0 2px 4px rgba(29,29,33,0.04), 0 8px 24px rgba(29,29,33,0.08);
+    --shadow-pill-hover: 0 2px 6px rgba(29,29,33,0.05), 0 12px 36px rgba(29,29,33,0.10);
+    --shadow-field-active: 0 6px 20px rgba(29,29,33,0.14);
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0;
+    color: var(--text);
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  .container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 640px) { .container { padding: 0 18px; } }
+
+  /* ---------- Header ---------- */
+  header.site {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(249, 246, 239, 0.92);
+    backdrop-filter: saturate(120%) blur(14px);
+    -webkit-backdrop-filter: saturate(120%) blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+    gap: 24px;
+  }
+  .logo {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .logo-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--orange-300), var(--orange-700));
+    box-shadow: 0 0 0 3px var(--orange-50);
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .nav-links a {
+    font-size: 15px;
+    color: var(--text);
+    padding: 10px 4px;
+    position: relative;
+    transition: color .2s var(--ease);
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 4px; right: 4px; bottom: 4px;
+    height: 1px;
+    background: var(--orange-700);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s var(--ease);
+  }
+  .nav-links a:hover { color: var(--orange-700); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .btn-ghost {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: background .2s var(--ease);
+    white-space: nowrap;
+  }
+  .btn-ghost:hover { background: var(--bg-2); }
+  @media (max-width: 1024px) { .btn-ghost { display: none; } }
+  .icon-btn {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: background .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
+    flex-shrink: 0;
+  }
+  .icon-btn:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+
+  .menu-toggle { display: none; }
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .menu-toggle { display: inline-flex; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 76px; left: 0; right: 0;
+      padding: 16px 24px 24px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      gap: 4px;
+    }
+    .nav-links.open a { padding: 14px 6px; border-bottom: 1px solid var(--border); }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding: 72px 0 40px;
+  }
+  .hero-inner { display: grid; gap: 44px; }
+  .hero-copy {
+    max-width: 780px;
+    text-align: center;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange-700);
+    background: var(--orange-50);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 5.2vw, 60px);
+    line-height: 1.08;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: italic; color: var(--olive-700); }
+  .hero p.lede {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .hero-image {
+    width: 100%;
+    aspect-ratio: 24 / 8;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-md);
+  }
+  .hero-image .photo-hero { position: absolute; inset: 0; }
+  .hero-image::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(60% 80% at 18% 70%, rgba(255,246,233,0.42) 0%, rgba(255,246,233,0) 60%),
+      radial-gradient(50% 70% at 85% 25%, rgba(63,41,14,0.30) 0%, rgba(63,41,14,0) 70%);
+  }
+  .hero-image .img-caption {
+    position: absolute;
+    left: 20px; bottom: 16px;
+    font-size: 11px;
+    color: rgba(255,246,233,0.72);
+    letter-spacing: 0.04em;
+    z-index: 2;
+  }
+
+  /* ---------- Search ---------- */
+  .search-wrap {
+    position: relative;
+    padding: 32px 0 8px;
+  }
+  .search-stage {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  /* Tab row */
+  .tabs-row {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .tab {
+    position: relative;
+    padding: 10px 20px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    border-radius: 12px;
+    transition: color .2s var(--ease), background .2s var(--ease);
+  }
+  .tab:hover { color: var(--text); background: rgba(255, 246, 233, 0.6); }
+  .tab[aria-selected="true"] { color: var(--text); }
+  .tab[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    left: 20px; right: 20px; bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--olive-900);
+  }
+  .tab-icon {
+    position: relative;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    color: var(--olive-700);
+    transition: transform .3s var(--ease), color .2s var(--ease);
+  }
+  .tab:hover .tab-icon,
+  .tab[aria-selected="true"] .tab-icon { color: var(--olive-900); transform: translateY(-1px); }
+  .tab-icon svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .tab-label { font-size: 15px; font-weight: 500; letter-spacing: 0.01em; white-space: nowrap; }
+  .tab-badge {
+    position: absolute;
+    top: 2px;
+    left: 34px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: #FFF6E9;
+    background: var(--olive-900);
+    padding: 3px 6px;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(29,29,33,0.22);
+  }
+  .tab-badge::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 8px;
+    width: 8px; height: 8px;
+    background: var(--olive-900);
+    transform: rotate(45deg);
+    border-radius: 1px;
+    z-index: -1;
+  }
+  @media (max-width: 720px) {
+    .tabs-row { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 0 16px 4px; scrollbar-width: none; }
+    .tabs-row::-webkit-scrollbar { display: none; }
+    .tab { padding: 8px 14px 12px; }
+    .tab-label { font-size: 14px; }
+  }
+
+  /* Pill search bar */
+  .search-pill {
+    display: flex;
+    align-items: stretch;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 10px 10px 10px 0;
+    box-shadow: var(--shadow-pill);
+    position: relative;
+    transition: box-shadow .25s var(--ease);
+  }
+  .search-pill:hover { box-shadow: var(--shadow-pill-hover); }
+  .search-pill:has(.field:hover),
+  .search-pill:has(.field.active) { background: #F7F4EC; }
+
+  .field {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 16px 28px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .field:hover { background: var(--surface); }
+  .field.active {
+    background: var(--surface);
+    box-shadow: var(--shadow-field-active);
+    z-index: 2;
+  }
+  .field + .field::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    height: 32px;
+    width: 1px;
+    background: rgba(29, 29, 33, 0.12);
+    transition: opacity .2s var(--ease);
+  }
+  .field:hover::before,
+  .field:hover + .field::before,
+  .field.active::before,
+  .field.active + .field::before { opacity: 0; }
+
+  .field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 2px;
+    display: block;
+    pointer-events: none;
+  }
+  .field .value {
+    font-size: 14px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .field .value.placeholder { color: var(--text-subtle); font-weight: 400; }
+
+  .submit-wrap {
+    display: flex;
+    align-items: center;
+    padding-left: 6px;
+  }
+  .submit {
+    height: 56px;
+    padding: 0;
+    width: 56px;
+    border-radius: 50%;
+    background: var(--orange-900);
+    color: #FFF6E9;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .25s var(--ease), width .3s var(--ease), padding .3s var(--ease), transform .15s var(--ease);
+    font-weight: 500;
+    font-size: 15px;
+    overflow: hidden;
+  }
+  .submit:hover { background: var(--olive-900); }
+  .submit:active { transform: scale(0.97); }
+  .submit svg { width: 18px; height: 18px; flex: 0 0 auto; }
+  .submit .submit-label {
+    font-size: 0;
+    max-width: 0;
+    opacity: 0;
+    transition: font-size .2s var(--ease), max-width .3s var(--ease), opacity .2s var(--ease), margin .3s var(--ease);
+  }
+  .search-pill:has(.field.active) .submit {
+    width: auto;
+    padding: 0 22px 0 18px;
+    border-radius: var(--radius-pill);
+  }
+  .search-pill:has(.field.active) .submit .submit-label {
+    font-size: 15px;
+    max-width: 120px;
+    opacity: 1;
+    margin-left: 8px;
+  }
+
+  /* Dropdown */
+  .dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: -10px;
+    min-width: 360px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+    display: none;
+    z-index: 40;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+  .field.active .dropdown { display: block; animation: ddIn .18s var(--ease); }
+  @keyframes ddIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .field:last-of-type .dropdown { left: auto; right: -10px; }
+  /* Wider dropdown for category picker */
+  .dropdown.wide { min-width: 520px; max-width: 560px; }
+  .dropdown.wide .dd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding: 4px;
+  }
+
+  .dd-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    font-weight: 600;
+    padding: 10px 14px 6px;
+  }
+  .dd-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .15s var(--ease);
+  }
+  .dd-item:hover { background: var(--bg-2); }
+  .dd-item .meta { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
+  .dd-item .name { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .dd-item .name .kind { color: var(--text-subtle); font-size: 12px; }
+  .dd-item .marker {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--olive-50);
+    display: grid; place-items: center;
+    color: var(--olive-700);
+    flex: 0 0 auto;
+  }
+  .dd-item .marker svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .dd-item .trending {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--orange-700);
+    background: var(--orange-50);
+    border: 1px solid var(--orange-100);
+    padding: 2px 7px;
+    border-radius: var(--radius-pill);
+  }
+  .dd-footer {
+    padding: 10px 14px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--border);
+    font-size: 12px;
+    color: var(--text-subtle);
+    line-height: 1.5;
+  }
+  .dd-footer strong { color: var(--text-muted); font-weight: 600; }
+
+  /* Search foot */
+  .search-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 8px 0;
+    flex-wrap: wrap;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .chips-label {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    font-weight: 600;
+    margin-right: 2px;
+  }
+  .chip {
+    font-size: 13px;
+    color: var(--olive-700);
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .chip:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .chip[aria-pressed="true"] {
+    background: var(--olive-900);
+    color: var(--bg-2);
+    border-color: var(--olive-900);
+  }
+  .url-preview { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-subtle); }
+  .url-preview code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    color: var(--orange-900);
+    background: var(--orange-50);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--orange-100);
+  }
+
+  /* Mobile search */
+  @media (max-width: 860px) {
+    .search-stage { padding: 0; }
+    .search-pill {
+      flex-direction: column;
+      border-radius: var(--radius-lg);
+      padding: 6px;
+    }
+    .field { padding: 14px 18px; border-radius: var(--radius-md); }
+    .field + .field::before {
+      left: 18px; right: 18px;
+      top: 0; transform: none;
+      width: auto; height: 1px;
+    }
+    .submit-wrap { padding: 6px 0 0; }
+    .search-pill:has(.field.active) .submit,
+    .submit { width: 100%; height: 52px; border-radius: var(--radius-pill); padding: 0 22px; }
+    .submit .submit-label { font-size: 15px; max-width: 200px; opacity: 1; margin-left: 10px; }
+    .dropdown { position: static; box-shadow: none; border: 0; padding: 4px 0; max-height: none; min-width: 0; }
+    .dropdown.wide .dd-grid { grid-template-columns: 1fr; }
+    .search-foot { padding: 14px 0 0; }
+  }
+
+  /* ---------- Section base ---------- */
+  .section { padding: 96px 0 32px; }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: end;
+    margin-bottom: 32px; gap: 24px; flex-wrap: wrap;
+  }
+  .section-header h2 { font-size: 30px; line-height: 1.15; max-width: 620px; }
+  .section-header p { color: var(--text-muted); margin: 10px 0 0; max-width: 520px; font-size: 15px; }
+  .section-header a.all {
+    font-size: 14px; color: var(--olive-700); font-weight: 500;
+    border-bottom: 1px solid var(--border-strong); padding-bottom: 2px;
+    white-space: nowrap;
+  }
+  .section-header a.all:hover { color: var(--orange-700); border-color: var(--orange-700); }
+
+  /* ---------- Cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 980px) { .cards { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .card-media { aspect-ratio: 4 / 3; position: relative; overflow: hidden; }
+  .card-media .bg { position: absolute; inset: 0; }
+  .card-media::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(29,29,33,0) 40%, rgba(29,29,33,0.45) 100%);
+  }
+  .card-label {
+    position: absolute;
+    top: 14px; left: 14px;
+    background: rgba(255, 246, 233, 0.95);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: var(--radius-pill);
+    color: var(--olive-900);
+    font-weight: 600;
+    z-index: 2;
+  }
+  .card-body { padding: 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  .card-body h3 { font-size: 20px; line-height: 1.25; }
+  .card-body > p { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .card-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .card-list li {
+    display: grid; grid-template-columns: 62px 1fr; gap: 12px;
+    padding: 10px 8px; border-radius: var(--radius-sm);
+    transition: background .2s var(--ease); cursor: pointer;
+  }
+  .card-list li:hover { background: var(--bg-2); }
+  .card-list .time {
+    font-size: 11px; color: var(--orange-900);
+    background: var(--orange-50); border: 1px solid var(--orange-100);
+    border-radius: 6px; padding: 8px; text-align: center;
+    align-self: start; line-height: 1.2; font-weight: 600; letter-spacing: 0.02em;
+  }
+  .card-list .title { font-size: 14px; color: var(--text); font-weight: 500; }
+  .card-list .meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .destinations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .destination {
+    position: relative; aspect-ratio: 3 / 2;
+    border-radius: var(--radius-sm); overflow: hidden;
+    color: #FFF6E9; transition: transform .2s var(--ease);
+  }
+  .destination:hover { transform: scale(1.02); }
+  .destination .bg { position: absolute; inset: 0; }
+  .destination::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(200deg, rgba(29,29,33,0.05) 30%, rgba(29,29,33,0.55) 100%);
+  }
+  .destination span {
+    position: absolute; left: 14px; bottom: 10px;
+    font-family: 'Lora', serif; font-size: 16px; letter-spacing: 0.01em; z-index: 1;
+  }
+
+  .training-row {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: center; padding: 14px 8px;
+    border-top: 1px solid var(--border); gap: 10px;
+    cursor: pointer; transition: background .2s var(--ease);
+  }
+  .training-row:first-of-type { border-top: 0; }
+  .training-row:hover { background: var(--bg-2); }
+  .training-row .name { font-size: 14px; font-weight: 500; }
+  .training-row .name .sub { color: var(--text-muted); font-size: 12px; margin-top: 2px; font-weight: 400; }
+  .training-row .cert {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--olive-700); border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: var(--radius-pill);
+    background: var(--bg); font-weight: 600;
+  }
+
+  .card-cta {
+    margin-top: auto; padding-top: 4px;
+    font-size: 13px; color: var(--olive-900); font-weight: 500;
+    border-bottom: 1px solid var(--border-strong); padding-bottom: 2px;
+    align-self: flex-start;
+    transition: color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .card-cta:hover { color: var(--orange-700); border-color: var(--orange-700); }
+
+  /* Photo gradients */
+  .photo-hero     { background: linear-gradient(115deg, #EADFC8 0%, #C9A672 35%, #7A5A2E 85%); }
+  .photo-events   { background: linear-gradient(140deg, #F1E3CE 0%, #C9A672 60%, #6B3E11 100%); }
+  .photo-dest-1   { background: linear-gradient(120deg, #CDB88A 0%, #7A6B3C 100%); }
+  .photo-dest-2   { background: linear-gradient(120deg, #D5B793 0%, #5C4A2E 100%); }
+  .photo-dest-3   { background: linear-gradient(120deg, #C8B494 0%, #3A3C2A 100%); }
+  .photo-dest-4   { background: linear-gradient(120deg, #E5D4B1 0%, #8B6B3A 100%); }
+  .photo-trainings{ background: linear-gradient(130deg, #EADFC8 0%, #B7B89E 60%, #3A3C2A 100%); }
+
+  /* ---------- Categories section ---------- */
+  .cats-section { padding: 80px 0 32px; }
+  .cats-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  @media (max-width: 980px) { .cats-pillars { grid-template-columns: 1fr; } }
+  .cat-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 24px 20px;
+    display: flex; flex-direction: column;
+    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .cat-group:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .cat-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; gap: 12px;
+  }
+  .cat-head h3 {
+    font-size: 20px; line-height: 1.2;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cat-head .icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--olive-50); color: var(--olive-700);
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+  .cat-head .icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .cat-head .cnt { font-size: 12px; color: var(--text-muted); }
+  .cat-list {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .cat-link {
+    font-size: 13px; padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .cat-link:hover { background: var(--olive-900); color: var(--bg-2); border-color: var(--olive-900); }
+  .cat-link.trending {
+    background: var(--orange-50); border-color: var(--orange-100); color: var(--orange-900);
+  }
+  .cat-link.trending:hover { background: var(--orange-900); color: var(--bg-2); }
+  .cat-more {
+    margin-top: 14px;
+    font-size: 12px; color: var(--text-subtle);
+    line-height: 1.6;
+  }
+  .cat-more strong { color: var(--text-muted); font-weight: 600; }
+  .cat-footer {
+    margin-top: auto; padding-top: 16px;
+  }
+
+  /* ---------- Editorial ---------- */
+  .editorial {
+    padding: 64px 0 88px;
+    border-top: 1px solid var(--border);
+    margin-top: 56px;
+  }
+  .editorial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  @media (max-width: 860px) { .editorial-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .editorial h2 { font-size: 30px; line-height: 1.2; max-width: 420px; margin-bottom: 14px; }
+  .editorial p.intro { color: var(--text-muted); margin-bottom: 20px; max-width: 460px; }
+  .editorial-list { display: flex; flex-direction: column; gap: 14px; }
+  .editorial-item {
+    display: grid; grid-template-columns: 110px 1fr; gap: 20px;
+    padding: 16px; border-radius: var(--radius-md);
+    border: 1px solid var(--border); background: var(--surface);
+    align-items: center;
+    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+    cursor: pointer;
+  }
+  .editorial-item:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .editorial-item .thumb { width: 110px; height: 80px; border-radius: var(--radius-sm); }
+  .editorial-item h4 { font-family: 'Lora', serif; font-size: 17px; margin: 0 0 4px; line-height: 1.25; }
+  .editorial-item p { font-size: 13px; margin: 0; color: var(--text-muted); }
+
+  /* ---------- Footer ---------- */
+  footer.site {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    background: var(--bg-2);
+    font-size: 13px; color: var(--text-muted);
+  }
+  footer.site .row {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 16px; align-items: center;
+  }
+  footer.site a { color: var(--text); }
+  footer.site a:hover { color: var(--orange-700); }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 32px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--olive-900);
+    color: var(--bg-2);
+    padding: 14px 22px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s var(--ease), transform .25s var(--ease);
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+    max-width: min(92vw, 720px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .toast code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: rgba(255,246,233,0.14);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="site">
+  <div class="container nav">
+    <a href="#" class="logo" aria-label="Lumaya home">
+      <span class="logo-dot" aria-hidden="true"></span>
+      Lumaya
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="#" data-hub="events">Events</a>
+      <a href="#" data-hub="retreats">Retreats</a>
+      <a href="#" data-hub="trainings">Trainings</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn-ghost">For organisers</button>
+      <button class="icon-btn" aria-label="Saved">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Account">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">Conscious events · retreats · trainings</span>
+      <h1>A quiet place to find what you're actually <em>looking for</em>.</h1>
+      <p class="lede">From a Tuesday-evening yoga class nearby to a 200-hour training in Rishikesh — Lumaya gathers real practice, real teachers, and real places in one calm marketplace.</p>
+    </div>
+    <div class="hero-image" aria-hidden="true">
+      <div class="photo-hero"></div>
+      <span class="img-caption">Photography placeholder · production uses real photography per brand guide</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEARCH ============ -->
+<section class="search-wrap">
+  <div class="container">
+    <div class="search-stage">
+
+      <!-- Tab row -->
+      <div class="tabs-row" role="tablist" id="tabs">
+        <button class="tab" role="tab" data-tab="all" aria-selected="true">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="11"/><path d="M14 5v6M14 17v6M5 14h6M17 14h6M8 8l3 3M17 17l3 3M8 20l3-3M17 11l3-3"/></svg>
+          </span>
+          <span class="tab-label">All</span>
+        </button>
+        <button class="tab" role="tab" data-tab="events" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><rect x="4" y="6" width="20" height="18" rx="2.5"/><path d="M4 11h20M10 3v5M18 3v5"/><circle cx="14" cy="17" r="1.2" fill="currentColor"/></svg>
+          </span>
+          <span class="tab-label">Events</span>
+        </button>
+        <button class="tab" role="tab" data-tab="retreats" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><circle cx="20" cy="9" r="3"/><path d="M3 21l7-9 5 6 3-3 7 8"/><path d="M3 24h22"/></svg>
+          </span>
+          <span class="tab-label">Retreats</span>
+          <span class="tab-badge">NEW</span>
+        </button>
+        <button class="tab" role="tab" data-tab="trainings" aria-selected="false">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><path d="M14 5l11 5-11 5L3 10l11-5z"/><path d="M7 13v5s2.5 3 7 3 7-3 7-3v-5"/><path d="M23 11v7"/></svg>
+          </span>
+          <span class="tab-label">Trainings</span>
+          <span class="tab-badge">NEW</span>
+        </button>
+      </div>
+
+      <!-- Pill -->
+      <form class="search-pill" id="searchPill" autocomplete="off" onsubmit="return submitSearch(event)">
+        <!-- Populated by JS -->
+      </form>
+
+      <!-- Foot: chips + URL preview -->
+      <div class="search-foot">
+        <div class="chips" id="chips"></div>
+        <div class="url-preview">
+          <span>opens</span>
+          <code id="urlPreview">/</code>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CURATED CARDS ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2>Or, let us show you what's quietly happening.</h2>
+        <p>Three windows into the marketplace — local tonight, trending destinations, and trainings you'd otherwise miss.</p>
+      </div>
+      <a href="#" class="all">Browse everything →</a>
+    </div>
+
+    <div class="cards">
+      <!-- Card 1: Events near you tonight -->
+      <article class="card">
+        <div class="card-media">
+          <div class="bg photo-events"></div>
+          <span class="card-label">Near you · tonight</span>
+        </div>
+        <div class="card-body">
+          <h3>Events in <span id="geoCity">Berlin</span> tonight</h3>
+          <p>Short, local, low-commitment — drop in and see.</p>
+          <ul class="card-list">
+            <li>
+              <div class="time">Fri<br>18:30</div>
+              <div>
+                <div class="title">Slow Flow &amp; Sound Bath</div>
+                <div class="meta">Kreuzberg · 75 min · €22</div>
+              </div>
+            </li>
+            <li>
+              <div class="time">Fri<br>19:00</div>
+              <div>
+                <div class="title">Candlelit Yin</div>
+                <div class="meta">Mitte · 90 min · €24</div>
+              </div>
+            </li>
+            <li>
+              <div class="time">Sat<br>10:00</div>
+              <div>
+                <div class="title">Morning Breathwork Circle</div>
+                <div class="meta">Neukölln · 60 min · €18</div>
+              </div>
+            </li>
+          </ul>
+          <a class="card-cta" href="#" data-link="/berlin/events/">See all events in Berlin →</a>
+        </div>
+      </article>
+
+      <!-- Card 2: Trending destinations -->
+      <article class="card">
+        <div class="card-media">
+          <div class="bg photo-dest-1"></div>
+          <span class="card-label">Trending · retreats</span>
+        </div>
+        <div class="card-body">
+          <h3>Where people are going this season</h3>
+          <p>Destination-first browsing — pick a place, then find the practice.</p>
+          <div class="destinations">
+            <a class="destination" href="#" data-link="/bali/"><div class="bg photo-dest-1"></div><span>Bali</span></a>
+            <a class="destination" href="#" data-link="/mallorca/"><div class="bg photo-dest-2"></div><span>Mallorca</span></a>
+            <a class="destination" href="#" data-link="/costa-rica/"><div class="bg photo-dest-3"></div><span>Costa Rica</span></a>
+            <a class="destination" href="#" data-link="/rishikesh/"><div class="bg photo-dest-4"></div><span>Rishikesh</span></a>
+          </div>
+          <a class="card-cta" href="#" data-link="/destinations/">All destinations →</a>
+        </div>
+      </article>
+
+      <!-- Card 3: Trainings -->
+      <article class="card">
+        <div class="card-media">
+          <div class="bg photo-trainings"></div>
+          <span class="card-label">Starting · spring 2026</span>
+        </div>
+        <div class="card-body">
+          <h3>Trainings beginning this season</h3>
+          <p>Career-level depth. Picked for the months ahead.</p>
+          <div>
+            <div class="training-row">
+              <div class="name">Hatha YTT · Rishikesh<div class="sub">Starts May · 4 weeks intensive</div></div>
+              <span class="cert">200 hr</span>
+            </div>
+            <div class="training-row">
+              <div class="name">Vinyasa Advanced · Lisbon<div class="sub">Starts June · modular 6 months</div></div>
+              <span class="cert">300 hr</span>
+            </div>
+            <div class="training-row">
+              <div class="name">Meditation Teacher Training · Berlin<div class="sub">Starts Sep · modular 9 months</div></div>
+              <span class="cert">300 hr</span>
+            </div>
+          </div>
+          <a class="card-cta" href="#" data-link="/trainings/yoga/200-hour/">Explore trainings →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BROWSE BY CATEGORY ============ -->
+<section class="cats-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2>Browse by category.</h2>
+        <p>The launch set, grouped by pillar. Each category is a crawlable destination — pick one to skip the search entirely.</p>
+      </div>
+      <a href="#" class="all" data-link="/categories/">All categories →</a>
+    </div>
+
+    <div class="cats-pillars" id="catsPillars">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDITORIAL ============ -->
+<section class="editorial">
+  <div class="container editorial-grid">
+    <div>
+      <h2>Grounded perspectives from the Lumaya journal.</h2>
+      <p class="intro">Why we moved events, retreats, and trainings under one roof — and what we learned from the places people asked us about most.</p>
+      <a class="card-cta" href="#">Read the journal →</a>
+    </div>
+    <div class="editorial-list">
+      <article class="editorial-item">
+        <div class="thumb photo-dest-1"></div>
+        <div>
+          <h4>Why Bali in March is different</h4>
+          <p>Low season isn't what you think. Quieter studios, deeper teachers.</p>
+        </div>
+      </article>
+      <article class="editorial-item">
+        <div class="thumb photo-trainings"></div>
+        <div>
+          <h4>Choosing a 200 vs. 300 hour training</h4>
+          <p>A short field guide, written with three lead teachers.</p>
+        </div>
+      </article>
+      <article class="editorial-item">
+        <div class="thumb photo-events"></div>
+        <div>
+          <h4>The Berlin Tuesday-night pattern</h4>
+          <p>How regulars are rebuilding local practice after the long winter.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site">
+  <div class="container row">
+    <div>© 2026 Lumaya · Conscious events · retreats · trainings</div>
+    <div style="display:flex; gap:20px;">
+      <a href="#">For organisers</a>
+      <a href="#">About</a>
+      <a href="#">Journal</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  /* ==========================================================
+   * CATEGORY DATA — sourced from domain-core/ux/categories/seo-research.md
+   * Tier 1 = launch set; Tier 2 = fast-follow
+   * "trending" flag = top-2 by US search volume within pillar
+   * ========================================================== */
+
+  const EVENT_CATEGORIES = {
+    launch: [
+      { slug: "yoga",            name: "Yoga",            trending: true },
+      { slug: "meditation",      name: "Meditation",      trending: true },
+      { slug: "breathwork",      name: "Breathwork" },
+      { slug: "sound-healing",   name: "Sound healing" },
+      { slug: "tantra",          name: "Tantra" },
+      { slug: "cacao-ceremony",  name: "Cacao ceremony" },
+      { slug: "conscious-dance", name: "Conscious dance" },
+      { slug: "embodiment",      name: "Embodiment" },
+      { slug: "kirtan",          name: "Kirtan" },
+      { slug: "temple-night",    name: "Temple night" },
+      { slug: "festival",        name: "Festival" },
+      { slug: "retreat",         name: "Retreat (one-off)" }
+    ],
+    fastFollow: []
+  };
+
+  const RETREAT_CATEGORIES = {
+    launch: [
+      { slug: "yoga",          name: "Yoga",          trending: true },
+      { slug: "wellness",      name: "Wellness",      trending: true },
+      { slug: "meditation",    name: "Meditation" },
+      { slug: "silent",        name: "Silent & Vipassana" },
+      { slug: "spiritual",     name: "Spiritual" },
+      { slug: "women",         name: "Women's" },
+      { slug: "breathwork",    name: "Breathwork" },
+      { slug: "sound-healing", name: "Sound healing" },
+      { slug: "tantra",        name: "Tantra" },
+      { slug: "ayurveda",      name: "Ayurveda" }
+    ],
+    fastFollow: [
+      { slug: "men",              name: "Men's" },
+      { slug: "mindfulness",      name: "Mindfulness" },
+      { slug: "healing",          name: "Healing" },
+      { slug: "detox",            name: "Detox" },
+      { slug: "digital-detox",    name: "Digital detox" },
+      { slug: "writing",          name: "Writing" },
+      { slug: "self-development", name: "Self-development" }
+    ]
+  };
+
+  const TRAINING_CATEGORIES = {
+    launch: [
+      { slug: "yoga-teacher-training",       name: "Yoga teacher training", trending: true, short: "Yoga TTC" },
+      { slug: "meditation-teacher-training", name: "Meditation teacher training", short: "Meditation TT" },
+      { slug: "breathwork-training",         name: "Breathwork facilitator" },
+      { slug: "sound-healing-training",      name: "Sound healing cert." },
+      { slug: "tantra-teacher-training",     name: "Tantra teacher training" },
+      { slug: "reiki-training",              name: "Reiki training", trending: true }
+    ],
+    fastFollow: [
+      { slug: "life-coach-certification", name: "Life-coach cert." },
+      { slug: "pilates-teacher-training", name: "Pilates TT" },
+      { slug: "doula-training",           name: "Doula training" },
+      { slug: "ayurveda-training",        name: "Ayurveda training" },
+      { slug: "somatic-experiencing",     name: "Somatic experiencing" },
+      { slug: "kundalini-yoga-ttc",       name: "Kundalini YTT" }
+    ]
+  };
+
+  /* ALL = union of launch sets, deduped by slug, ordered by cross-pillar priority */
+  const ALL_CATEGORIES = (() => {
+    const seen = new Map();
+    [...EVENT_CATEGORIES.launch, ...RETREAT_CATEGORIES.launch, ...TRAINING_CATEGORIES.launch]
+      .forEach(c => { if (!seen.has(c.slug)) seen.set(c.slug, c); });
+    return Array.from(seen.values());
+  })();
+
+  /* ==========================================================
+   * Field configuration per tab
+   * ========================================================== */
+  const TAB_CONFIG = {
+    all: {
+      chipsLabel: "Popular",
+      chips: [
+        { label: "This weekend", date: "weekend" },
+        { label: "Yoga", cat: "yoga" },
+        { label: "Meditation", cat: "meditation" },
+        { label: "Bali", place: "bali" }
+      ],
+      fields: [
+        { key: "where", label: "Where", placeholder: "Any destination or city", type: "place" },
+        { key: "when",  label: "When",  placeholder: "Any dates",               type: "date" },
+        { key: "cat",   label: "What",  placeholder: "Any category",            type: "category", catSource: "all" }
+      ]
+    },
+    events: {
+      chipsLabel: "Popular",
+      chips: [
+        { label: "Tonight", date: "tonight" },
+        { label: "This weekend", date: "weekend" },
+        { label: "Yoga", cat: "yoga" },
+        { label: "Sound healing", cat: "sound-healing" }
+      ],
+      fields: [
+        { key: "where", label: "Where",    placeholder: "Berlin", defaultValue: "Berlin", type: "place", defaultSlug: "berlin" },
+        { key: "when",  label: "When",     placeholder: "Next 7 days", defaultValue: "Next 7 days", type: "date" },
+        { key: "cat",   label: "Category", placeholder: "Any practice", type: "category", catSource: "events" },
+        { key: "time",  label: "Time",     placeholder: "Any time",     type: "time" }
+      ]
+    },
+    retreats: {
+      chipsLabel: "Trending",
+      chips: [
+        { label: "I'm flexible", date: "flexible" },
+        { label: "Yoga", cat: "yoga" },
+        { label: "Wellness", cat: "wellness" },
+        { label: "Silent", cat: "silent" },
+        { label: "Women's", cat: "women" }
+      ],
+      fields: [
+        { key: "where", label: "Destination", placeholder: "Anywhere", type: "place" },
+        { key: "when",  label: "Dates",       placeholder: "Flexible", defaultValue: "Flexible", type: "date" },
+        { key: "cat",   label: "Category",    placeholder: "Any retreat type", type: "category", catSource: "retreats" },
+        { key: "theme", label: "Length",      placeholder: "Any length", type: "length" }
+      ]
+    },
+    trainings: {
+      chipsLabel: "Filters",
+      chips: [
+        { label: "200 hour",   cert: "200-hour" },
+        { label: "300 hour",   cert: "300-hour" },
+        { label: "Intensive (3–4 wk)", cert: "intensive" },
+        { label: "Modular (6 mo+)",    cert: "modular" },
+        { label: "Yoga TTC",   cat: "yoga-teacher-training" }
+      ],
+      fields: [
+        { key: "cat",   label: "Training",    placeholder: "Choose a certification", type: "category", catSource: "trainings" },
+        { key: "cert",  label: "Hours",       placeholder: "200 / 300 / 500 hr",     type: "cert" },
+        { key: "where", label: "Where",       placeholder: "Anywhere",               type: "place" },
+        { key: "when",  label: "Starts",      placeholder: "Next 6 months", defaultValue: "Next 6 months", type: "date" }
+      ]
+    }
+  };
+
+  const PLACE_SUGGESTIONS = [
+    { name: "Bali",        kind: "destination", slug: "bali",         counts: "12 retreats · 3 trainings" },
+    { name: "Berlin",      kind: "city",        slug: "berlin",       counts: "47 events · 2 retreats · 1 training" },
+    { name: "Mallorca",    kind: "destination", slug: "mallorca",     counts: "9 retreats · 1 training" },
+    { name: "Rishikesh",   kind: "destination", slug: "rishikesh",    counts: "5 retreats · 7 trainings" },
+    { name: "Lisbon",      kind: "city",        slug: "lisbon",       counts: "14 events · 3 retreats · 2 trainings" },
+    { name: "Costa Rica",  kind: "country",     slug: "costa-rica",   counts: "8 retreats" },
+    { name: "Portugal",    kind: "country",     slug: "portugal",     counts: "11 retreats · 2 trainings · 16 events" }
+  ];
+
+  const DATE_QUICK = {
+    events:    ["Tonight", "Tomorrow", "This weekend", "This week", "Pick dates…"],
+    retreats:  ["I'm flexible", "Spring 2026", "Summer 2026", "Autumn 2026", "Pick dates…"],
+    trainings: ["Next 3 months", "Next 6 months", "Autumn 2026", "Pick a start month…"],
+    all:       ["Any time", "This weekend", "This month", "Pick dates…"]
+  };
+
+  const CERT_SUGGESTIONS  = ["200 hour", "300 hour", "500 hour"];
+  const LENGTH_SUGGESTIONS = ["Weekend (2–3 days)", "Short (4–7 days)", "Week+ (8–14 days)", "Deep (2+ weeks)"];
+  const TIME_SUGGESTIONS  = ["Morning (before 11)", "Midday (11–14)", "Afternoon (14–18)", "Evening (after 18)"];
+
+  const PIN_ICON    = '<svg viewBox="0 0 24 24"><path d="M12 22s-7-7.1-7-12a7 7 0 1 1 14 0c0 4.9-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  const CAL_ICON    = '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+  const STAR_ICON   = '<svg viewBox="0 0 24 24"><path d="M12 4l2.6 5.3 5.9.9-4.3 4.2 1 5.8-5.2-2.8L6.8 20l1-5.8L3.5 10.2l5.9-.9L12 4z"/></svg>';
+  const SPROUT_ICON = '<svg viewBox="0 0 24 24"><path d="M12 22V9"/><path d="M12 9c0-4 3-6 7-6-1 4-3 6-7 6z"/><path d="M12 13c0-3-2-5-5-5 .5 3 2 5 5 5z"/></svg>';
+  const TICKET_ICON = '<svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8z"/><path d="M9 6v12"/></svg>';
+  const SUN_ICON    = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>';
+  const CAP_ICON    = '<svg viewBox="0 0 24 24"><path d="M12 4l10 4.5L12 13 2 8.5 12 4z"/><path d="M6 11v5s2.5 2.5 6 2.5 6-2.5 6-2.5v-5"/></svg>';
+
+  const PILLAR_ICONS = { events: TICKET_ICON, retreats: SUN_ICON, trainings: CAP_ICON };
+
+  const ICONS = {
+    place: PIN_ICON, date: CAL_ICON, category: SPROUT_ICON,
+    cert: STAR_ICON, length: SUN_ICON, time: CAL_ICON
+  };
+
+  /* ==========================================================
+   * State
+   * ========================================================== */
+  const state = {
+    tab: "all",
+    where: "",     whereSlug: "",
+    when: "",
+    cat: "",       catSlug: "",
+    cert: "",      certSlug: "",
+    theme: "",
+    time: ""
+  };
+
+  const pillEl  = document.getElementById("searchPill");
+  const chipsEl = document.getElementById("chips");
+
+  function slugify(s) {
+    return (s || "")
+      .toLowerCase().trim()
+      .replace(/ö/g, "oe").replace(/ä/g, "ae").replace(/ü/g, "ue").replace(/ß/g, "ss")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+
+  /* ==========================================================
+   * Render pill fields
+   * ========================================================== */
+  function renderFields() {
+    const cfg = TAB_CONFIG[state.tab];
+    pillEl.innerHTML = "";
+
+    cfg.fields.forEach(f => {
+      const wrap = document.createElement("div");
+      wrap.className = "field";
+      wrap.dataset.key = f.key;
+      wrap.innerHTML = `
+        <label>${f.label}</label>
+        <div class="value placeholder">${f.placeholder}</div>
+        <div class="dropdown" role="listbox"></div>
+      `;
+      wrap.addEventListener("click", (e) => openField(wrap, f, e));
+      pillEl.appendChild(wrap);
+
+      const stateVal = state[f.key];
+      if (stateVal) {
+        setFieldValue(wrap, stateVal);
+      } else if (f.defaultValue) {
+        setFieldValue(wrap, f.defaultValue);
+        state[f.key] = f.defaultValue;
+        if (f.key === "where" && f.defaultSlug) state.whereSlug = f.defaultSlug;
+      }
+    });
+
+    const submitWrap = document.createElement("div");
+    submitWrap.className = "submit-wrap";
+    submitWrap.innerHTML = `
+      <button class="submit" type="submit" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+        <span class="submit-label">Search</span>
+      </button>
+    `;
+    pillEl.appendChild(submitWrap);
+
+    renderChips();
+    updateUrlPreview();
+  }
+
+  function renderChips() {
+    const cfg = TAB_CONFIG[state.tab];
+    chipsEl.innerHTML = "";
+    const lbl = document.createElement("span");
+    lbl.className = "chips-label";
+    lbl.textContent = cfg.chipsLabel;
+    chipsEl.appendChild(lbl);
+    cfg.chips.forEach(c => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = c.label;
+      b.addEventListener("click", () => applyChip(c, b));
+      chipsEl.appendChild(b);
+    });
+  }
+
+  function setFieldValue(fieldEl, value) {
+    const v = fieldEl.querySelector(".value");
+    v.textContent = value;
+    v.classList.remove("placeholder");
+  }
+
+  /* ==========================================================
+   * Dropdowns
+   * ========================================================== */
+  let activeField = null;
+  document.addEventListener("click", (e) => {
+    if (activeField && !activeField.contains(e.target)) {
+      activeField.classList.remove("active");
+      activeField = null;
+    }
+  });
+
+  function openField(fieldEl, f, e) {
+    e.stopPropagation();
+    if (activeField === fieldEl) return;
+    if (activeField) activeField.classList.remove("active");
+    activeField = fieldEl;
+    fieldEl.classList.add("active");
+
+    const dd = fieldEl.querySelector(".dropdown");
+    dd.innerHTML = "";
+    dd.classList.toggle("wide", f.type === "category");
+
+    if (f.type === "place")         renderPlaceDropdown(dd, fieldEl, f);
+    else if (f.type === "date")     renderListDropdown(dd, fieldEl, f, DATE_QUICK[state.tab] || DATE_QUICK.all, "Pick a time window");
+    else if (f.type === "category") renderCategoryDropdown(dd, fieldEl, f);
+    else if (f.type === "cert")     renderListDropdown(dd, fieldEl, f, CERT_SUGGESTIONS, "Training hours");
+    else if (f.type === "length")   renderListDropdown(dd, fieldEl, f, LENGTH_SUGGESTIONS, "Retreat length");
+    else if (f.type === "time")     renderListDropdown(dd, fieldEl, f, TIME_SUGGESTIONS, "Time of day");
+  }
+
+  function renderPlaceDropdown(dd, fieldEl, f) {
+    dd.appendChild(el(`<div class="dd-title">Suggested places · with availability</div>`));
+    PLACE_SUGGESTIONS.forEach(p => {
+      const item = el(`
+        <div class="dd-item" role="option">
+          <div class="name">
+            <span class="marker">${PIN_ICON}</span>
+            <span>${p.name}<span class="kind"> · ${p.kind}</span></span>
+          </div>
+          <span class="meta">${p.counts}</span>
+        </div>
+      `);
+      item.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        state.where = p.name;
+        state.whereSlug = p.slug;
+        setFieldValue(fieldEl, p.name);
+        closeActive();
+        updateUrlPreview();
+      });
+      dd.appendChild(item);
+    });
+  }
+
+  function renderCategoryDropdown(dd, fieldEl, f) {
+    const source = f.catSource;
+    let launch, fastFollow;
+    if (source === "events")         { launch = EVENT_CATEGORIES.launch;    fastFollow = EVENT_CATEGORIES.fastFollow; }
+    else if (source === "retreats")  { launch = RETREAT_CATEGORIES.launch;  fastFollow = RETREAT_CATEGORIES.fastFollow; }
+    else if (source === "trainings") { launch = TRAINING_CATEGORIES.launch; fastFollow = TRAINING_CATEGORIES.fastFollow; }
+    else                             { launch = ALL_CATEGORIES;             fastFollow = []; }
+
+    dd.appendChild(el(`<div class="dd-title">${source === "all" ? "Categories across the marketplace" : `${source.charAt(0).toUpperCase() + source.slice(1)} categories`}</div>`));
+
+    const grid = el(`<div class="dd-grid"></div>`);
+    dd.appendChild(grid);
+
+    launch.forEach(c => {
+      const item = el(`
+        <div class="dd-item" role="option">
+          <div class="name">
+            <span class="marker">${SPROUT_ICON}</span>
+            <span>${c.name}</span>
+          </div>
+          ${c.trending ? '<span class="trending">Trending</span>' : ''}
+        </div>
+      `);
+      item.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        state.cat = c.name;
+        state.catSlug = c.slug;
+        setFieldValue(fieldEl, c.name);
+        closeActive();
+        updateUrlPreview();
+      });
+      grid.appendChild(item);
+    });
+
+    if (fastFollow.length) {
+      const footer = el(`
+        <div class="dd-footer">
+          <strong>Coming soon:</strong> ${fastFollow.map(c => c.name).join(" · ")}
+        </div>
+      `);
+      dd.appendChild(footer);
+    }
+  }
+
+  function renderListDropdown(dd, fieldEl, f, items, titleText) {
+    dd.appendChild(el(`<div class="dd-title">${titleText}</div>`));
+    items.forEach(label => {
+      const item = el(`
+        <div class="dd-item" role="option">
+          <div class="name">
+            <span class="marker">${ICONS[f.type] || STAR_ICON}</span>
+            <span>${label}</span>
+          </div>
+        </div>
+      `);
+      item.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        state[f.key] = label;
+        if (f.key === "cert") state.certSlug = slugify(label);
+        setFieldValue(fieldEl, label);
+        closeActive();
+        updateUrlPreview();
+      });
+      dd.appendChild(item);
+    });
+  }
+
+  function closeActive() {
+    if (activeField) activeField.classList.remove("active");
+    activeField = null;
+  }
+
+  function el(html) {
+    const t = document.createElement("template");
+    t.innerHTML = html.trim();
+    return t.content.firstElementChild;
+  }
+
+  /* ==========================================================
+   * Chips
+   * ========================================================== */
+  function applyChip(c, btn) {
+    chipsEl.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", "false"));
+    btn.setAttribute("aria-pressed", "true");
+
+    if (c.date) {
+      state.when = c.label;
+      const whenField = pillEl.querySelector('[data-key="when"]');
+      if (whenField) setFieldValue(whenField, c.label);
+    }
+    if (c.cat) {
+      // Resolve name from slug
+      const source = TAB_CONFIG[state.tab].fields.find(f => f.type === "category")?.catSource || "all";
+      const list = source === "events" ? EVENT_CATEGORIES.launch
+                  : source === "retreats" ? RETREAT_CATEGORIES.launch
+                  : source === "trainings" ? TRAINING_CATEGORIES.launch
+                  : ALL_CATEGORIES;
+      const found = list.find(x => x.slug === c.cat) || { slug: c.cat, name: c.label };
+      state.cat = found.name;
+      state.catSlug = found.slug;
+      const catField = pillEl.querySelector('[data-key="cat"]');
+      if (catField) setFieldValue(catField, found.name);
+    }
+    if (c.place) {
+      const found = PLACE_SUGGESTIONS.find(p => p.slug === c.place);
+      if (found) {
+        state.where = found.name;
+        state.whereSlug = found.slug;
+        const whereField = pillEl.querySelector('[data-key="where"]');
+        if (whereField) setFieldValue(whereField, found.name);
+      }
+    }
+    if (c.cert) {
+      state.cert = c.label;
+      state.certSlug = c.cert;
+      const certField = pillEl.querySelector('[data-key="cert"]');
+      if (certField) setFieldValue(certField, c.label);
+    }
+    updateUrlPreview();
+  }
+
+  /* ==========================================================
+   * URL builder
+   * ========================================================== */
+  function buildUrl() {
+    const parts = [];
+    const where = state.whereSlug;
+    const cat = state.catSlug;
+    const cert = state.certSlug || (state.cert ? slugify(state.cert) : "");
+
+    if (state.tab === "all") {
+      if (where) parts.push(where);
+      else if (cat) parts.push(cat);
+    } else if (state.tab === "events") {
+      if (where) parts.push(where);
+      parts.push("events");
+      if (cat) parts.push(cat);
+    } else if (state.tab === "retreats") {
+      if (where) parts.push(where);
+      parts.push("retreats");
+      if (cat) parts.push(cat);
+    } else if (state.tab === "trainings") {
+      if (where) parts.push(where);
+      parts.push("trainings");
+      if (cat) parts.push(cat);
+      else parts.push("yoga");
+      if (cert) parts.push(cert);
+    }
+    return "/" + parts.filter(Boolean).join("/") + (parts.length ? "/" : "");
+  }
+
+  function updateUrlPreview() {
+    document.getElementById("urlPreview").textContent = buildUrl();
+  }
+
+  /* ==========================================================
+   * Tabs
+   * ========================================================== */
+  document.getElementById("tabs").addEventListener("click", (e) => {
+    const tab = e.target.closest("[data-tab]");
+    if (!tab) return;
+    const newTab = tab.dataset.tab;
+    if (newTab === state.tab) return;
+
+    document.querySelectorAll("#tabs .tab").forEach(t => t.setAttribute("aria-selected", "false"));
+    tab.setAttribute("aria-selected", "true");
+
+    state.tab = newTab;
+    if (newTab !== "trainings") { state.cert = ""; state.certSlug = ""; }
+    if (newTab !== "events")    { state.time = ""; }
+    if (newTab !== "retreats")  { state.theme = ""; }
+    // Reset when because default semantics differ per tab
+    state.when = "";
+    // Reset category when switching tabs (categories differ per pillar)
+    state.cat = ""; state.catSlug = "";
+
+    renderFields();
+  });
+
+  /* ==========================================================
+   * Browse-by-category section
+   * ========================================================== */
+  function renderCatsPillars() {
+    const host = document.getElementById("catsPillars");
+    const pillars = [
+      { key: "events",    title: "Events",    subtitle: "Local · drop-in",         src: EVENT_CATEGORIES,    baseUrl: "/events/" },
+      { key: "retreats",  title: "Retreats",  subtitle: "Destinations · 2+ days",  src: RETREAT_CATEGORIES,  baseUrl: "/retreats/" },
+      { key: "trainings", title: "Trainings", subtitle: "Certifications · deep",   src: TRAINING_CATEGORIES, baseUrl: "/trainings/" }
+    ];
+
+    host.innerHTML = "";
+    pillars.forEach(p => {
+      const group = document.createElement("div");
+      group.className = "cat-group";
+      const launchCount = p.src.launch.length;
+
+      group.innerHTML = `
+        <div class="cat-head">
+          <h3>
+            <span class="icon">${PILLAR_ICONS[p.key]}</span>
+            ${p.title}
+          </h3>
+          <span class="cnt">${launchCount} categories · ${p.subtitle}</span>
+        </div>
+        <div class="cat-list"></div>
+        ${p.src.fastFollow.length ? `
+          <div class="cat-more">
+            <strong>Fast-follow:</strong> ${p.src.fastFollow.map(c => c.name).join(" · ")}
+          </div>
+        ` : ""}
+        <div class="cat-footer">
+          <a class="card-cta" href="#" data-link="${p.baseUrl}">All ${p.title.toLowerCase()} →</a>
+        </div>
+      `;
+
+      const list = group.querySelector(".cat-list");
+      p.src.launch.forEach(c => {
+        const a = document.createElement("a");
+        a.href = "#";
+        a.className = "cat-link" + (c.trending ? " trending" : "");
+        a.textContent = c.name;
+        a.dataset.link = `${p.baseUrl}${c.slug}/`;
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          toast(`Open <code>${a.dataset.link}</code>`);
+        });
+        list.appendChild(a);
+      });
+
+      host.appendChild(group);
+    });
+  }
+
+  /* ==========================================================
+   * Navigation demo
+   * ========================================================== */
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const hub = link.dataset.hub;
+      toast(`Navigate to pillar hub <code>/${hub}/</code>`);
+    });
+  });
+  document.querySelectorAll("[data-link]").forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      toast(`Open <code>${el.dataset.link}</code>`);
+    });
+  });
+
+  function submitSearch(e) {
+    e.preventDefault();
+    const url = buildUrl();
+    toast(`Submit search · routes to <code>${url}</code>`);
+    return false;
+  }
+
+  /* ==========================================================
+   * Toast
+   * ========================================================== */
+  let toastTimer;
+  function toast(html) {
+    const el = document.getElementById("toast");
+    el.innerHTML = html;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+  }
+
+  /* ==========================================================
+   * Mobile menu
+   * ========================================================== */
+  document.getElementById("menuToggle").addEventListener("click", () => {
+    const nav = document.getElementById("navLinks");
+    const btn = document.getElementById("menuToggle");
+    const open = nav.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  /* ==========================================================
+   * Boot
+   * ========================================================== */
+  renderFields();
+  renderCatsPillars();
+</script>
+
+</body>
+</html>
