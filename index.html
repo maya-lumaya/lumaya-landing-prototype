@@ -99,7 +99,22 @@
     transition: background .2s var(--ease); white-space: nowrap;
   }
   .btn-ghost:hover { background: var(--bg-2); }
-  @media (max-width: 1024px) { .btn-ghost { display: none; } }
+  @media (max-width: 1100px) { .btn-ghost { display: none; } }
+
+  .version-toggle {
+    display: inline-flex; align-items: center; gap: 0;
+    border-radius: var(--radius-pill);
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 3px; font-size: 12px; font-weight: 500;
+    box-shadow: var(--shadow-sm);
+    margin-right: 4px;
+  }
+  .version-toggle a {
+    padding: 6px 12px; border-radius: var(--radius-pill);
+    color: var(--text-muted); transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .version-toggle a.is-active { background: var(--olive-900); color: #FFF6E9; }
+  .version-toggle a:not(.is-active):hover { background: var(--bg-2); color: var(--text); }
   .icon-btn {
     width: 44px; height: 44px;
     display: inline-flex; align-items: center; justify-content: center;
@@ -684,6 +699,10 @@
       <a href="#" data-hub="trainings">Trainings</a>
     </nav>
     <div class="nav-actions">
+      <span class="version-toggle" aria-label="Prototype version">
+        <a href="index.html" class="is-active" aria-current="page">v1</a>
+        <a href="v2.html">v2</a>
+      </span>
       <button class="btn-ghost">For organisers</button>
       <button class="icon-btn" aria-label="Saved">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
