@@ -504,7 +504,6 @@
     transition: background .2s var(--ease); white-space: nowrap;
   }
   .btn-ghost:hover { background: var(--bg-2); }
-  @media (max-width: 1100px) { .btn-ghost { display: none; } }
 
   .version-toggle {
     display: inline-flex; align-items: center; gap: 0;
@@ -531,18 +530,6 @@
   .icon-btn:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
 
   .menu-toggle { display: none; }
-  @media (max-width: 860px) {
-    .nav-links { display: none; }
-    .menu-toggle { display: inline-flex; }
-    .nav-links.open {
-      display: flex; flex-direction: column;
-      position: absolute; top: 76px; left: 0; right: 0;
-      padding: 16px 24px 24px;
-      background: var(--bg); border-bottom: 1px solid var(--border);
-      gap: 4px;
-    }
-    .nav-links.open a { padding: 14px 6px; border-bottom: 1px solid var(--border); }
-  }
 
   /* ---------- Hero ---------- */
   .hero { position: relative; padding: 72px 0 40px; }
@@ -828,26 +815,6 @@
     vertical-align: middle;
   }
 
-  /* Mobile taxonomy */
-  @media (max-width: 860px) {
-    .dropdown.taxonomy {
-      min-width: 0; max-width: none;
-      max-height: none; overflow: visible;
-    }
-    .field.active .dropdown.taxonomy { display: block; grid-template-columns: none; }
-    .tax-pillars { border-right: 0; background: transparent; padding: 4px; overflow: visible; }
-    .tax-panel { display: none; }
-    .tax-chev { display: block; }
-    /* Don't auto-highlight first pillar on mobile — accordion mode */
-    .tax-item.active:not(.open) .tax-head { background: transparent; box-shadow: none; }
-    .tax-item.active:not(.open) .tax-icon { background: var(--surface); border-color: var(--border); color: var(--olive-700); }
-    .tax-item.active:not(.open) .tax-name { color: var(--text); font-weight: 500; }
-  }
-  /* Collapse panel grid on narrower desktop */
-  @media (max-width: 1100px) {
-    .tax-subs-grid { grid-template-columns: 1fr; }
-  }
-
   /* Search foot */
   .search-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 8px 0; flex-wrap: wrap; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -868,20 +835,6 @@
     border-radius: 6px; border: 1px solid var(--orange-100);
   }
 
-  /* Mobile search */
-  @media (max-width: 860px) {
-    .search-stage { padding: 0; }
-    .search-pill { flex-direction: column; border-radius: var(--radius-lg); padding: 6px; }
-    .field { padding: 14px 18px; border-radius: var(--radius-md); }
-    .field + .field::before { left: 18px; right: 18px; top: 0; transform: none; width: auto; height: 1px; }
-    .submit-wrap { padding: 6px 0 0; }
-    .search-pill:has(.field.active) .submit, .submit { width: 100%; height: 52px; border-radius: var(--radius-pill); padding: 0 22px; }
-    .submit .submit-label { font-size: 15px; max-width: 200px; opacity: 1; margin-left: 10px; }
-    .dropdown { position: static; box-shadow: none; border: 0; padding: 4px 0; max-height: none; min-width: 0; }
-    .dropdown.wide .dd-grid { grid-template-columns: 1fr; }
-    .search-foot { padding: 14px 0 0; }
-  }
-
   /* ---------- Section base ---------- */
   .section { padding: 96px 0 32px; }
   .section-header { display: flex; justify-content: space-between; align-items: end; margin-bottom: 32px; gap: 24px; flex-wrap: wrap; }
@@ -896,7 +849,6 @@
 
   /* ---------- Cards ---------- */
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 980px) { .cards { grid-template-columns: 1fr; } }
   .card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); overflow: hidden;
@@ -986,7 +938,6 @@
   /* ---------- Browse by category ---------- */
   .cats-section { padding: 80px 0 32px; }
   .cats-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-  @media (max-width: 980px) { .cats-pillars { grid-template-columns: 1fr; } }
   .cat-group {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1049,7 +1000,6 @@
   /* ---------- Editorial ---------- */
   .editorial { padding: 64px 0 88px; border-top: 1px solid var(--border); margin-top: 56px; }
   .editorial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
-  @media (max-width: 860px) { .editorial-grid { grid-template-columns: 1fr; gap: 32px; } }
   .editorial h2 { font-size: 30px; line-height: 1.2; max-width: 420px; margin-bottom: 14px; }
   .editorial p.intro { color: var(--text-muted); margin-bottom: 20px; max-width: 460px; }
   .editorial-list { display: flex; flex-direction: column; gap: 14px; }
@@ -2134,7 +2084,7 @@
       // Desktop hover/click → show in panel
       const head = item.querySelector(".tax-head");
       head.addEventListener("mouseenter", () => {
-        if (window.matchMedia("(min-width: 861px)").matches) {
+        if (window.matchMedia("(min-width: 721px)").matches) {
           pillars.querySelectorAll(".tax-item").forEach(n => n.classList.remove("active"));
           item.classList.add("active");
           showPanel(pillar);
@@ -2142,7 +2092,7 @@
       });
       head.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        const isMobile = !window.matchMedia("(min-width: 861px)").matches;
+        const isMobile = !window.matchMedia("(min-width: 721px)").matches;
         if (isMobile) {
           // Accordion — toggle open on tap
           const wasOpen = item.classList.contains("open");
