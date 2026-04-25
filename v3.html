@@ -62,15 +62,17 @@
 
   /* ======================================================
    * MOBILE SEARCH (v3) — Airbnb-style trigger + fullscreen
+   * Scroll-driven --shrink (0..1) collapses the icon row
+   * and the gap between text tabs and the search pill.
    * ====================================================== */
-  .m-search { display: none; }
-  .m-search-wrap { padding: 12px 0 4px; }
+  .m-search { display: none; --shrink: 0; }
+  .m-search-wrap { padding: 14px 0 calc(10px - 6px * var(--shrink)); }
   .m-search-pill {
     width: 100%;
     background: #FFFFFF;
     border: 1px solid var(--olive-100);
     border-radius: 999px;
-    padding: 14px 22px;
+    padding: 18px 22px;
     box-shadow: 0 1px 2px rgba(18,19,12,0.04), 0 8px 24px rgba(18,19,12,0.08);
     display: flex; align-items: center; gap: 12px;
     font: 500 15px/1 "Inter", system-ui, sans-serif;
@@ -82,29 +84,44 @@
   .m-search-pill .m-search-label { flex: 1; text-align: left; }
   .m-search-pill .m-search-sub { color: var(--muted); font-size: 12px; }
   .m-tab-row {
-    display: flex; gap: 6px; justify-content: center;
-    margin-top: 16px; padding: 0 4px;
+    display: flex; gap: 0;
+    justify-content: space-around; align-items: stretch;
+    /* gap between pill and tab text shrinks from 14px → 0 as user scrolls */
+    margin-top: calc(14px - 14px * var(--shrink));
+    padding: 0;
   }
   .m-tab-btn {
-    flex: 1; max-width: 110px;
-    background: transparent; border: 0; padding: 10px 6px 10px;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    flex: 1 1 0; max-width: none;
+    background: transparent; border: 0;
+    /* vertical padding tightens slightly when collapsed */
+    padding: calc(10px - 4px * var(--shrink)) 6px calc(10px - 2px * var(--shrink));
+    display: flex; flex-direction: column; align-items: center;
+    /* gap between icon and label collapses to 0 when shrink → 1 */
+    gap: calc(6px - 6px * var(--shrink));
     color: var(--muted); cursor: pointer; position: relative;
     border-bottom: 2px solid transparent;
-    font: 500 12px/1.2 "Inter", system-ui, sans-serif;
+    font: 500 13px/1.2 "Inter", system-ui, sans-serif;
   }
   .m-tab-btn .m-tab-icon {
-    width: 32px; height: 32px; display: grid; place-items: center;
+    /* icons shrink from 32 → 0 and fade out a touch faster */
+    width: calc(32px - 32px * var(--shrink));
+    height: calc(32px - 32px * var(--shrink));
+    display: grid; place-items: center;
     color: var(--text);
+    overflow: hidden;
+    opacity: clamp(0, calc(1 - var(--shrink) * 1.4), 1);
   }
   .m-tab-btn .m-tab-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .m-tab-btn .m-tab-badge {
-    position: absolute; top: 4px; right: -2px;
+    position: absolute; top: 4px; right: 2px;
     background: #2D5BFF; color: #fff;
     font: 700 9px/1 "Inter", system-ui, sans-serif;
     letter-spacing: 0.06em;
     padding: 3px 5px 3px;
     border-radius: 6px;
+    /* badges fade out together with icons */
+    opacity: clamp(0, calc(1 - var(--shrink) * 1.6), 1);
+    pointer-events: none;
   }
   .m-tab-btn[aria-selected="true"] {
     color: var(--text);
@@ -254,6 +271,61 @@
     font-size: 13px;
   }
   .m-chip-stack .m-chip .m-chip-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  /* Radius chips: 5-up grid */
+  .m-chip-stack.m-chip-stack-5 { grid-template-columns: repeat(5, 1fr); }
+
+  /* Suggest item with right-side remove button (history entries) */
+  .m-suggest-item.has-remove { padding-right: 4px; }
+  .m-suggest-item .m-suggest-remove {
+    flex: 0 0 auto;
+    width: 32px; height: 32px;
+    border: 0; background: transparent;
+    border-radius: 8px; cursor: pointer;
+    color: var(--muted);
+    display: grid; place-items: center;
+  }
+  .m-suggest-item .m-suggest-remove:hover { background: var(--olive-50); color: var(--text); }
+  .m-suggest-item .m-suggest-remove svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  /* Back button used inside the place picker (address-search / address-radius modes) */
+  .m-back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: transparent; border: 0;
+    color: var(--muted); cursor: pointer;
+    font: 500 13px/1.2 "Inter", system-ui, sans-serif;
+    padding: 8px 0; margin-bottom: 8px;
+  }
+  .m-back-btn:hover { color: var(--text); }
+  .m-back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Pinned address card shown in radius mode */
+  .m-address-pinned {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px; margin-bottom: 18px;
+    background: var(--bg-2);
+    border: 1px solid var(--olive-100);
+    border-radius: 14px;
+  }
+  .m-address-pinned .m-pin-icon {
+    width: 40px; height: 40px;
+    background: #EFF1FA; border-radius: 10px;
+    display: grid; place-items: center; color: #2D5BFF; flex: 0 0 auto;
+  }
+  .m-address-pinned .m-pin-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .m-address-pinned .m-pin-text { flex: 1; min-width: 0; }
+  .m-address-pinned .m-pin-name { font-weight: 500; font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-address-pinned .m-pin-sub  { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-address-pinned .m-pin-change {
+    background: transparent; border: 0;
+    color: var(--text); cursor: pointer;
+    font: 500 13px/1.2 "Inter", system-ui, sans-serif;
+    text-decoration: underline; padding: 4px 0;
+  }
+
+  /* Empty / loading rows for address autocomplete */
+  .m-suggest-empty {
+    padding: 16px 6px; color: var(--muted); font-size: 13px; text-align: center;
+  }
 
   /* Faux calendar (illustrative, not interactive) */
   .m-cal { margin-top: 18px; }
@@ -360,7 +432,24 @@
   /* Show/hide rules */
   @media (max-width: 720px) {
     .search-wrap { display: none; }
-    .m-search { display: block; }
+    .m-search {
+      display: block;
+      position: sticky;
+      top: 64px; /* sits flush below the sticky header */
+      z-index: 50;
+      background: rgba(249, 246, 239, 0.96);
+      backdrop-filter: saturate(120%) blur(14px);
+      -webkit-backdrop-filter: saturate(120%) blur(14px);
+    }
+    /* subtle separator that fades in once the bar is in its compact, stuck state */
+    .m-search::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+      height: 1px; background: var(--border);
+      opacity: var(--shrink, 0);
+      pointer-events: none;
+    }
+    /* tighten the header itself on mobile so the sticky offset stays correct */
+    header.site .nav { height: 64px; }
     .hero { padding: 8px 0 24px !important; }
     .hero .hero-inner { gap: 0 !important; }
     .hero .hero-image { display: none; }
@@ -492,7 +581,10 @@
   }
 
   /* ---------- Search ---------- */
-  .search-wrap { position: relative; padding: 32px 0 8px; }
+  /* z-index 50 keeps the entire search bar (tabs + pill + dropdowns) above
+     the curated cards section below — otherwise card chips like "NEAR YOU ·
+     TONIGHT" can paint over the expanded dropdown. */
+  .search-wrap { position: relative; z-index: 50; padding: 32px 0 8px; }
   .search-stage { max-width: 1080px; margin: 0 auto; }
 
   .tabs-row { display: flex; justify-content: center; gap: 2px; margin-bottom: 18px; position: relative; }
@@ -540,7 +632,7 @@
   .search-pill {
     display: flex; align-items: stretch;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-pill); padding: 10px 10px 10px 0;
+    border-radius: var(--radius-pill); padding: 10px;
     box-shadow: var(--shadow-pill); position: relative;
     transition: box-shadow .25s var(--ease);
   }
@@ -554,6 +646,9 @@
     display: flex; flex-direction: column; justify-content: center;
     transition: background .2s var(--ease), box-shadow .2s var(--ease);
   }
+  /* First field gets a touch more left padding so the label clears the
+     pill's rounded corner curve (border-radius is full pill ≈ half-height). */
+  .search-pill > .field:first-of-type { padding-left: 36px; }
   .field:hover { background: var(--surface); }
   .field.active { background: var(--surface); box-shadow: var(--shadow-field-active); z-index: 2; }
   .field + .field::before {
@@ -1586,16 +1681,21 @@
     retreats: {
       chipsLabel: "Trending",
       chips: [
-        { label: "I'm flexible", date: "flexible" },
         { label: "Yoga", cat: "yoga/yoga-teacher-training" },
         { label: "Silent", cat: "meditation/silent" },
         { label: "Women's", cat: "groups/womens" },
-        { label: "Ayurveda", cat: "wellness/ayurveda" }
+        { label: "Ayurveda", cat: "wellness/ayurveda" },
+        { label: "I'm flexible", date: "flexible" }
       ],
+      // Field order: modality+style (taxonomy) → destination → dates → length.
+      // Per search-bar.md spec: pure-pillar volume "yoga retreat" (22,200/mo EN, 12,100/mo DE) is
+      // 22× larger than any location-modified variant, and DACH "yoga urlaub" autocomplete narrows
+      // exclusively by location, never by style. Buyers commit to modality before destination.
+      // Search-bar field order ≠ URL slug order — the URL builder still emits /{region}/retreats/{cat}/.
       fields: [
+        { key: "cat",   label: "Practice",    placeholder: "Yoga, meditation, Ayurveda…", type: "category", catMode: "taxonomy", taxSource: "retreats" },
         { key: "where", label: "Destination", placeholder: "Anywhere", type: "place" },
         { key: "when",  label: "Dates",       placeholder: "Flexible", defaultValue: "Flexible", type: "date" },
-        { key: "cat",   label: "Category",    placeholder: "Any retreat type", type: "category", catMode: "taxonomy", taxSource: "retreats" },
         { key: "theme", label: "Length",      placeholder: "Any length", type: "length" }
       ]
     },
@@ -1648,6 +1748,7 @@
   const state = {
     tab: "all",
     where: "",     whereSlug: "",
+    whereRadiusKm: 10,  // Events tab — used when Where is an address
     when: "",
     cat: "",       catSlug: "",      catPath: "",
     cert: "",      certSlug: "",
@@ -2250,7 +2351,81 @@
     theme: "Any length"
   };
 
-  const mState = { tab: "retreats", step: 0, openPillar: null };
+  const mState = {
+    tab: "retreats",
+    step: 0,
+    openPillar: null,
+    // Place picker sub-mode (Events tab only): "list" | "address-search" | "address-radius"
+    placeMode: "list",
+    addrQuery: "",
+    addrResults: [],
+    addrLoading: false,
+    pickedAddress: null  // { id, name, sub }
+  };
+
+  /* ----- Address autocomplete + history (Events tab only) ----- */
+  const ADDR_HISTORY_KEY = "lumaya-v3-where-history";
+  const ADDR_HISTORY_MAX = 3;
+  const ADDR_AUTOCOMPLETE_URL = "https://api.lumaya.co/api/v1/places/autocomplete";
+  const RADIUS_OPTIONS = [1, 5, 10, 25, 50];
+  let addrSessionToken = null;
+  let addrFetchTimer = null;
+  let addrFetchSeq = 0;
+
+  function freshAddrSession() {
+    addrSessionToken = "v3-" + Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
+  }
+
+  function addrHistoryRead() {
+    try { return JSON.parse(localStorage.getItem(ADDR_HISTORY_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function addrHistoryWrite(arr) {
+    try { localStorage.setItem(ADDR_HISTORY_KEY, JSON.stringify(arr.slice(0, ADDR_HISTORY_MAX))); }
+    catch {}
+  }
+  function addrHistoryPrepend(item) {
+    const cur = addrHistoryRead().filter(x => x.id !== item.id);
+    addrHistoryWrite([item, ...cur]);
+  }
+  function addrHistoryRemove(id) {
+    addrHistoryWrite(addrHistoryRead().filter(x => x.id !== id));
+  }
+
+  async function fetchAddressSuggestions(query) {
+    if (!query || query.trim().length < 2) return [];
+    if (!addrSessionToken) freshAddrSession();
+    try {
+      const res = await fetch(ADDR_AUTOCOMPLETE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ searchString: query, sessionToken: addrSessionToken })
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const arr = Array.isArray(data) ? data
+                : (data.predictions || data.results || data.suggestions || data.items || []);
+      return arr.map((p, i) => {
+        const desc = p.description || "";
+        const parts = desc.split(",");
+        return {
+          id: p.placeId || p.place_id || p.id || ("ac-" + i + "-" + Date.now()),
+          name: p.mainText || p.main_text || (p.structured_formatting && p.structured_formatting.main_text)
+                || parts[0] || desc || "Unknown",
+          sub:  p.secondaryText || p.secondary_text || (p.structured_formatting && p.structured_formatting.secondary_text)
+                || parts.slice(1).join(",").trim() || ""
+        };
+      });
+    } catch (e) {
+      // CORS / offline fallback — synthetic suggestions so the UX is demonstrable.
+      const cap = query.charAt(0).toUpperCase() + query.slice(1);
+      return [
+        { id: "mock-" + query + "-1", name: cap + "er Allee 32", sub: "Berlin, Germany" },
+        { id: "mock-" + query + "-2", name: cap + "straße 12",   sub: "Hamburg, Germany" },
+        { id: "mock-" + query + "-3", name: cap + " Platz",      sub: "München, Germany" }
+      ];
+    }
+  }
   const mModal = document.getElementById("mModal");
   const mBody  = document.getElementById("mModalBody");
   const mTabs  = document.getElementById("mModalTabs");
@@ -2287,6 +2462,9 @@
     state.tab = mState.tab;
     mState.step = 0;
     mState.openPillar = null;
+    mState.placeMode = "list";
+    mState.pickedAddress = null;
+    mState.addrQuery = ""; mState.addrResults = []; mState.addrLoading = false;
     document.body.classList.add("m-locked");
     mModal.classList.add("open");
     mRender();
@@ -2318,9 +2496,13 @@
         mState.openPillar = null;
         // Reset incompatible state slots
         if (key !== "trainings") { state.cert = ""; state.certSlug = ""; }
-        if (key !== "events")    { state.time = ""; }
+        if (key !== "events")    { state.time = ""; state.whereRadiusKm = 10; }
         if (key !== "retreats")  { state.theme = ""; }
         state.cat = ""; state.catSlug = ""; state.catPath = "";
+        // Reset address sub-state when leaving Events
+        mState.placeMode = "list";
+        mState.pickedAddress = null;
+        mState.addrQuery = ""; mState.addrResults = []; mState.addrLoading = false;
         mRender();
         syncTopMobileTabs();
         renderFields(); // keep desktop in sync
@@ -2362,6 +2544,7 @@
     wrap.addEventListener("click", () => {
       mState.step = idx;
       mState.openPillar = null;
+      mState.placeMode = "list"; // re-entering "Where" should land on the list view, not a stale sub-mode
       mRender();
     });
     return wrap;
@@ -2387,11 +2570,23 @@
   }
 
   function mRenderPlace(body, f) {
+    // 3 sub-modes; only Events tab uses the address modes.
+    if (mState.tab === "events" && mState.placeMode === "address-search") {
+      return mRenderPlaceAddressSearch(body);
+    }
+    if (mState.tab === "events" && mState.placeMode === "address-radius") {
+      return mRenderPlaceAddressRadius(body);
+    }
+    mRenderPlaceList(body);
+  }
+
+  /* List mode — Near me / Worldwide / Address / History / Cities */
+  function mRenderPlaceList(body) {
     const wrap = document.createElement("div");
     wrap.className = "m-input-wrap";
     wrap.innerHTML = `
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input class="m-input" type="text" placeholder="Search destinations" id="mPlaceInput" />
+      <input class="m-input" type="text" placeholder="${mState.tab === "events" ? "Search city or address" : "Search destinations"}" id="mPlaceInput" />
     `;
     body.appendChild(wrap);
 
@@ -2399,24 +2594,119 @@
     const list = document.createElement("div");
     list.className = "m-suggest-list";
 
-    // Near me (always first)
-    const near = el(`
-      <div class="m-suggest-item" role="option">
-        <div class="m-suggest-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+    // First entry depends on tab.
+    if (mState.tab === "events") {
+      const near = el(`
+        <div class="m-suggest-item" role="option">
+          <div class="m-suggest-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+          </div>
+          <div class="m-suggest-text">
+            <div class="m-suggest-name">Near me</div>
+            <div class="m-suggest-sub">Find what's around you right now.</div>
+          </div>
         </div>
-        <div class="m-suggest-text">
-          <div class="m-suggest-name">Near me</div>
-          <div class="m-suggest-sub">Find what's around you right now.</div>
-        </div>
-      </div>
-    `);
-    near.addEventListener("click", () => {
-      mSetFieldValue("where", "Near me", "near-me");
-      mAdvance();
-    });
-    list.appendChild(near);
+      `);
+      near.addEventListener("click", () => {
+        mSetFieldValue("where", "Near me", "near-me");
+        mAdvance();
+      });
+      list.appendChild(near);
 
+      // Address entry — opens the address-search sub-mode.
+      const addr = el(`
+        <div class="m-suggest-item" role="option">
+          <div class="m-suggest-icon" style="background:#FEF1E2;color:#D97706;">
+            <svg viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="m-suggest-text">
+            <div class="m-suggest-name">An address</div>
+            <div class="m-suggest-sub">Pin a point + radius (1–50 km).</div>
+          </div>
+        </div>
+      `);
+      addr.addEventListener("click", () => {
+        freshAddrSession();
+        mState.placeMode = "address-search";
+        mState.addrQuery = "";
+        mState.addrResults = [];
+        mState.addrLoading = false;
+        mRender();
+        // Focus the address input shortly after mount
+        setTimeout(() => { const i = document.getElementById("mAddrInput"); if (i) i.focus(); }, 30);
+      });
+      list.appendChild(addr);
+    } else {
+      const worldwide = el(`
+        <div class="m-suggest-item" role="option">
+          <div class="m-suggest-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          </div>
+          <div class="m-suggest-text">
+            <div class="m-suggest-name">Worldwide</div>
+            <div class="m-suggest-sub">Browse every destination — no geo filter.</div>
+          </div>
+        </div>
+      `);
+      worldwide.addEventListener("click", () => {
+        mSetFieldValue("where", "Worldwide", "");
+        mAdvance();
+      });
+      list.appendChild(worldwide);
+    }
+
+    // History (Events only) — saved addresses, max 3, each removable.
+    if (mState.tab === "events") {
+      const history = addrHistoryRead();
+      if (history.length) {
+        body.appendChild(list); // attach what we have so far so order is right
+        body.appendChild(el(`<div class="m-suggest-label" style="margin-top:18px;">Recent addresses</div>`));
+        const hList = document.createElement("div");
+        hList.className = "m-suggest-list";
+        history.forEach(item => {
+          const row = el(`
+            <div class="m-suggest-item has-remove" role="option">
+              <div class="m-suggest-icon" style="background:#F1EAD9;color:#7A6027;">
+                <svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+              </div>
+              <div class="m-suggest-text">
+                <div class="m-suggest-name">${item.name}</div>
+                <div class="m-suggest-sub">${item.sub || ""}${item.radiusKm ? " · " + item.radiusKm + " km" : ""}</div>
+              </div>
+              <button class="m-suggest-remove" type="button" aria-label="Remove from history">
+                <svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg>
+              </button>
+            </div>
+          `);
+          row.addEventListener("click", () => {
+            mState.pickedAddress = { id: item.id, name: item.name, sub: item.sub };
+            state.whereRadiusKm = item.radiusKm || 10;
+            mState.placeMode = "address-radius";
+            mRender();
+          });
+          row.querySelector(".m-suggest-remove").addEventListener("click", (e) => {
+            e.stopPropagation();
+            addrHistoryRemove(item.id);
+            mRender();
+          });
+          hList.appendChild(row);
+        });
+        body.appendChild(hList);
+        body.appendChild(el(`<div class="m-suggest-label" style="margin-top:18px;">Cities</div>`));
+        // Reset list so cities go in a fresh container below
+        const list2 = document.createElement("div");
+        list2.className = "m-suggest-list";
+        appendPlaceSuggestions(list2);
+        body.appendChild(list2);
+        return;
+      }
+    }
+
+    appendPlaceSuggestions(list);
+    body.appendChild(list);
+  }
+
+  function appendPlaceSuggestions(list) {
     PLACE_SUGGESTIONS.forEach(p => {
       const item = el(`
         <div class="m-suggest-item" role="option">
@@ -2435,7 +2725,154 @@
       });
       list.appendChild(item);
     });
-    body.appendChild(list);
+  }
+
+  /* Address-search mode — debounced fetch against the Lumaya autocomplete API */
+  function mRenderPlaceAddressSearch(body) {
+    const back = el(`
+      <button class="m-back-btn" type="button">
+        <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg>
+        Back to destinations
+      </button>
+    `);
+    back.addEventListener("click", () => {
+      mState.placeMode = "list";
+      mRender();
+    });
+    body.appendChild(back);
+
+    const wrap = document.createElement("div");
+    wrap.className = "m-input-wrap";
+    wrap.innerHTML = `
+      <svg viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <input class="m-input" type="text" placeholder="Search address" id="mAddrInput" autocomplete="off" />
+    `;
+    body.appendChild(wrap);
+
+    const input = wrap.querySelector("#mAddrInput");
+    input.value = mState.addrQuery || "";
+
+    const resultsHost = document.createElement("div");
+    resultsHost.id = "mAddrResults";
+    body.appendChild(resultsHost);
+    renderAddrResults(resultsHost);
+
+    input.addEventListener("input", (e) => {
+      mState.addrQuery = e.target.value;
+      clearTimeout(addrFetchTimer);
+      const seq = ++addrFetchSeq;
+      mState.addrLoading = true;
+      renderAddrResults(resultsHost);
+      addrFetchTimer = setTimeout(async () => {
+        const results = await fetchAddressSuggestions(mState.addrQuery);
+        if (seq !== addrFetchSeq) return; // stale
+        mState.addrResults = results;
+        mState.addrLoading = false;
+        renderAddrResults(resultsHost);
+      }, 220);
+    });
+  }
+
+  function renderAddrResults(host) {
+    host.innerHTML = "";
+    const q = (mState.addrQuery || "").trim();
+    if (q.length < 2) {
+      host.appendChild(el(`<div class="m-suggest-empty">Start typing an address — e.g. "Schönhauser Allee 32"</div>`));
+      return;
+    }
+    if (mState.addrLoading) {
+      host.appendChild(el(`<div class="m-suggest-empty">Searching…</div>`));
+      return;
+    }
+    const list = document.createElement("div");
+    list.className = "m-suggest-list";
+    if (!mState.addrResults.length) {
+      host.appendChild(el(`<div class="m-suggest-empty">No matches. Try a different street or city.</div>`));
+      return;
+    }
+    mState.addrResults.forEach(r => {
+      const row = el(`
+        <div class="m-suggest-item" role="option">
+          <div class="m-suggest-icon" style="background:#FEF1E2;color:#D97706;">
+            <svg viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="m-suggest-text">
+            <div class="m-suggest-name">${r.name}</div>
+            <div class="m-suggest-sub">${r.sub || ""}</div>
+          </div>
+        </div>
+      `);
+      row.addEventListener("click", () => {
+        mState.pickedAddress = r;
+        state.whereRadiusKm = state.whereRadiusKm || 10;
+        mState.placeMode = "address-radius";
+        mRender();
+      });
+      list.appendChild(row);
+    });
+    host.appendChild(list);
+  }
+
+  /* Address-radius mode — pinned address + radius chips */
+  function mRenderPlaceAddressRadius(body) {
+    const back = el(`
+      <button class="m-back-btn" type="button">
+        <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg>
+        Back to destinations
+      </button>
+    `);
+    back.addEventListener("click", () => {
+      mState.placeMode = "list";
+      mState.pickedAddress = null;
+      mRender();
+    });
+    body.appendChild(back);
+
+    const a = mState.pickedAddress || { name: "—", sub: "" };
+    const pinned = el(`
+      <div class="m-address-pinned">
+        <div class="m-pin-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="m-pin-text">
+          <div class="m-pin-name">${a.name}</div>
+          <div class="m-pin-sub">${a.sub || ""}</div>
+        </div>
+        <button class="m-pin-change" type="button">Change</button>
+      </div>
+    `);
+    pinned.querySelector(".m-pin-change").addEventListener("click", () => {
+      mState.placeMode = "address-search";
+      mRender();
+      setTimeout(() => { const i = document.getElementById("mAddrInput"); if (i) i.focus(); }, 30);
+    });
+    body.appendChild(pinned);
+
+    body.appendChild(el(`<div class="m-suggest-label">Within</div>`));
+    const stack = document.createElement("div");
+    stack.className = "m-chip-stack m-chip-stack-5";
+    const cur = state.whereRadiusKm || 10;
+    RADIUS_OPTIONS.forEach(km => {
+      const chip = el(`<button class="m-chip${cur === km ? " is-active" : ""}" type="button"><span>${km} km</span></button>`);
+      chip.addEventListener("click", () => {
+        state.whereRadiusKm = km;
+        const labelName = a.name;
+        const labelSub  = a.sub ? a.sub + " · " + km + " km" : km + " km radius";
+        // Persist into state.where so the collapsed step head reflects the choice.
+        mSetFieldValue("where", labelName, "address-" + (a.id || ""));
+        // Save / refresh history (deduped, latest first, max 3).
+        addrHistoryPrepend({ id: a.id, name: a.name, sub: a.sub, radiusKm: km });
+        // Reset modal sub-state and advance to next step.
+        mState.placeMode = "list";
+        mState.pickedAddress = null;
+        mState.addrQuery = "";
+        mState.addrResults = [];
+        addrSessionToken = null; // end Google session-token billing window
+        mAdvance();
+      });
+      stack.appendChild(chip);
+    });
+    body.appendChild(stack);
   }
 
   function mRenderDate(body, f) {
@@ -2535,12 +2972,12 @@
         mRender();
       });
       const subs = p.querySelector(".m-tax-subs");
-      // "All" entry
+      // "All" entry — auto-advances (close-on-select) like the place / date pickers.
       const allItem = el(`<div class="m-tax-sub" role="option"><span>All ${pillar.name}</span><span class="cnt">${fmt(pillar.count)}</span></div>`);
       allItem.addEventListener("click", (e) => {
         e.stopPropagation();
         mSetFieldValue("cat", `All ${pillar.name}`, pillar.slug);
-        mRender();
+        mAdvance();
       });
       subs.appendChild(allItem);
       pillar.subs.forEach(sub => {
@@ -2548,7 +2985,7 @@
         item.addEventListener("click", (e) => {
           e.stopPropagation();
           mSetFieldValue("cat", sub.name, `${pillar.slug}/${sub.slug}`);
-          mRender();
+          mAdvance();
         });
         subs.appendChild(item);
       });
@@ -2597,7 +3034,7 @@
   document.getElementById("mModalClose").addEventListener("click", closeMobileModal);
   mNext.addEventListener("click", mAdvance);
   document.getElementById("mClear").addEventListener("click", () => {
-    state.where = ""; state.whereSlug = "";
+    state.where = ""; state.whereSlug = ""; state.whereRadiusKm = 10;
     state.when = "";
     state.cat = ""; state.catSlug = ""; state.catPath = "";
     state.cert = ""; state.certSlug = "";
@@ -2605,6 +3042,9 @@
     state.theme = "";
     mState.step = 0;
     mState.openPillar = null;
+    mState.placeMode = "list";
+    mState.pickedAddress = null;
+    mState.addrQuery = ""; mState.addrResults = []; mState.addrLoading = false;
     updateUrlPreview();
     renderFields();
     mRender();
@@ -2613,6 +3053,28 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && mModal.classList.contains("open")) closeMobileModal();
   });
+
+  /* ==========================================================
+   * Mobile sticky search shrink (Airbnb-style)
+   * Drives the --shrink CSS var (0..1) on .m-search based on scrollY.
+   * ========================================================== */
+  (function() {
+    const m = document.querySelector(".m-search");
+    if (!m) return;
+    const RANGE = 110; // px of scroll over which we collapse to fully compact
+    let raf = 0;
+    const apply = () => {
+      raf = 0;
+      const y = window.scrollY || window.pageYOffset || 0;
+      const s = Math.max(0, Math.min(1, y / RANGE));
+      m.style.setProperty("--shrink", s.toFixed(3));
+    };
+    window.addEventListener("scroll", () => {
+      if (raf) return;
+      raf = requestAnimationFrame(apply);
+    }, { passive: true });
+    apply();
+  })();
 
   /* ==========================================================
    * Boot
