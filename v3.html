@@ -892,7 +892,7 @@
     transition: transform .25s var(--ease), box-shadow .25s var(--ease);
     display: flex; flex-direction: column;
   }
-  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .card-media { aspect-ratio: 4 / 3; position: relative; overflow: hidden; }
   .card-media .bg { position: absolute; inset: 0; }
   .card-media::after {
@@ -931,7 +931,7 @@
     border-radius: var(--radius-sm); overflow: hidden;
     color: #FFF6E9; transition: transform .2s var(--ease);
   }
-  .destination:hover { transform: scale(1.02); }
+  .destination:hover { transform: scale(1.015); }
   .destination .bg { position: absolute; inset: 0; }
   .destination::after { content: ""; position: absolute; inset: 0; background: linear-gradient(200deg, rgba(29,29,33,0.05) 30%, rgba(29,29,33,0.55) 100%); }
   .destination span { position: absolute; left: 14px; bottom: 10px; font-family: 'Lora', serif; font-size: 16px; letter-spacing: 0.01em; z-index: 1; }
@@ -1131,7 +1131,7 @@
 
   /* ============================================================
    * HAPTIC + MICRO-INTERACTION FEEDBACK
-   * Touch-only press-scale, tab-pop, suggest-row tint, bn-spring.
+   * Touch-only press-scale, selection settle, suggest-row tint.
    * Respects prefers-reduced-motion.
    * ============================================================ */
   /* Hidden iOS Safari haptic switch (input type=checkbox switch) */
@@ -1148,35 +1148,35 @@
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
-    /* Press-scale — short, springy, non-interruptive */
+    /* Press-scale — brief, calm confirmation */
     .m-tab-btn, .tab, .m-modal-tab,
     .destination, .card-cta, .chip,
     .icon-btn, .menu-toggle,
     .m-clear, .m-next, .submit, .btn, .btn-ghost,
     .m-modal-close, .m-back-btn, .m-suggest-remove,
     .m-bn-btn, .m-bn-btn--cta, .m-search-pill, .m-step {
-      transition: transform .14s cubic-bezier(.2,.7,.2,1),
+      transition: transform .12s cubic-bezier(0,0,.2,1),
                   background-color .2s var(--ease),
                   color .2s var(--ease),
                   box-shadow .2s var(--ease);
     }
-    .m-bn-btn:active            { transform: scale(.86); }
-    .m-bn-btn--cta:active       { transform: scale(.92); }
-    .m-tab-btn:active           { transform: scale(.94); }
-    .m-search-pill:active       { transform: scale(.985); }
-    .tab:active, .m-modal-tab:active { transform: scale(.94); }
-    .chip:active                { transform: scale(.92); }
+    .m-bn-btn:active            { transform: scale(.97); }
+    .m-bn-btn--cta:active       { transform: scale(.97); }
+    .m-tab-btn:active           { transform: scale(.97); }
+    .m-search-pill:active       { transform: scale(.99); }
+    .tab:active, .m-modal-tab:active { transform: scale(.97); }
+    .chip:active                { transform: scale(.97); }
     .icon-btn:active,
-    .menu-toggle:active         { transform: scale(.86); }
-    .destination:active         { transform: scale(.97); }
-    .card-cta:active            { transform: scale(.97); }
+    .menu-toggle:active         { transform: scale(.96); }
+    .destination:active         { transform: scale(.98); }
+    .card-cta:active            { transform: scale(.98); }
     .m-modal-close:active,
     .m-back-btn:active,
-    .m-suggest-remove:active    { transform: scale(.85); }
+    .m-suggest-remove:active    { transform: scale(.96); }
     .m-clear:active, .m-next:active,
     .submit:active, .btn:active,
-    .btn-ghost:active           { transform: scale(.96); }
-    .m-step:active              { transform: scale(.985); }
+    .btn-ghost:active           { transform: scale(.98); }
+    .m-step:active              { transform: scale(.99); }
     /* Soft tint feedback for list rows (no scale — feels wrong on rows) */
     .m-suggest-row, .m-account-item {
       transition: background-color .15s var(--ease);
@@ -1185,36 +1185,17 @@
     .m-account-item:active      { background: rgba(0,0,0,.045); }
   }
 
-  /* Tab "pop" when selection changes — JS adds .is-tap-flash for one frame burst */
-  .m-tab-btn.is-tap-flash .m-tab-icon { animation: hapticTabPop .34s cubic-bezier(.34,1.56,.64,1); }
-  .m-modal-tab.is-tap-flash .m-tab-icon { animation: hapticTabPop .34s cubic-bezier(.34,1.56,.64,1); }
-  .tab.is-tap-flash               { animation: hapticTabBob .26s cubic-bezier(.34,1.56,.64,1); }
-  .chip.is-tap-flash              { animation: hapticChipPop .28s cubic-bezier(.34,1.56,.64,1); }
-  .m-bn-btn.is-tap-flash svg      { animation: hapticIconBob .32s cubic-bezier(.34,1.56,.64,1); }
-  .m-bn-btn--cta.is-tap-flash svg { animation: hapticCtaSpin .42s cubic-bezier(.34,1.56,.64,1); }
-  @keyframes hapticTabPop {
-    0%   { transform: scale(.82); }
-    55%  { transform: scale(1.12); }
+  /* Selection flash — JS adds .is-tap-flash; settle-back, no overshoot */
+  .m-tab-btn.is-tap-flash .m-tab-icon { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
+  .m-modal-tab.is-tap-flash .m-tab-icon { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
+  .tab.is-tap-flash               { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
+  .chip.is-tap-flash              { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
+  .m-bn-btn.is-tap-flash svg      { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
+  .m-bn-btn--cta.is-tap-flash svg { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
+  @keyframes hapticSettle {
+    0%   { transform: scale(.97); }
+    60%  { transform: scale(1.015); }
     100% { transform: scale(1); }
-  }
-  @keyframes hapticTabBob {
-    0%, 100% { transform: translateY(0); }
-    45%      { transform: translateY(-2px); }
-  }
-  @keyframes hapticChipPop {
-    0%   { transform: scale(.88); }
-    50%  { transform: scale(1.06); }
-    100% { transform: scale(1); }
-  }
-  @keyframes hapticIconBob {
-    0%   { transform: translateY(2px) scale(.88); }
-    50%  { transform: translateY(-2px) scale(1.08); }
-    100% { transform: translateY(0)    scale(1); }
-  }
-  @keyframes hapticCtaSpin {
-    0%   { transform: rotate(-15deg) scale(.86); }
-    45%  { transform: rotate( 12deg) scale(1.10); }
-    100% { transform: rotate(0)      scale(1); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1706,7 +1687,7 @@
       // Force reflow so the keyframe restarts even on the same element.
       void el.offsetWidth;
       el.classList.add("is-tap-flash");
-      setTimeout(() => el.classList.remove("is-tap-flash"), 450);
+      setTimeout(() => el.classList.remove("is-tap-flash"), 220);
     }
 
     document.addEventListener("pointerdown", (e) => {
