@@ -103,15 +103,21 @@
     font: 500 13px/1.2 "Inter", system-ui, sans-serif;
   }
   .m-tab-btn .m-tab-icon {
-    /* icons shrink from 32 → 0 and fade out a touch faster */
-    width: calc(32px - 32px * var(--shrink));
+    /* container height collapses with --shrink */
+    width: 32px;
     height: calc(32px - 32px * var(--shrink));
     display: grid; place-items: center;
     color: var(--text);
-    overflow: hidden;
-    opacity: clamp(0, calc(1 - var(--shrink) * 1.4), 1);
+    /* fade out a touch ahead of the scale so they "dissolve" before reaching 0 */
+    opacity: clamp(0, calc(1.1 - var(--shrink) * 1.3), 1);
   }
-  .m-tab-btn .m-tab-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  /* SVG shrinks proportionally with the container — prevents clipping */
+  .m-tab-btn .m-tab-icon svg {
+    width: calc(28px - 28px * var(--shrink));
+    height: calc(28px - 28px * var(--shrink));
+    stroke: currentColor; fill: none; stroke-width: 1.4;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
   .m-tab-btn .m-tab-badge {
     position: absolute; top: 4px; right: 2px;
     background: #2D5BFF; color: #fff;
@@ -431,41 +437,32 @@
 
   /* Show/hide rules */
   @media (max-width: 720px) {
+    /* On mobile, the search bar IS the header — hide the desktop chrome */
+    header.site { display: none; }
     .search-wrap { display: none; }
     .m-search {
       display: block;
       position: sticky;
-      top: 64px; /* sits flush below the sticky header */
+      top: 0;
       z-index: 50;
       background: rgba(249, 246, 239, 0.96);
       backdrop-filter: saturate(120%) blur(14px);
       -webkit-backdrop-filter: saturate(120%) blur(14px);
     }
-    /* subtle separator that fades in once the bar is in its compact, stuck state */
     .m-search::after {
       content: ""; position: absolute; left: 0; right: 0; bottom: 0;
       height: 1px; background: var(--border);
       opacity: var(--shrink, 0);
       pointer-events: none;
     }
-    /* tighten the header itself on mobile so the sticky offset stays correct */
-    header.site .nav { height: 64px; }
     .hero { padding: 8px 0 24px !important; }
     .hero .hero-inner { gap: 0 !important; }
     .hero .hero-image { display: none; }
     .hero .hero-copy h1 { font-size: 32px !important; }
     .section { padding: 32px 0 16px !important; }
     .cats-section { padding: 32px 0 16px !important; }
-    /* tighten header so version-toggle + icons fit at 360px */
-    header.site .nav-actions .icon-btn { width: 36px; height: 36px; }
-    header.site .nav-actions { gap: 4px; }
-    header.site .version-toggle a { padding: 5px 9px; font-size: 12px; }
-  }
-  @media (max-width: 400px) {
-    header.site .nav-actions .icon-btn[aria-label="Saved"],
-    header.site .nav-actions .icon-btn[aria-label="Account"] { display: none; }
-    header.site .container { padding: 0 14px; }
-    header.site .brand .name { font-size: 18px; }
+    /* Reserve space at the bottom for the fixed mobile bottom nav */
+    body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
   }
 
   /* ---------- Header ---------- */
@@ -1095,6 +1092,85 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     background: rgba(255,246,233,0.14);
     padding: 3px 8px; border-radius: 4px; margin-left: 6px;
+  }
+
+  /* ======================================================
+   * MOBILE BOTTOM NAV (v3) — 3 elements: Home / Add / Account
+   * Replaces the burger menu on small viewports.
+   * ====================================================== */
+  .m-bottom-nav { display: none; }
+  @media (max-width: 720px) {
+    .m-bottom-nav {
+      display: flex;
+      position: fixed; left: 0; right: 0; bottom: 0;
+      z-index: 70;
+      background: rgba(249, 246, 239, 0.96);
+      backdrop-filter: saturate(120%) blur(14px);
+      -webkit-backdrop-filter: saturate(120%) blur(14px);
+      border-top: 1px solid var(--border);
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+  .m-bn-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 4px; background: transparent; border: 0;
+    padding: 8px 6px; cursor: pointer;
+    color: var(--muted);
+    font: 500 11px/1 "Inter", system-ui, sans-serif;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-bn-btn[aria-current="page"] { color: var(--text); }
+  .m-bn-btn:active { color: var(--text); }
+  .m-bn-btn svg {
+    width: 24px; height: 24px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .m-bn-btn--cta { color: var(--orange-700); }
+  .m-bn-btn--cta svg { stroke-width: 1.8; }
+
+  /* ============= Mobile account menu (fullscreen) ============= */
+  .m-account-menu {
+    position: fixed; inset: 0; z-index: 210;
+    background: var(--bg-2);
+    display: none;
+    flex-direction: column;
+  }
+  .m-account-menu.open { display: flex; }
+  .m-account-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px 12px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .m-account-title {
+    margin: 0; font: 500 16px/1.2 "Inter", system-ui, sans-serif;
+    color: var(--text);
+  }
+  .m-account-body {
+    flex: 1; overflow-y: auto;
+    padding: 12px 16px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .m-account-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 18px;
+    border-radius: 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--text); text-decoration: none;
+    font: 500 15px/1.2 "Inter", system-ui, sans-serif;
+    cursor: pointer; text-align: left;
+    width: 100%;
+  }
+  .m-account-item:active { background: #FBF8F0; }
+  .m-account-item svg {
+    width: 22px; height: 22px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+    flex: 0 0 auto;
   }
 </style>
 </head>
@@ -3081,7 +3157,64 @@
    * ========================================================== */
   renderFields();
   renderCatsPillars();
+
+  /* ==========================================================
+   * Mobile bottom-nav account menu
+   * ========================================================== */
+  (function() {
+    const menu = document.getElementById("mAccountMenu");
+    const openBtn = document.getElementById("mBnAccount");
+    const closeBtn = document.getElementById("mAccountClose");
+    if (!menu || !openBtn || !closeBtn) return;
+    const open = () => { menu.classList.add("open"); document.body.classList.add("m-locked"); };
+    const close = () => { menu.classList.remove("open"); document.body.classList.remove("m-locked"); };
+    openBtn.addEventListener("click", open);
+    closeBtn.addEventListener("click", close);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.classList.contains("open")) close();
+    });
+  })();
 </script>
+
+<!-- ============ MOBILE BOTTOM NAV (v3) ============ -->
+<nav class="m-bottom-nav" aria-label="Primary mobile">
+  <a href="#" class="m-bn-btn" aria-current="page" aria-label="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V11z"/></svg>
+    Home
+  </a>
+  <button type="button" class="m-bn-btn m-bn-btn--cta" aria-label="Add an event">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+    Add
+  </button>
+  <button type="button" class="m-bn-btn" id="mBnAccount" aria-label="Open account menu">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+    Account
+  </button>
+</nav>
+
+<!-- ============ MOBILE ACCOUNT MENU (fullscreen) ============ -->
+<div class="m-account-menu" id="mAccountMenu" role="dialog" aria-modal="true" aria-label="Account menu">
+  <div class="m-account-head">
+    <button class="m-modal-close" id="mAccountClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <h2 class="m-account-title">Account</h2>
+  </div>
+  <div class="m-account-body">
+    <a href="#" class="m-account-item">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M9 3v4M15 3v4"/></svg>
+      My Events
+    </a>
+    <a href="#" class="m-account-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      My Profile
+    </a>
+    <button type="button" class="m-account-item">
+      <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l-5-5 5-5M5 12h10"/></svg>
+      Logout
+    </button>
+  </div>
+</div>
 
 </body>
 </html>
