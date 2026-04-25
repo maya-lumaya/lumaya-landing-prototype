@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lumaya — Retreats, Trainings & Events</title>
+<title>Lumaya — v3 · Mobile flow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -59,6 +59,308 @@
 
   .container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 32px; }
   @media (max-width: 640px) { .container { padding: 0 18px; } }
+
+  /* ======================================================
+   * MOBILE SEARCH (v3) — Airbnb-style trigger + fullscreen
+   * ====================================================== */
+  .m-search { display: none; }
+  .m-search-wrap { padding: 18px 0 4px; }
+  .m-search-pill {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 14px 22px;
+    box-shadow: 0 1px 2px rgba(18,19,12,0.04), 0 6px 20px rgba(18,19,12,0.06);
+    display: flex; align-items: center; gap: 12px;
+    font: 500 15px/1 "Inter", system-ui, sans-serif;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .m-search-pill svg { width: 17px; height: 17px; stroke: var(--text); flex: 0 0 auto; }
+  .m-search-pill .m-search-label { flex: 1; text-align: left; }
+  .m-search-pill .m-search-sub { color: var(--muted); font-size: 12px; }
+  .m-tab-row {
+    display: flex; gap: 6px; justify-content: center;
+    margin-top: 16px; padding: 0 4px;
+  }
+  .m-tab-btn {
+    flex: 1; max-width: 110px;
+    background: transparent; border: 0; padding: 10px 6px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--muted); cursor: pointer; position: relative;
+    border-bottom: 2px solid transparent;
+    font: 500 12px/1.2 "Inter", system-ui, sans-serif;
+  }
+  .m-tab-btn .m-tab-icon {
+    width: 32px; height: 32px; display: grid; place-items: center;
+    color: var(--text);
+  }
+  .m-tab-btn .m-tab-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .m-tab-btn .m-tab-badge {
+    position: absolute; top: 4px; right: -2px;
+    background: #2D5BFF; color: #fff;
+    font: 700 9px/1 "Inter", system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    padding: 3px 5px 3px;
+    border-radius: 6px;
+  }
+  .m-tab-btn[aria-selected="true"] {
+    color: var(--text);
+    border-bottom-color: var(--text);
+  }
+
+  /* ============= Fullscreen modal ============= */
+  body.m-locked { overflow: hidden; }
+  .m-modal {
+    position: fixed; inset: 0;
+    background: var(--bg-2);
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+  }
+  .m-modal.open { display: flex; }
+  .m-modal-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px 12px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .m-modal-tabs {
+    flex: 1; display: flex; gap: 4px; justify-content: center;
+  }
+  .m-modal-tab {
+    background: transparent; border: 0;
+    padding: 6px 10px 8px; cursor: pointer;
+    color: var(--muted);
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    border-bottom: 2px solid transparent;
+    font: 500 12px/1.2 "Inter", system-ui, sans-serif;
+  }
+  .m-modal-tab .m-tab-icon { width: 26px; height: 26px; color: var(--text); display: grid; place-items: center; }
+  .m-modal-tab .m-tab-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .m-modal-tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--text); }
+  .m-modal-close {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg); border: 1px solid var(--line);
+    display: grid; place-items: center; cursor: pointer;
+    flex: 0 0 auto;
+  }
+  .m-modal-close svg { width: 14px; height: 14px; stroke: var(--text); stroke-width: 2; stroke-linecap: round; }
+  .m-modal-body {
+    flex: 1; overflow-y: auto;
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .m-step {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(18,19,12,0.03);
+  }
+  .m-step.collapsed {
+    cursor: pointer;
+  }
+  .m-step-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px;
+    color: var(--muted);
+    font: 500 14px/1.2 "Inter", system-ui, sans-serif;
+  }
+  .m-step.collapsed .m-step-head .m-step-value { color: var(--text); font-weight: 500; }
+  .m-step.collapsed .m-step-head .m-step-value.placeholder { color: var(--muted); }
+  .m-step.expanded {
+    border-color: var(--text);
+    box-shadow: 0 0 0 1px var(--text), 0 8px 28px rgba(18,19,12,0.08);
+  }
+  .m-step.expanded .m-step-head { display: none; }
+  .m-step-body { padding: 20px 20px 22px; }
+  .m-step-title {
+    font-family: "Lora", Georgia, serif;
+    font-size: 26px; font-weight: 600;
+    line-height: 1.1;
+    color: var(--text);
+    margin: 0 0 16px;
+  }
+
+  /* Search input inside step (place) */
+  .m-step .m-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--olive-100);
+    border-radius: 14px;
+    padding: 14px 14px 14px 44px;
+    font: 400 15px/1.2 "Inter", system-ui, sans-serif;
+    color: var(--text);
+    box-sizing: border-box;
+    position: relative;
+  }
+  .m-input-wrap { position: relative; margin-bottom: 18px; }
+  .m-input-wrap > svg {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px;
+    color: var(--text); stroke: currentColor; fill: none;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none; z-index: 1;
+  }
+  .m-step .m-input:focus { outline: none; border-color: var(--text); }
+  .m-suggest-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 10px; letter-spacing: 0.01em; }
+  .m-suggest-list { display: flex; flex-direction: column; gap: 4px; }
+  .m-suggest-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 6px; cursor: pointer;
+    border-radius: 10px;
+  }
+  .m-suggest-item:hover, .m-suggest-item:active { background: var(--bg-2); }
+  .m-suggest-item .m-suggest-icon {
+    width: 48px; height: 48px;
+    background: #EFF1FA; border-radius: 10px;
+    display: grid; place-items: center;
+    flex: 0 0 auto;
+    color: #2D5BFF;
+  }
+  .m-suggest-item .m-suggest-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .m-suggest-item .m-suggest-text { flex: 1; min-width: 0; }
+  .m-suggest-item .m-suggest-name { font-weight: 500; font-size: 15px; color: var(--text); }
+  .m-suggest-item .m-suggest-sub { font-size: 13px; color: var(--muted); }
+
+  /* Quick chips (date, length, time, cert) */
+  .m-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .m-chip {
+    padding: 10px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--olive-100);
+    border-radius: 999px;
+    font: 500 13px/1.2 "Inter", system-ui, sans-serif;
+    color: var(--text); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .m-chip.is-active {
+    border-color: var(--text); border-width: 2px; padding: 8.5px 14.5px;
+  }
+  .m-chip-stack {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .m-chip-stack .m-chip {
+    flex-direction: column; align-items: center; gap: 4px;
+    padding: 14px 10px; border-radius: 16px;
+    line-height: 1.2; text-align: center;
+    font-size: 13px;
+  }
+  .m-chip-stack .m-chip .m-chip-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+
+  /* Faux calendar (illustrative, not interactive) */
+  .m-cal { margin-top: 18px; }
+  .m-cal-month { font: 600 15px/1.2 "Inter", system-ui, sans-serif; color: var(--text); margin-bottom: 12px; }
+  .m-cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    font: 500 13px/1.2 "Inter", system-ui, sans-serif;
+  }
+  .m-cal-grid .m-cal-dow { color: var(--muted); font-size: 11px; text-align: center; padding: 6px 0; }
+  .m-cal-grid .m-cal-day {
+    aspect-ratio: 1; display: grid; place-items: center;
+    color: var(--text); border-radius: 50%;
+    cursor: pointer;
+  }
+  .m-cal-grid .m-cal-day.muted { color: var(--line); cursor: default; }
+  .m-cal-grid .m-cal-day.selected { background: var(--text); color: #FFF6E9; font-weight: 600; }
+
+  /* Category grid */
+  .m-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .m-cat-grid .m-chip { justify-content: flex-start; }
+
+  /* Taxonomy accordion */
+  .m-tax-list { display: flex; flex-direction: column; }
+  .m-tax-pillar {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 4px;
+  }
+  .m-tax-pillar:last-child { border-bottom: 0; }
+  .m-tax-pillar-head {
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+  }
+  .m-tax-pillar-head .pi-icon {
+    width: 36px; height: 36px; display: grid; place-items: center;
+    background: var(--bg-2); border-radius: 10px;
+    color: var(--text);
+    flex: 0 0 auto;
+  }
+  .m-tax-pillar-head .pi-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .m-tax-pillar-head .pi-text { flex: 1; min-width: 0; }
+  .m-tax-pillar-head .pi-name { font: 500 15px/1.2 "Inter", system-ui, sans-serif; color: var(--text); }
+  .m-tax-pillar-head .pi-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .m-tax-pillar-head .pi-chev { color: var(--muted); transition: transform 0.18s ease; }
+  .m-tax-pillar.open .m-tax-pillar-head .pi-chev { transform: rotate(90deg); }
+  .m-tax-subs { display: none; padding: 12px 0 4px 48px; flex-direction: column; gap: 2px; }
+  .m-tax-pillar.open .m-tax-subs { display: flex; }
+  .m-tax-sub {
+    padding: 8px 6px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    border-radius: 8px;
+    color: var(--text);
+    font: 400 14px/1.2 "Inter", system-ui, sans-serif;
+  }
+  .m-tax-sub:hover { background: var(--bg-2); }
+  .m-tax-sub .cnt { color: var(--muted); font-size: 12px; }
+
+  /* Counters (placeholder for future "guests" pattern) */
+  .m-counter-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--line);
+  }
+  .m-counter-row:last-child { border-bottom: 0; }
+  .m-counter-row .m-counter-text .m-counter-name { font-weight: 500; color: var(--text); }
+  .m-counter-row .m-counter-text .m-counter-sub { font-size: 12px; color: var(--muted); }
+  .m-counter-ctrls { display: flex; align-items: center; gap: 14px; }
+  .m-counter-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--bg); cursor: pointer;
+    display: grid; place-items: center; color: var(--text);
+    font-size: 18px; font-weight: 300; line-height: 1;
+  }
+  .m-counter-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .m-counter-val { min-width: 18px; text-align: center; font-weight: 500; }
+
+  /* Footer */
+  .m-modal-foot {
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0));
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .m-clear {
+    background: transparent; border: 0;
+    text-decoration: underline; text-underline-offset: 3px;
+    color: var(--text); font: 500 14px/1 "Inter", system-ui, sans-serif;
+    cursor: pointer; padding: 8px 4px;
+  }
+  .m-next {
+    background: var(--text); color: #FFF6E9;
+    border: 0; border-radius: 999px;
+    padding: 14px 22px;
+    font: 600 14px/1 "Inter", system-ui, sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .m-next svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .m-next.is-final {
+    background: var(--orange-700);
+    color: #FFF6E9;
+    padding: 14px 26px;
+  }
+
+  /* Show/hide rules */
+  @media (max-width: 720px) {
+    .search-wrap .search-stage > .tabs-row,
+    .search-wrap .search-stage > .search-pill,
+    .search-wrap .search-stage > .search-foot { display: none; }
+    .m-search { display: block; }
+  }
 
   /* ---------- Header ---------- */
   header.site {
@@ -700,9 +1002,9 @@
     </nav>
     <div class="nav-actions">
       <span class="version-toggle" aria-label="Prototype version">
-        <a href="index.html" class="is-active" aria-current="page">v1</a>
+        <a href="index.html">v1</a>
         <a href="v2.html">v2</a>
-        <a href="v3.html">v3</a>
+        <a href="v3.html" class="is-active" aria-current="page">v3</a>
       </span>
       <button class="btn-ghost">For organisers</button>
       <button class="icon-btn" aria-label="Saved">
@@ -737,6 +1039,33 @@
 <section class="search-wrap">
   <div class="container">
     <div class="search-stage">
+
+      <!-- ============= Mobile-only search trigger (v3) ============= -->
+      <div class="m-search">
+        <div class="m-search-wrap">
+          <button type="button" class="m-search-pill" id="mSearchPill" aria-label="Open search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="m-search-label">Search anything</span>
+          </button>
+          <div class="m-tab-row" role="tablist">
+            <button class="m-tab-btn" role="tab" data-mtab="events" aria-selected="false">
+              <span class="m-tab-icon"><svg viewBox="0 0 28 28"><rect x="4" y="6" width="20" height="18" rx="2.5"/><path d="M4 11h20M10 3v5M18 3v5"/><circle cx="14" cy="17" r="1.2" fill="currentColor"/></svg></span>
+              <span>Events</span>
+            </button>
+            <button class="m-tab-btn" role="tab" data-mtab="retreats" aria-selected="true">
+              <span class="m-tab-icon"><svg viewBox="0 0 28 28"><circle cx="20" cy="9" r="3"/><path d="M3 21l7-9 5 6 3-3 7 8"/><path d="M3 24h22"/></svg></span>
+              <span>Retreats</span>
+              <span class="m-tab-badge">NEW</span>
+            </button>
+            <button class="m-tab-btn" role="tab" data-mtab="trainings" aria-selected="false">
+              <span class="m-tab-icon"><svg viewBox="0 0 28 28"><path d="M14 5l11 5-11 5L3 10l11-5z"/><path d="M7 13v5s2.5 3 7 3 7-3 7-3v-5"/><path d="M23 11v7"/></svg></span>
+              <span>Trainings</span>
+              <span class="m-tab-badge">NEW</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="tabs-row" role="tablist" id="tabs">
         <button class="tab" role="tab" data-tab="all" aria-selected="true">
           <span class="tab-icon" aria-hidden="true">
@@ -916,6 +1245,23 @@
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ============= MOBILE FULLSCREEN MODAL (v3) ============= -->
+<div class="m-modal" id="mModal" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="m-modal-head">
+    <div class="m-modal-tabs" id="mModalTabs"></div>
+    <button class="m-modal-close" id="mModalClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="m-modal-body" id="mModalBody"></div>
+  <div class="m-modal-foot">
+    <button class="m-clear" id="mClear">Clear all</button>
+    <button class="m-next" id="mNext" type="button">
+      <span id="mNextLabel">Next</span>
+    </button>
+  </div>
+</div>
 
 <script>
   /* ==========================================================
@@ -1855,6 +2201,398 @@
     const btn = document.getElementById("menuToggle");
     const open = nav.classList.toggle("open");
     btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  /* ==========================================================
+   * MOBILE STEP-FLOW MODAL (v3)
+   * ========================================================== */
+  const M_TAB_LABELS = {
+    events:    "Events",
+    retreats:  "Retreats",
+    trainings: "Trainings"
+  };
+  const M_TAB_ICONS = {
+    events:    `<svg viewBox="0 0 28 28"><rect x="4" y="6" width="20" height="18" rx="2.5"/><path d="M4 11h20M10 3v5M18 3v5"/><circle cx="14" cy="17" r="1.2" fill="currentColor"/></svg>`,
+    retreats:  `<svg viewBox="0 0 28 28"><circle cx="20" cy="9" r="3"/><path d="M3 21l7-9 5 6 3-3 7 8"/><path d="M3 24h22"/></svg>`,
+    trainings: `<svg viewBox="0 0 28 28"><path d="M14 5l11 5-11 5L3 10l11-5z"/><path d="M7 13v5s2.5 3 7 3 7-3 7-3v-5"/><path d="M23 11v7"/></svg>`
+  };
+  // Per-tab step labels (what + how to phrase the step title)
+  const M_STEP_TITLES = {
+    events:    { where: "Where?",  when: "When?",   cat: "What?",        time: "Time of day" },
+    retreats:  { where: "Where to?", when: "When?", cat: "What kind?",   theme: "How long?" },
+    trainings: { cat: "Discipline?", cert: "Hours?", where: "Where?",    when: "Starts when?" }
+  };
+  const M_VALUE_PLACEHOLDER = {
+    where: "Add destination",
+    when:  "Add dates",
+    cat:   "Choose category",
+    cert:  "Pick hours",
+    time:  "Any time",
+    theme: "Any length"
+  };
+
+  const mState = { tab: "retreats", step: 0, openPillar: null };
+  const mModal = document.getElementById("mModal");
+  const mBody  = document.getElementById("mModalBody");
+  const mTabs  = document.getElementById("mModalTabs");
+  const mNext  = document.getElementById("mNext");
+  const mNextLabel = document.getElementById("mNextLabel");
+
+  function mGetFields() {
+    // Mobile flow only supports the 3 vertical tabs (skip "all")
+    return TAB_CONFIG[mState.tab].fields;
+  }
+
+  function mFieldValue(key) {
+    if (key === "where") return state.where;
+    if (key === "when")  return state.when;
+    if (key === "cat")   return state.cat;
+    if (key === "cert")  return state.cert;
+    if (key === "time")  return state.time;
+    if (key === "theme") return state.theme;
+    return "";
+  }
+  function mSetFieldValue(key, value, slug) {
+    if (key === "where") { state.where = value; state.whereSlug = slug || ""; }
+    else if (key === "when")  { state.when  = value; }
+    else if (key === "cat")   { state.cat   = value; state.catSlug = slug || ""; state.catPath = slug || ""; }
+    else if (key === "cert")  { state.cert  = value; state.certSlug = slug || (value || "").replace(/\s+/g, "-").toLowerCase(); }
+    else if (key === "time")  { state.time  = value; }
+    else if (key === "theme") { state.theme = value; }
+    updateUrlPreview();
+  }
+
+  function openMobileModal(tab) {
+    if (tab) mState.tab = tab;
+    if (!M_TAB_LABELS[mState.tab]) mState.tab = "retreats";
+    state.tab = mState.tab;
+    mState.step = 0;
+    mState.openPillar = null;
+    document.body.classList.add("m-locked");
+    mModal.classList.add("open");
+    mRender();
+    syncTopMobileTabs();
+  }
+  function closeMobileModal() {
+    mModal.classList.remove("open");
+    document.body.classList.remove("m-locked");
+  }
+  function syncTopMobileTabs() {
+    document.querySelectorAll(".m-tab-btn").forEach(b => {
+      b.setAttribute("aria-selected", b.dataset.mtab === mState.tab ? "true" : "false");
+    });
+  }
+
+  function mRender() {
+    // top tab bar
+    mTabs.innerHTML = "";
+    Object.keys(M_TAB_LABELS).forEach(key => {
+      const b = document.createElement("button");
+      b.className = "m-modal-tab";
+      b.setAttribute("aria-selected", key === mState.tab ? "true" : "false");
+      b.innerHTML = `<span class="m-tab-icon">${M_TAB_ICONS[key]}</span><span>${M_TAB_LABELS[key]}</span>`;
+      b.addEventListener("click", () => {
+        if (mState.tab === key) return;
+        mState.tab = key;
+        state.tab = key;
+        mState.step = 0;
+        mState.openPillar = null;
+        // Reset incompatible state slots
+        if (key !== "trainings") { state.cert = ""; state.certSlug = ""; }
+        if (key !== "events")    { state.time = ""; }
+        if (key !== "retreats")  { state.theme = ""; }
+        state.cat = ""; state.catSlug = ""; state.catPath = "";
+        mRender();
+        syncTopMobileTabs();
+        renderFields(); // keep desktop in sync
+      });
+      mTabs.appendChild(b);
+    });
+
+    // body
+    mBody.innerHTML = "";
+    const fields = mGetFields();
+    fields.forEach((f, i) => {
+      if (i === mState.step) mBody.appendChild(mBuildExpanded(f));
+      else mBody.appendChild(mBuildCollapsed(f, i));
+    });
+
+    // footer button label
+    const isLast = mState.step >= fields.length - 1;
+    mNext.classList.toggle("is-final", isLast);
+    if (isLast) {
+      mNextLabel.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;margin-right:6px;vertical-align:-2px"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search`;
+    } else {
+      mNextLabel.textContent = "Next";
+    }
+  }
+
+  function mBuildCollapsed(f, idx) {
+    const titles = M_STEP_TITLES[mState.tab] || {};
+    const value = mFieldValue(f.key);
+    const placeholder = M_VALUE_PLACEHOLDER[f.key] || "Add";
+    const labelShort = (titles[f.key] || f.label || "").replace(/\?$/, "");
+    const wrap = document.createElement("div");
+    wrap.className = "m-step collapsed";
+    wrap.innerHTML = `
+      <div class="m-step-head">
+        <span>${labelShort}</span>
+        <span class="m-step-value ${value ? "" : "placeholder"}">${value || placeholder}</span>
+      </div>
+    `;
+    wrap.addEventListener("click", () => {
+      mState.step = idx;
+      mState.openPillar = null;
+      mRender();
+    });
+    return wrap;
+  }
+
+  function mBuildExpanded(f) {
+    const titles = M_STEP_TITLES[mState.tab] || {};
+    const wrap = document.createElement("div");
+    wrap.className = "m-step expanded";
+    const body = document.createElement("div");
+    body.className = "m-step-body";
+    body.innerHTML = `<h3 class="m-step-title">${titles[f.key] || f.label}</h3>`;
+    wrap.appendChild(body);
+
+    if (f.type === "place")     mRenderPlace(body, f);
+    else if (f.type === "date") mRenderDate(body, f);
+    else if (f.type === "category" && f.catMode === "taxonomy") mRenderTaxonomy(body, f);
+    else if (f.type === "category") mRenderFlatCats(body, f);
+    else if (f.type === "cert") mRenderChips(body, f, CERT_SUGGESTIONS);
+    else if (f.type === "time") mRenderChips(body, f, TIME_SUGGESTIONS);
+    else if (f.type === "length") mRenderChips(body, f, LENGTH_SUGGESTIONS);
+    return wrap;
+  }
+
+  function mRenderPlace(body, f) {
+    const wrap = document.createElement("div");
+    wrap.className = "m-input-wrap";
+    wrap.innerHTML = `
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input class="m-input" type="text" placeholder="Search destinations" id="mPlaceInput" />
+    `;
+    body.appendChild(wrap);
+
+    body.appendChild(el(`<div class="m-suggest-label">Suggested destinations</div>`));
+    const list = document.createElement("div");
+    list.className = "m-suggest-list";
+
+    // Near me (always first)
+    const near = el(`
+      <div class="m-suggest-item" role="option">
+        <div class="m-suggest-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+        </div>
+        <div class="m-suggest-text">
+          <div class="m-suggest-name">Near me</div>
+          <div class="m-suggest-sub">Find what's around you right now.</div>
+        </div>
+      </div>
+    `);
+    near.addEventListener("click", () => {
+      mSetFieldValue("where", "Near me", "near-me");
+      mAdvance();
+    });
+    list.appendChild(near);
+
+    PLACE_SUGGESTIONS.forEach(p => {
+      const item = el(`
+        <div class="m-suggest-item" role="option">
+          <div class="m-suggest-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="m-suggest-text">
+            <div class="m-suggest-name">${p.name}</div>
+            <div class="m-suggest-sub">${p.counts}</div>
+          </div>
+        </div>
+      `);
+      item.addEventListener("click", () => {
+        mSetFieldValue("where", p.name, p.slug);
+        mAdvance();
+      });
+      list.appendChild(item);
+    });
+    body.appendChild(list);
+  }
+
+  function mRenderDate(body, f) {
+    const quick = (DATE_QUICK[mState.tab] || DATE_QUICK.all).filter(x => x !== "Pick dates…" && x !== "Pick a start month…");
+    const stack = document.createElement("div");
+    stack.className = "m-chip-stack";
+    quick.slice(0, 3).forEach(label => {
+      const chip = el(`<button class="m-chip${state.when === label ? " is-active" : ""}" type="button"><span>${label}</span></button>`);
+      chip.addEventListener("click", () => {
+        mSetFieldValue("when", label);
+        mRender();
+      });
+      stack.appendChild(chip);
+    });
+    body.appendChild(stack);
+
+    // remaining quick chips as pills (e.g., "This week", "Next 6 months")
+    if (quick.length > 3) {
+      const more = document.createElement("div");
+      more.className = "m-chips";
+      more.style.marginTop = "10px";
+      quick.slice(3).forEach(label => {
+        const chip = el(`<button class="m-chip${state.when === label ? " is-active" : ""}" type="button">${label}</button>`);
+        chip.addEventListener("click", () => {
+          mSetFieldValue("when", label);
+          mRender();
+        });
+        more.appendChild(chip);
+      });
+      body.appendChild(more);
+    }
+
+    // Faux calendar for visual fidelity (April 2026)
+    body.appendChild(mBuildCalendar());
+  }
+
+  function mBuildCalendar() {
+    const cal = el(`
+      <div class="m-cal">
+        <div class="m-cal-month">April 2026</div>
+        <div class="m-cal-grid"></div>
+      </div>
+    `);
+    const grid = cal.querySelector(".m-cal-grid");
+    ["Mo","Tu","We","Th","Fr","Sa","Su"].forEach(d => grid.appendChild(el(`<div class="m-cal-dow">${d}</div>`)));
+    // April 2026 starts on Wednesday (1st = Wed)
+    const startOffset = 2; // Mon, Tue empty
+    for (let i = 0; i < startOffset; i++) grid.appendChild(el(`<div class="m-cal-day muted"></div>`));
+    const today = 25; // 2026-04-25 — illustrative
+    for (let d = 1; d <= 30; d++) {
+      const cls = d < today ? "muted" : (d === today ? "selected" : "");
+      grid.appendChild(el(`<div class="m-cal-day ${cls}">${d}</div>`));
+    }
+    return cal;
+  }
+
+  function mRenderFlatCats(body, f) {
+    const source = mState.tab === "events" ? EVENT_CATEGORIES.launch : ALL_CATEGORIES;
+    const grid = document.createElement("div");
+    grid.className = "m-cat-grid";
+    source.forEach(c => {
+      const chip = el(`<button class="m-chip${state.cat === c.name ? " is-active" : ""}" type="button">${c.name}</button>`);
+      chip.addEventListener("click", () => {
+        mSetFieldValue("cat", c.name, c.slug);
+        mRender();
+      });
+      grid.appendChild(chip);
+    });
+    body.appendChild(grid);
+  }
+
+  function mRenderTaxonomy(body, f) {
+    const taxonomy = f.taxSource === "retreats" ? RETREAT_TAXONOMY : TRAINING_TAXONOMY;
+    const kind = f.taxSource === "retreats" ? "retreats" : "trainings";
+    const list = document.createElement("div");
+    list.className = "m-tax-list";
+
+    taxonomy.forEach(pillar => {
+      const isOpen = mState.openPillar === pillar.slug;
+      const p = el(`
+        <div class="m-tax-pillar${isOpen ? " open" : ""}">
+          <div class="m-tax-pillar-head" role="button" aria-expanded="${isOpen}">
+            <span class="pi-icon">${pillar.icon}</span>
+            <span class="pi-text">
+              <span class="pi-name">${pillar.name}${pillar.sensitive ? ' <span style="font-size:9px;color:var(--orange-700);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;background:var(--orange-50);border:1px solid var(--orange-100);padding:1px 5px;border-radius:4px;margin-left:4px;">review</span>' : ''}</span>
+              <span class="pi-meta">${fmt(pillar.count)} ${kind} · ${pillar.subs.length} types</span>
+            </span>
+            <span class="pi-chev">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+            </span>
+          </div>
+          <div class="m-tax-subs"></div>
+        </div>
+      `);
+      p.querySelector(".m-tax-pillar-head").addEventListener("click", () => {
+        mState.openPillar = isOpen ? null : pillar.slug;
+        mRender();
+      });
+      const subs = p.querySelector(".m-tax-subs");
+      // "All" entry
+      const allItem = el(`<div class="m-tax-sub" role="option"><span>All ${pillar.name}</span><span class="cnt">${fmt(pillar.count)}</span></div>`);
+      allItem.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mSetFieldValue("cat", `All ${pillar.name}`, pillar.slug);
+        mRender();
+      });
+      subs.appendChild(allItem);
+      pillar.subs.forEach(sub => {
+        const item = el(`<div class="m-tax-sub" role="option"><span>${sub.name}</span><span class="cnt">${fmt(sub.count)}</span></div>`);
+        item.addEventListener("click", (e) => {
+          e.stopPropagation();
+          mSetFieldValue("cat", sub.name, `${pillar.slug}/${sub.slug}`);
+          mRender();
+        });
+        subs.appendChild(item);
+      });
+      list.appendChild(p);
+    });
+    body.appendChild(list);
+  }
+
+  function mRenderChips(body, f, items) {
+    const wrap = document.createElement("div");
+    wrap.className = "m-chips";
+    const currentVal = mFieldValue(f.key);
+    items.forEach(label => {
+      const chip = el(`<button class="m-chip${currentVal === label ? " is-active" : ""}" type="button">${label}</button>`);
+      chip.addEventListener("click", () => {
+        mSetFieldValue(f.key, label);
+        mRender();
+      });
+      wrap.appendChild(chip);
+    });
+    body.appendChild(wrap);
+  }
+
+  function mAdvance() {
+    const fields = mGetFields();
+    if (mState.step < fields.length - 1) {
+      mState.step++;
+      mState.openPillar = null;
+      mRender();
+    } else {
+      mSubmit();
+    }
+  }
+
+  function mSubmit() {
+    closeMobileModal();
+    const url = buildUrl();
+    toast(`Submit search · routes to <code>${url}</code>`);
+  }
+
+  // Wire up triggers
+  document.getElementById("mSearchPill").addEventListener("click", () => openMobileModal());
+  document.querySelectorAll(".m-tab-btn").forEach(b => {
+    b.addEventListener("click", () => openMobileModal(b.dataset.mtab));
+  });
+  document.getElementById("mModalClose").addEventListener("click", closeMobileModal);
+  mNext.addEventListener("click", mAdvance);
+  document.getElementById("mClear").addEventListener("click", () => {
+    state.where = ""; state.whereSlug = "";
+    state.when = "";
+    state.cat = ""; state.catSlug = ""; state.catPath = "";
+    state.cert = ""; state.certSlug = "";
+    state.time = "";
+    state.theme = "";
+    mState.step = 0;
+    mState.openPillar = null;
+    updateUrlPreview();
+    renderFields();
+    mRender();
+  });
+  // Esc closes
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && mModal.classList.contains("open")) closeMobileModal();
   });
 
   /* ==========================================================
