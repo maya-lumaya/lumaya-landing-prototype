@@ -504,6 +504,7 @@
     transition: background .2s var(--ease); white-space: nowrap;
   }
   .btn-ghost:hover { background: var(--bg-2); }
+  @media (max-width: 1100px) { .btn-ghost { display: none; } }
 
   .version-toggle {
     display: inline-flex; align-items: center; gap: 0;
@@ -530,6 +531,18 @@
   .icon-btn:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
 
   .menu-toggle { display: none; }
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .menu-toggle { display: inline-flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 76px; left: 0; right: 0;
+      padding: 16px 24px 24px;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      gap: 4px;
+    }
+    .nav-links.open a { padding: 14px 6px; border-bottom: 1px solid var(--border); }
+  }
 
   /* ---------- Hero ---------- */
   .hero { position: relative; padding: 72px 0 40px; }
@@ -815,6 +828,28 @@
     vertical-align: middle;
   }
 
+  /* Mobile taxonomy — accordion mode for tablet/small viewports.
+     Note: scoped to ≤860px so the desktop search bar (>720px) keeps its
+     two-panel pillar+detail layout on tablet too — only the taxonomy
+     dropdown collapses to accordion. */
+  @media (max-width: 860px) {
+    .dropdown.taxonomy {
+      min-width: 0; max-width: none;
+      max-height: none; overflow: visible;
+    }
+    .field.active .dropdown.taxonomy { display: block; grid-template-columns: none; }
+    .tax-pillars { border-right: 0; background: transparent; padding: 4px; overflow: visible; }
+    .tax-panel { display: none; }
+    .tax-chev { display: block; }
+    .tax-item.active:not(.open) .tax-head { background: transparent; box-shadow: none; }
+    .tax-item.active:not(.open) .tax-icon { background: var(--surface); border-color: var(--border); color: var(--olive-700); }
+    .tax-item.active:not(.open) .tax-name { color: var(--text); font-weight: 500; }
+  }
+  /* Collapse panel grid on narrower desktop */
+  @media (max-width: 1100px) {
+    .tax-subs-grid { grid-template-columns: 1fr; }
+  }
+
   /* Search foot */
   .search-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 8px 0; flex-wrap: wrap; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -849,6 +884,7 @@
 
   /* ---------- Cards ---------- */
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 980px) { .cards { grid-template-columns: 1fr; } }
   .card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); overflow: hidden;
@@ -938,6 +974,7 @@
   /* ---------- Browse by category ---------- */
   .cats-section { padding: 80px 0 32px; }
   .cats-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  @media (max-width: 980px) { .cats-pillars { grid-template-columns: 1fr; } }
   .cat-group {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1000,6 +1037,7 @@
   /* ---------- Editorial ---------- */
   .editorial { padding: 64px 0 88px; border-top: 1px solid var(--border); margin-top: 56px; }
   .editorial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  @media (max-width: 860px) { .editorial-grid { grid-template-columns: 1fr; gap: 32px; } }
   .editorial h2 { font-size: 30px; line-height: 1.2; max-width: 420px; margin-bottom: 14px; }
   .editorial p.intro { color: var(--text-muted); margin-bottom: 20px; max-width: 460px; }
   .editorial-list { display: flex; flex-direction: column; gap: 14px; }
@@ -1089,6 +1127,103 @@
     transform: translateY(110%);
     opacity: 0;
     pointer-events: none;
+  }
+
+  /* ============================================================
+   * HAPTIC + MICRO-INTERACTION FEEDBACK
+   * Touch-only press-scale, tab-pop, suggest-row tint, bn-spring.
+   * Respects prefers-reduced-motion.
+   * ============================================================ */
+  /* Hidden iOS Safari haptic switch (input type=checkbox switch) */
+  .haptic-host { position: absolute; width: 0; height: 0; overflow: hidden;
+    pointer-events: none; opacity: 0; clip: rect(0 0 0 0); }
+
+  @media (hover: none) and (pointer: coarse) {
+    /* universal tap target hardening */
+    .m-tab-btn, .m-bn-btn, .m-search-pill, .tab, .chip,
+    .m-suggest-row, .m-account-item, .icon-btn, .menu-toggle,
+    .destination, .card-cta, .m-modal-close, .m-modal-tab,
+    .m-clear, .m-next, .submit, .btn, .btn-ghost,
+    .m-step, .m-suggest-remove, .m-back-btn, .m-bn-btn--cta {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    /* Press-scale — short, springy, non-interruptive */
+    .m-tab-btn, .tab, .m-modal-tab,
+    .destination, .card-cta, .chip,
+    .icon-btn, .menu-toggle,
+    .m-clear, .m-next, .submit, .btn, .btn-ghost,
+    .m-modal-close, .m-back-btn, .m-suggest-remove,
+    .m-bn-btn, .m-bn-btn--cta, .m-search-pill, .m-step {
+      transition: transform .14s cubic-bezier(.2,.7,.2,1),
+                  background-color .2s var(--ease),
+                  color .2s var(--ease),
+                  box-shadow .2s var(--ease);
+    }
+    .m-bn-btn:active            { transform: scale(.86); }
+    .m-bn-btn--cta:active       { transform: scale(.92); }
+    .m-tab-btn:active           { transform: scale(.94); }
+    .m-search-pill:active       { transform: scale(.985); }
+    .tab:active, .m-modal-tab:active { transform: scale(.94); }
+    .chip:active                { transform: scale(.92); }
+    .icon-btn:active,
+    .menu-toggle:active         { transform: scale(.86); }
+    .destination:active         { transform: scale(.97); }
+    .card-cta:active            { transform: scale(.97); }
+    .m-modal-close:active,
+    .m-back-btn:active,
+    .m-suggest-remove:active    { transform: scale(.85); }
+    .m-clear:active, .m-next:active,
+    .submit:active, .btn:active,
+    .btn-ghost:active           { transform: scale(.96); }
+    .m-step:active              { transform: scale(.985); }
+    /* Soft tint feedback for list rows (no scale — feels wrong on rows) */
+    .m-suggest-row, .m-account-item {
+      transition: background-color .15s var(--ease);
+    }
+    .m-suggest-row:active       { background: rgba(0,0,0,.045); }
+    .m-account-item:active      { background: rgba(0,0,0,.045); }
+  }
+
+  /* Tab "pop" when selection changes — JS adds .is-tap-flash for one frame burst */
+  .m-tab-btn.is-tap-flash .m-tab-icon { animation: hapticTabPop .34s cubic-bezier(.34,1.56,.64,1); }
+  .m-modal-tab.is-tap-flash .m-tab-icon { animation: hapticTabPop .34s cubic-bezier(.34,1.56,.64,1); }
+  .tab.is-tap-flash               { animation: hapticTabBob .26s cubic-bezier(.34,1.56,.64,1); }
+  .chip.is-tap-flash              { animation: hapticChipPop .28s cubic-bezier(.34,1.56,.64,1); }
+  .m-bn-btn.is-tap-flash svg      { animation: hapticIconBob .32s cubic-bezier(.34,1.56,.64,1); }
+  .m-bn-btn--cta.is-tap-flash svg { animation: hapticCtaSpin .42s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes hapticTabPop {
+    0%   { transform: scale(.82); }
+    55%  { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+  @keyframes hapticTabBob {
+    0%, 100% { transform: translateY(0); }
+    45%      { transform: translateY(-2px); }
+  }
+  @keyframes hapticChipPop {
+    0%   { transform: scale(.88); }
+    50%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  @keyframes hapticIconBob {
+    0%   { transform: translateY(2px) scale(.88); }
+    50%  { transform: translateY(-2px) scale(1.08); }
+    100% { transform: translateY(0)    scale(1); }
+  }
+  @keyframes hapticCtaSpin {
+    0%   { transform: rotate(-15deg) scale(.86); }
+    45%  { transform: rotate( 12deg) scale(1.10); }
+    100% { transform: rotate(0)      scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m-tab-btn, .m-bn-btn, .m-search-pill, .tab, .chip,
+    .m-suggest-row, .m-account-item, .destination, .card-cta,
+    .m-modal-close, .m-modal-tab, .m-clear, .m-next, .submit,
+    .btn, .btn-ghost, .icon-btn, .menu-toggle, .m-step,
+    .m-bn-btn--cta { transition: none !important; }
+    .is-tap-flash, .is-tap-flash * { animation: none !important; }
   }
 
   /* ============= Mobile account menu (fullscreen) ============= */
@@ -1455,6 +1590,143 @@
 </div>
 
 <script>
+  /* ==========================================================
+   * HAPTICS — multi-tier mobile feedback
+   *   Tier 1: navigator.vibrate()  (Android Chrome / Firefox)
+   *   Tier 2: <input type="checkbox" switch> + <label> click trick
+   *           (iOS Safari 17.4+ — emits real Taptic feedback)
+   *   Bails out cleanly under prefers-reduced-motion.
+   *
+   *   Patterns:
+   *     light      — list row tap, link tap
+   *     selection  — tab change, chip toggle
+   *     medium     — primary CTA (Add event)
+   *     success    — search submit
+   *     warning    — destructive (clear all)
+   * ========================================================== */
+  const Haptics = (() => {
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const PATTERNS = {
+      light:     [8],
+      selection: [10],
+      medium:    [16],
+      heavy:     [24],
+      success:   [10, 40, 18],
+      warning:   [12, 60, 12, 60, 18],
+      error:     [20, 50, 20, 50, 30],
+    };
+
+    let host, sw, lbl, ready = false;
+    function ensure() {
+      if (ready || typeof document === "undefined") return;
+      host = document.createElement("div");
+      host.className = "haptic-host";
+      host.setAttribute("aria-hidden", "true");
+      // <input type=checkbox switch> is the only Safari-recognised
+      // surface that emits Taptic feedback when its <label> is clicked.
+      sw = document.createElement("input");
+      sw.type = "checkbox";
+      sw.setAttribute("switch", "");
+      sw.id = "__hapticSwitch__" + Math.random().toString(36).slice(2, 7);
+      lbl = document.createElement("label");
+      lbl.setAttribute("for", sw.id);
+      host.appendChild(sw);
+      host.appendChild(lbl);
+      (document.body || document.documentElement).appendChild(host);
+      ready = true;
+    }
+
+    function pulseSwitch(times) {
+      ensure();
+      if (!lbl) return;
+      let i = 0;
+      const tick = () => {
+        try { lbl.click(); } catch (_) {}
+        if (++i < times) setTimeout(tick, 55);
+      };
+      tick();
+    }
+
+    function fire(type) {
+      if (reduceMotion) return;
+      const pattern = PATTERNS[type] || PATTERNS.light;
+      // Tier 1 — Android & Chromium support navigator.vibrate.
+      if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+        try {
+          if (navigator.vibrate(pattern)) return;
+        } catch (_) {}
+      }
+      // Tier 2 — iOS Safari fallback. Pattern array length ≈ pulse count.
+      const pulses = type === "success" || type === "warning" ? 2
+                   : type === "error"   ? 3
+                   : 1;
+      pulseSwitch(pulses);
+    }
+
+    return { fire };
+  })();
+
+  /* ==========================================================
+   * MICRO-INTERACTIONS — wires haptics + visual flash on press
+   * Delegated, single pointerdown listener, passive.
+   * ========================================================== */
+  (() => {
+    if (typeof document === "undefined") return;
+
+    // Element matchers → haptic intensity. Order matters (most specific first).
+    const RULES = [
+      { sel: ".m-bn-btn--cta",          type: "medium",    flash: true  },
+      { sel: ".submit",                  type: "success",   flash: false },
+      { sel: ".m-clear",                 type: "warning",   flash: false },
+      { sel: ".m-tab-btn",               type: "selection", flash: true  },
+      { sel: ".m-modal-tab",             type: "selection", flash: true  },
+      { sel: "#tabs .tab",               type: "selection", flash: true  },
+      { sel: ".chip",                    type: "selection", flash: true  },
+      { sel: ".m-bn-btn",                type: "light",     flash: true  },
+      { sel: ".m-search-pill",           type: "light",     flash: false },
+      { sel: ".m-modal-close",           type: "light",     flash: false },
+      { sel: ".m-back-btn",              type: "light",     flash: false },
+      { sel: ".m-suggest-remove",        type: "light",     flash: false },
+      { sel: ".m-suggest-row",           type: "light",     flash: false },
+      { sel: ".m-account-item",          type: "light",     flash: false },
+      { sel: ".m-step",                  type: "light",     flash: false },
+      { sel: ".m-next",                  type: "selection", flash: false },
+      { sel: ".destination",             type: "light",     flash: false },
+      { sel: ".card-cta",                type: "light",     flash: false },
+      { sel: ".icon-btn, .menu-toggle",  type: "light",     flash: false },
+      { sel: ".btn, .btn-ghost",         type: "light",     flash: false },
+    ];
+
+    function flash(el) {
+      el.classList.remove("is-tap-flash");
+      // Force reflow so the keyframe restarts even on the same element.
+      void el.offsetWidth;
+      el.classList.add("is-tap-flash");
+      setTimeout(() => el.classList.remove("is-tap-flash"), 450);
+    }
+
+    document.addEventListener("pointerdown", (e) => {
+      // primary pointer / left button only
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      for (const rule of RULES) {
+        const t = e.target.closest(rule.sel);
+        if (!t) continue;
+        // Skip disabled or aria-disabled targets.
+        if (t.hasAttribute("disabled") || t.getAttribute("aria-disabled") === "true") return;
+        Haptics.fire(rule.type);
+        if (rule.flash) flash(t);
+        return;
+      }
+    }, { passive: true });
+
+    // Expose for ad-hoc programmatic calls (e.g. successful search submit)
+    window.Haptics = Haptics;
+  })();
+
   /* ==========================================================
    * ICONS
    * ========================================================== */
@@ -2084,7 +2356,7 @@
       // Desktop hover/click → show in panel
       const head = item.querySelector(".tax-head");
       head.addEventListener("mouseenter", () => {
-        if (window.matchMedia("(min-width: 721px)").matches) {
+        if (window.matchMedia("(min-width: 861px)").matches) {
           pillars.querySelectorAll(".tax-item").forEach(n => n.classList.remove("active"));
           item.classList.add("active");
           showPanel(pillar);
@@ -2092,7 +2364,7 @@
       });
       head.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        const isMobile = !window.matchMedia("(min-width: 721px)").matches;
+        const isMobile = !window.matchMedia("(min-width: 861px)").matches;
         if (isMobile) {
           // Accordion — toggle open on tap
           const wasOpen = item.classList.contains("open");
@@ -2374,6 +2646,7 @@
   function submitSearch(e) {
     e.preventDefault();
     const url = buildUrl();
+    if (window.Haptics) window.Haptics.fire("success");
     toast(`Submit search · routes to <code>${url}</code>`);
     return false;
   }
@@ -3100,6 +3373,7 @@
   function mSubmit() {
     closeMobileModal();
     const url = buildUrl();
+    if (window.Haptics) window.Haptics.fire("success");
     toast(`Submit search · routes to <code>${url}</code>`);
   }
 
