@@ -6,7 +6,9 @@
 <title>Viluma — Conscious events · retreats · trainings</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }</style>
 <style>
   :root {
     --bg: #FCF9F4;
@@ -485,15 +487,12 @@
   }
   .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 24px; }
   .logo {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 22px; font-weight: 500; letter-spacing: 0.02em;
-    color: var(--text); display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    font-family: 'Noto Serif', serif;
+    font-style: italic; font-weight: 400;
+    font-size: 24px; letter-spacing: -0.025em;
+    color: #182c24; flex-shrink: 0;
   }
-  .logo-dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, var(--orange-300), var(--orange-700));
-    box-shadow: 0 0 0 3px var(--orange-50);
-  }
+  .logo-dot { display: none; }
   .nav-links { display: flex; gap: 32px; align-items: center; }
   .nav-links a {
     font-size: 15px; color: var(--text); padding: 10px 4px;
@@ -1075,56 +1074,73 @@
 
   /* ---------- Footer ---------- */
   footer.site {
-    background: var(--neutral-footer-bg-light);
-    border-top: 1px solid var(--border);
+    width: 100%;
+    padding: 64px 32px;
+    background: #f0ede8;
+    border-top: 1px solid rgba(194, 200, 195, 0.1);
   }
-  .footer-top {
-    display: flex; gap: 80px;
-    padding: 64px 0 48px;
-    border-bottom: 1px solid var(--border);
+  .footer-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    max-width: 1280px;
+    margin: 0 auto;
   }
-  .footer-brand { flex: 0 0 280px; }
-  .footer-logo {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 20px; font-weight: 500; letter-spacing: 0.02em;
-    color: var(--text); display: flex; align-items: center; gap: 9px;
-    margin-bottom: 20px;
+  .footer-brand-col { display: flex; flex-direction: column; gap: 24px; }
+  .footer-brand-name {
+    font-family: 'Noto Serif', serif;
+    font-size: 20px; font-weight: 400; color: #182c24; margin: 0;
   }
-  .footer-tagline {
-    font-size: 14px; line-height: 1.65; color: var(--text-muted);
-    margin: 0; max-width: 260px;
-    font-family: 'Lora', Georgia, serif; font-style: italic;
+  .footer-brand-tagline {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px; letter-spacing: 0.025em;
+    color: rgba(24, 44, 36, 0.7); line-height: 1.625; margin: 0;
   }
-  .footer-cols {
-    flex: 1; display: flex; gap: 48px; justify-content: flex-end;
+  .footer-link-col { display: flex; flex-direction: column; gap: 16px; }
+  .footer-col-heading {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: rgba(24, 44, 36, 0.4); margin: 0;
   }
-  .footer-col { display: flex; flex-direction: column; gap: 14px; min-width: 100px; }
-  .footer-col strong {
-    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--text-subtle);
+  .footer-link-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .footer-link-col a {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px; letter-spacing: 0.025em;
+    color: rgba(24, 44, 36, 0.7); transition: color 0.2s ease;
   }
-  .footer-col a {
-    font-size: 14px; color: var(--text-muted);
-    transition: color .2s var(--ease);
+  .footer-link-col a:hover { color: #182c24; }
+  .footer-connect-icons { display: flex; gap: 16px; }
+  .footer-icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(194, 200, 195, 0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(24, 44, 36, 0.7); transition: background 0.2s ease;
   }
-  .footer-col a:hover { color: var(--orange-600); }
+  .footer-icon-btn:hover { background: rgba(24, 44, 36, 0.05); }
+  .footer-icon-btn .material-symbols-outlined { font-size: 18px; }
   .footer-bottom {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 0; gap: 16px; flex-wrap: wrap;
-    font-size: 13px; color: var(--text-subtle);
+    max-width: 1280px; margin: 64px auto 0;
+    padding-top: 32px;
+    border-top: 1px solid rgba(194, 200, 195, 0.2);
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
   }
-  .footer-legal { display: flex; gap: 24px; }
-  .footer-legal a { font-size: 13px; color: var(--text-subtle); transition: color .2s var(--ease); }
-  .footer-legal a:hover { color: var(--orange-600); }
-  @media (max-width: 860px) {
-    .footer-top { flex-direction: column; gap: 40px; padding: 48px 0 36px; }
-    .footer-brand { flex: none; }
-    .footer-tagline { max-width: 100%; }
-    .footer-cols { justify-content: flex-start; }
+  .footer-copyright {
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px; letter-spacing: 0.025em;
+    color: rgba(24, 44, 36, 0.5); margin: 0;
   }
-  @media (max-width: 480px) {
-    .footer-cols { flex-wrap: wrap; gap: 32px; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer-legal-links { display: flex; gap: 32px; }
+  .footer-legal-links a {
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px; letter-spacing: 0.025em;
+    color: rgba(24, 44, 36, 0.5); transition: color 0.2s ease;
+  }
+  .footer-legal-links a:hover { color: #182c24; }
+  @media (max-width: 768px) {
+    footer.site { padding: 48px 24px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
   }
 
   /* ---------- Toast ---------- */
@@ -1561,10 +1577,7 @@
 <!-- ============ HEADER ============ -->
 <header class="site">
   <div class="container nav">
-    <a href="#" class="logo" aria-label="Viluma home">
-      <span class="logo-dot" aria-hidden="true"></span>
-      Viluma
-    </a>
+    <a href="#" class="logo" aria-label="Viluma home">Viluma</a>
     <nav class="nav-links" id="navLinks" aria-label="Primary">
       <a href="#" data-hub="events">Events</a>
       <a href="#" data-hub="retreats">Retreats</a>
@@ -2002,42 +2015,44 @@
 
 <!-- ============ FOOTER ============ -->
 <footer class="site">
-  <div class="container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="#" class="footer-logo" aria-label="Viluma home">
-          <span class="logo-dot" aria-hidden="true"></span>
-          Viluma
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <h2 class="footer-brand-name">Viluma</h2>
+      <p class="footer-brand-tagline">Elevating the human experience through intentional spaces and curated presence.</p>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Explore</h4>
+      <ul>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Retreats</a></li>
+        <li><a href="#">Trainings</a></li>
+      </ul>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Journal</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Connect</h4>
+      <div class="footer-connect-icons">
+        <a href="#" class="footer-icon-btn" aria-label="Website">
+          <span class="material-symbols-outlined">public</span>
         </a>
-        <p class="footer-tagline">Elevating the human experience through intentional spaces and curated presence.</p>
-      </div>
-      <div class="footer-cols">
-        <div class="footer-col">
-          <strong>Explore</strong>
-          <a href="#">Events</a>
-          <a href="#">Retreats</a>
-          <a href="#">Trainings</a>
-        </div>
-        <div class="footer-col">
-          <strong>Company</strong>
-          <a href="#">About</a>
-          <a href="#">Journal</a>
-          <a href="#">Contact</a>
-        </div>
-        <div class="footer-col">
-          <strong>Connect</strong>
-          <a href="#">Instagram</a>
-          <a href="#">Newsletter</a>
-          <a href="#">For organisers</a>
-        </div>
+        <a href="#" class="footer-icon-btn" aria-label="Email">
+          <span class="material-symbols-outlined">mail</span>
+        </a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Viluma. All rights reserved.</span>
-      <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-      </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copyright">© 2026 Viluma. All rights reserved.</p>
+    <div class="footer-legal-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
     </div>
   </div>
 </footer>
