@@ -1265,6 +1265,247 @@
     stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
     flex: 0 0 auto;
   }
+
+  /* ============================================================
+   * LIVE PULSE
+   * ============================================================ */
+  .pulse-section {
+    padding: 96px 0 72px;
+    background: var(--bg-3);
+    overflow: hidden;
+  }
+  .pulse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+  }
+  .pulse-kicker {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .pulse-title {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 34px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .pulse-nav {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .pulse-nav-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    color: var(--text);
+  }
+  .pulse-nav-btn:hover { background: var(--surface); border-color: var(--border-strong); }
+  .pulse-nav-btn svg {
+    width: 18px; height: 18px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .pulse-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 4px 32px 28px;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .pulse-track::-webkit-scrollbar { display: none; }
+  .pulse-card {
+    flex: 0 0 268px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 28px 28px 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .pulse-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .pulse-card-icon svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .pulse-card-count {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 26px; font-weight: 500;
+    color: var(--text); margin-bottom: 4px;
+  }
+  .pulse-card-desc { font-size: 14px; color: var(--text-muted); }
+  .pulse-card-foot {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .pulse-avatars { display: flex; }
+  .pulse-av {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    overflow: hidden;
+  }
+  .pulse-av + .pulse-av { margin-left: -8px; }
+  .pulse-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pulse-joining { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+
+  /* ============================================================
+   * THE COMMUNITY — HOST PREVIEW
+   * ============================================================ */
+  .community-section {
+    padding: 112px 0 96px;
+    background: var(--bg);
+  }
+  .community-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .community-kicker {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 0 0 14px;
+  }
+  .community-headline {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 40px; line-height: 1.2;
+    color: var(--text);
+    margin: 0 0 20px;
+    letter-spacing: -0.02em;
+  }
+  .community-headline em { font-style: italic; }
+  .community-body {
+    font-size: 16px; line-height: 1.75;
+    color: var(--text-muted);
+    max-width: 460px;
+    margin: 0 0 44px;
+  }
+  .community-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 44px;
+  }
+  .community-stat {
+    padding-left: 18px;
+    border-left: 2px solid var(--orange-300);
+  }
+  .community-stat-num {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 36px; font-weight: 500;
+    color: var(--text); line-height: 1;
+  }
+  .community-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+  .community-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--olive-900);
+    color: #fff;
+    padding: 14px 26px;
+    border-radius: var(--radius-pill);
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: opacity 0.2s;
+  }
+  .community-cta:hover { opacity: 0.82; }
+  .community-cta svg {
+    width: 16px; height: 16px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.2s var(--ease);
+  }
+  .community-cta:hover svg { transform: translateX(3px); }
+  .hosts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .host-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .host-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .host-photo {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+  .host-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease);
+    display: block;
+  }
+  .host-card:hover .host-photo img { transform: scale(1.04); }
+  .host-info { padding: 13px 15px 14px; }
+  .host-name {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 14px; color: var(--text); margin-bottom: 2px;
+  }
+  .host-role { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .host-card--more {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: var(--bg-3) !important;
+    box-shadow: none !important;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    min-height: 200px;
+  }
+  .host-card--more:hover { background: var(--olive-100) !important; transform: none; }
+  .host-card--more-num {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 30px; color: var(--olive-500); margin-bottom: 6px;
+  }
+  .host-card--more-label {
+    font-size: 12px; color: var(--text-muted);
+    text-align: center; line-height: 1.5;
+  }
+
+  @media (max-width: 960px) {
+    .community-inner { grid-template-columns: 1fr; gap: 56px; }
+    .community-headline { font-size: 34px; }
+  }
+  @media (max-width: 640px) {
+    .pulse-section { padding: 64px 0 52px; }
+    .pulse-track { padding: 4px 18px 24px; }
+    .pulse-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .community-section { padding: 72px 0 64px; }
+    .community-headline { font-size: 28px; }
+    .hosts-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -1511,6 +1752,211 @@
         <div class="thumb photo-events"></div>
         <div><h4>The Berlin Tuesday-night pattern</h4><p>How regulars are rebuilding local practice after the long winter.</p></div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE PULSE ============ -->
+<section class="pulse-section">
+  <div class="container pulse-header">
+    <div>
+      <p class="pulse-kicker">Live Pulse</p>
+      <h2 class="pulse-title">Global Movement</h2>
+    </div>
+    <div class="pulse-nav">
+      <button class="pulse-nav-btn" id="pulse-prev" aria-label="Scroll left">
+        <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="pulse-nav-btn" id="pulse-next" aria-label="Scroll right">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="pulse-track" id="pulse-track">
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--orange-100);color:var(--orange-700)">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
+      <div class="pulse-card-count">12 Retreats</div>
+      <div class="pulse-card-desc">starting in Bali this week</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+          <div class="pulse-av" style="background:var(--orange-200)"></div>
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+        </div>
+        <span class="pulse-joining">+124 joining</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--olive-100);color:var(--olive-500)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="pulse-card-count">8 Trainings</div>
+      <div class="pulse-card-desc">opening in Kyoto this month</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--orange-300)"></div>
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+        </div>
+        <span class="pulse-joining">+86 interested</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--bg-2);color:var(--orange-600)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="pulse-card-count">24 Events</div>
+      <div class="pulse-card-desc">near Los Angeles this weekend</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-400)"></div>
+          <div class="pulse-av" style="background:var(--orange-200)"></div>
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+          <div class="pulse-av" style="background:var(--orange-100)"></div>
+        </div>
+        <span class="pulse-joining">+200 gathering</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--orange-50);color:var(--orange-700)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="pulse-card-count">18 Retreats</div>
+      <div class="pulse-card-desc">opening in Portugal next month</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+          <div class="pulse-av" style="background:var(--orange-300)"></div>
+        </div>
+        <span class="pulse-joining">+97 joining</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--olive-100);color:var(--olive-600)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="pulse-card-count">6 Trainings</div>
+      <div class="pulse-card-desc">residential in Germany this season</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--orange-200)"></div>
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+          <div class="pulse-av" style="background:var(--orange-100)"></div>
+        </div>
+        <span class="pulse-joining">+41 enrolled</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--orange-100);color:var(--orange-700)">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="pulse-card-count">31 Events</div>
+      <div class="pulse-card-desc">across Vienna &amp; Budapest</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+          <div class="pulse-av" style="background:var(--orange-300)"></div>
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+        </div>
+        <span class="pulse-joining">+153 attending</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ THE COMMUNITY ============ -->
+<section class="community-section">
+  <div class="container">
+    <div class="community-inner">
+
+      <div>
+        <p class="community-kicker">The Community</p>
+        <h2 class="community-headline">The people behind<br><em>the practice.</em></h2>
+        <p class="community-body">Every offering on Lumaya is shaped by someone who has devoted years — often decades — to their craft. Our hosts are somatic therapists, senior yoga teachers, breathwork guides, and retreat organizers who carry the trust of the communities they serve.<br><br>We don't believe in anonymous listings. Each profile is verified, each space is intentional. The people you'll find here have built something real — and they've invited you in.</p>
+
+        <div class="community-stats">
+          <div class="community-stat">
+            <div class="community-stat-num">150+</div>
+            <div class="community-stat-label">Verified Hosts</div>
+          </div>
+          <div class="community-stat">
+            <div class="community-stat-num">28</div>
+            <div class="community-stat-label">Countries</div>
+          </div>
+        </div>
+
+        <a class="community-cta" href="#">
+          Browse all hosts
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="hosts-grid">
+
+        <div class="host-card">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fe5b34281-aadd-4d01-bbf8-67fc0c71d6ad%2Favatar%2F1766403731470_kuschelraum.jpg?alt=media&token=da2a304f-4eb6-4871-86a7-96e39f6daac8" alt="Kuschelraum">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Kuschelraum</div>
+            <div class="host-role">Somatic &amp; Consent Work · Vienna</div>
+          </div>
+        </div>
+
+        <div class="host-card">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fff7dc0ec-fb76-4c04-92bc-d4cdce7d4288%2Favatar%2F1766155114347_1-Tanja%20Berni17697-WEB-small-sRGB-72dpi1500px%C2%A9Foto%20Dieter%20Duevelmeyer.jpg?alt=media&token=3fd41cea-a9c3-4e99-9c5f-7e610a1b6e10" alt="Tanja Berni">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Tanja Berni</div>
+            <div class="host-role">Yoga &amp; Body Awareness</div>
+          </div>
+        </div>
+
+        <div class="host-card">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F9e18fa4e-19d6-4cf1-b031-61362ed6ebd8%2Favatar%2F1776453843531_Copy%20of%20Copy%20of%20JW%20-%20Intro%20(Instagram%20Post%20(45))%20(1).png?alt=media&token=37228c93-58b3-45c7-a482-08462225b2fc" alt="JW">
+          </div>
+          <div class="host-info">
+            <div class="host-name">JW Collective</div>
+            <div class="host-role">Movement &amp; Breathwork</div>
+          </div>
+        </div>
+
+        <div class="host-card">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fb9e16bc9-adba-4e2e-8f99-884daacacf4c%2Favatar%2F1772975570462_IMG-20230228-WA0008.jpg?alt=media&token=3b22d637-5bb7-4604-9b31-49051c3d5c85" alt="Host">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Host Name</div>
+            <div class="host-role">Mindfulness · Meditation</div>
+          </div>
+        </div>
+
+        <div class="host-card">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F7ff29437-18a3-4cfa-bd54-6a8f604ff329%2Favatar%2F1773392725816_A7400723.jpg?alt=media&token=e645b4ad-601f-44d9-a899-df7ca7b7d117" alt="Host">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Host Name</div>
+            <div class="host-role">Embodied Leadership</div>
+          </div>
+        </div>
+
+        <div class="host-card host-card--more">
+          <div class="host-card--more-num">150+</div>
+          <div class="host-card--more-label">more hosts<br>to discover</div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
@@ -3489,6 +3935,18 @@
       if (raf) return;
       raf = requestAnimationFrame(apply);
     }, { passive: true });
+  })();
+
+  // Live Pulse scroll buttons
+  (function() {
+    var track = document.getElementById('pulse-track');
+    if (!track) return;
+    document.getElementById('pulse-prev').addEventListener('click', function() {
+      track.scrollBy({ left: -300, behavior: 'smooth' });
+    });
+    document.getElementById('pulse-next').addEventListener('click', function() {
+      track.scrollBy({ left: 300, behavior: 'smooth' });
+    });
   })();
 </script>
 
