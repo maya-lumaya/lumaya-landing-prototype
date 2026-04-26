@@ -2686,11 +2686,11 @@
       });
       dd.appendChild(nearMe);
 
-      const suggestTitle = el(`<div class="dd-title">Nearby cities</div>`);
+      const suggestTitle = el(`<div class="dd-title">Suggested places</div>`);
       dd.appendChild(suggestTitle);
 
       const citySuggestions = document.createElement("div");
-      PLACE_SUGGESTIONS.filter(p => p.kind === "city").forEach(p => {
+      PLACE_SUGGESTIONS.forEach(p => {
         const item = el(`
           <div class="dd-item" role="option">
             <div class="name">
@@ -2718,7 +2718,7 @@
         const query = input.value.trim();
         if (!query) {
           addrResults.innerHTML = "";
-          suggestTitle.textContent = "Nearby cities";
+          suggestTitle.textContent = "Suggested places";
           citySuggestions.style.display = "";
           return;
         }
