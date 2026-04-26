@@ -461,7 +461,7 @@
       display: block;
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
       background: rgba(249, 246, 239, 0.96);
       backdrop-filter: saturate(120%) blur(14px);
       -webkit-backdrop-filter: saturate(120%) blur(14px);
@@ -592,7 +592,7 @@
     max-width: 580px; margin: 0 auto; line-height: 1.6;
   }
   /* Search lives inside hero — keep dropdowns above subsequent sections */
-  .hero .search-stage { position: relative; z-index: 50; max-width: 1080px; margin: 0 auto; }
+  .hero .search-stage { position: relative; z-index: 100; max-width: 1080px; margin: 0 auto; }
 
   .tabs-row { display: flex; justify-content: center; gap: 2px; margin-bottom: 18px; position: relative; }
   .tab {
@@ -692,7 +692,7 @@
     min-width: 360px;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
-    padding: 8px; display: none; z-index: 40;
+    padding: 8px; display: none; z-index: 110;
     max-height: 520px; overflow-y: auto;
   }
   .field.active .dropdown { display: block; animation: ddIn .18s var(--ease); }
