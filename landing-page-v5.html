@@ -3580,11 +3580,6 @@
     const suggestSection = document.createElement("div");
     body.appendChild(suggestSection);
 
-    // Address autocomplete results host — shown when user types (Events tab only)
-    const resultsHost = document.createElement("div");
-    resultsHost.id = "mPlaceAddrResults";
-    body.appendChild(resultsHost);
-
     // Build static section
     suggestSection.appendChild(el(`<div class="m-suggest-label">Suggested destinations</div>`));
     const list = document.createElement("div");
@@ -3653,36 +3648,16 @@
         appendPlaceSuggestions(list);
       }
 
-      // Wire input — typing triggers inline address autocomplete
+      // Tapping the input opens the dedicated address-search sub-mode
       const input = wrap.querySelector("#mPlaceInput");
-      if (mState.addrQuery) {
-        input.value = mState.addrQuery;
-        suggestSection.style.display = "none";
-        renderAddrResults(resultsHost);
-      }
-      input.addEventListener("input", (e) => {
-        mState.addrQuery = e.target.value;
-        clearTimeout(addrFetchTimer);
-        const q = mState.addrQuery.trim();
-        const hasQuery = q.length >= 2;
-        suggestSection.style.display = hasQuery ? "none" : "";
-        if (!hasQuery) {
-          resultsHost.innerHTML = "";
-          mState.addrResults = [];
-          mState.addrLoading = false;
-          return;
-        }
-        if (!addrSessionToken) freshAddrSession();
-        const seq = ++addrFetchSeq;
-        mState.addrLoading = true;
-        renderAddrResults(resultsHost);
-        addrFetchTimer = setTimeout(async () => {
-          const results = await fetchAddressSuggestions(q);
-          if (seq !== addrFetchSeq) return;
-          mState.addrResults = results;
-          mState.addrLoading = false;
-          renderAddrResults(resultsHost);
-        }, 220);
+      input.addEventListener("focus", () => {
+        freshAddrSession();
+        mState.placeMode = "address-search";
+        mState.addrQuery = "";
+        mState.addrResults = [];
+        mState.addrLoading = false;
+        mRender();
+        setTimeout(() => { const i = document.getElementById("mAddrInput"); if (i) i.focus(); }, 30);
       });
     } else {
       const worldwide = el(`
