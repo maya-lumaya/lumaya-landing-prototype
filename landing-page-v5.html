@@ -85,8 +85,7 @@
   .m-search-wrap { padding: 14px 0 calc(10px - 6px * var(--shrink)); }
   .m-search-pill {
     width: 100%;
-    background: #FFFFFF;
-    border: 1px solid var(--olive-100);
+    background: var(--surface);
     border-radius: 999px;
     padding: 18px 22px;
     box-shadow: 0 1px 2px rgba(18,19,12,0.04), 0 8px 24px rgba(18,19,12,0.08);
@@ -195,11 +194,10 @@
     -webkit-overflow-scrolling: touch;
   }
   .m-step {
-    background: var(--bg);
-    border: 1px solid var(--line);
+    background: var(--surface);
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(18,19,12,0.03);
+    box-shadow: var(--shadow-sm);
     flex: 0 0 auto;
   }
   .m-step.collapsed {
@@ -214,8 +212,7 @@
   .m-step.collapsed .m-step-head .m-step-value { color: var(--text); font-weight: 500; }
   .m-step.collapsed .m-step-head .m-step-value.placeholder { color: var(--muted); }
   .m-step.expanded {
-    border-color: var(--text);
-    box-shadow: 0 0 0 1px var(--text), 0 8px 28px rgba(18,19,12,0.08);
+    box-shadow: var(--shadow-md);
   }
   .m-step.expanded .m-step-head { display: none; }
   .m-step-body { padding: 20px 20px 22px; }
@@ -230,14 +227,14 @@
   /* Search input inside step (place) */
   .m-step .m-input {
     width: 100%;
-    background: var(--bg);
-    border: 1.5px solid var(--olive-100);
+    background: var(--bg-2);
     border-radius: 14px;
     padding: 14px 14px 14px 44px;
     font: 400 15px/1.2 "Inter", system-ui, sans-serif;
     color: var(--text);
     box-sizing: border-box;
     position: relative;
+    box-shadow: var(--shadow-sm);
   }
   .m-input-wrap { position: relative; margin-bottom: 18px; }
   .m-input-wrap > svg {
@@ -247,7 +244,7 @@
     stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
     pointer-events: none; z-index: 1;
   }
-  .m-step .m-input:focus { outline: none; border-color: var(--text); }
+  .m-step .m-input:focus { outline: none; box-shadow: var(--shadow-md); }
   .m-suggest-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 10px; letter-spacing: 0.01em; }
   .m-suggest-list { display: flex; flex-direction: column; gap: 4px; }
   .m-suggest-item {
