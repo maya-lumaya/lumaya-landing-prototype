@@ -3389,12 +3389,12 @@
       const arr = Array.isArray(data) ? data
                 : (data.predictions || data.results || data.suggestions || data.items || []);
       return arr.map((p, i) => {
-        const desc = p.description || "";
-        const parts = desc.split(",");
+        const fullName = p.name || p.description || "";
+        const parts = fullName.split(",");
         return {
-          id: p.placeId || p.place_id || p.id || ("ac-" + i + "-" + Date.now()),
+          id: p.placesId || p.placeId || p.place_id || p.id || ("ac-" + i + "-" + Date.now()),
           name: p.mainText || p.main_text || (p.structured_formatting && p.structured_formatting.main_text)
-                || parts[0] || desc || "Unknown",
+                || parts[0].trim() || fullName || "Unknown",
           sub:  p.secondaryText || p.secondary_text || (p.structured_formatting && p.structured_formatting.secondary_text)
                 || parts.slice(1).join(",").trim() || ""
         };
@@ -3566,7 +3566,7 @@
     mRenderPlaceList(body);
   }
 
-  /* List mode — Near me / Worldwide / Address / History / Cities */
+  /* List mode — Near me / Worldwide / Cities (Events: inline address autocomplete on type) */
   function mRenderPlaceList(body) {
     const wrap = document.createElement("div");
     wrap.className = "m-input-wrap";
@@ -3576,11 +3576,21 @@
     `;
     body.appendChild(wrap);
 
-    body.appendChild(el(`<div class="m-suggest-label">Suggested destinations</div>`));
+    // Static suggestions section — toggled as a unit when address search is active
+    const suggestSection = document.createElement("div");
+    body.appendChild(suggestSection);
+
+    // Address autocomplete results host — shown when user types (Events tab only)
+    const resultsHost = document.createElement("div");
+    resultsHost.id = "mPlaceAddrResults";
+    body.appendChild(resultsHost);
+
+    // Build static section
+    suggestSection.appendChild(el(`<div class="m-suggest-label">Suggested destinations</div>`));
     const list = document.createElement("div");
     list.className = "m-suggest-list";
+    suggestSection.appendChild(list);
 
-    // First entry depends on tab.
     if (mState.tab === "events") {
       const near = el(`
         <div class="m-suggest-item" role="option">
@@ -3599,54 +3609,10 @@
       });
       list.appendChild(near);
 
-      // Address entry — opens the address-search sub-mode.
-      const addr = el(`
-        <div class="m-suggest-item" role="option">
-          <div class="m-suggest-icon" style="background:#FEF1E2;color:#D97706;">
-            <svg viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div class="m-suggest-text">
-            <div class="m-suggest-name">An address</div>
-            <div class="m-suggest-sub">Pin a point + radius (1–50 km).</div>
-          </div>
-        </div>
-      `);
-      addr.addEventListener("click", () => {
-        freshAddrSession();
-        mState.placeMode = "address-search";
-        mState.addrQuery = "";
-        mState.addrResults = [];
-        mState.addrLoading = false;
-        mRender();
-        // Focus the address input shortly after mount
-        setTimeout(() => { const i = document.getElementById("mAddrInput"); if (i) i.focus(); }, 30);
-      });
-      list.appendChild(addr);
-    } else {
-      const worldwide = el(`
-        <div class="m-suggest-item" role="option">
-          <div class="m-suggest-icon">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-          </div>
-          <div class="m-suggest-text">
-            <div class="m-suggest-name">Worldwide</div>
-            <div class="m-suggest-sub">Browse every destination — no geo filter.</div>
-          </div>
-        </div>
-      `);
-      worldwide.addEventListener("click", () => {
-        mSetFieldValue("where", "Worldwide", "");
-        mAdvance();
-      });
-      list.appendChild(worldwide);
-    }
-
-    // History (Events only) — saved addresses, max 3, each removable.
-    if (mState.tab === "events") {
+      // History — saved addresses, max 3, each removable
       const history = addrHistoryRead();
       if (history.length) {
-        body.appendChild(list); // attach what we have so far so order is right
-        body.appendChild(el(`<div class="m-suggest-label" style="margin-top:18px;">Recent addresses</div>`));
+        suggestSection.appendChild(el(`<div class="m-suggest-label" style="margin-top:18px;">Recent addresses</div>`));
         const hList = document.createElement("div");
         hList.className = "m-suggest-list";
         history.forEach(item => {
@@ -3677,19 +3643,66 @@
           });
           hList.appendChild(row);
         });
-        body.appendChild(hList);
-        body.appendChild(el(`<div class="m-suggest-label" style="margin-top:18px;">Cities</div>`));
-        // Reset list so cities go in a fresh container below
+        suggestSection.appendChild(hList);
+        suggestSection.appendChild(el(`<div class="m-suggest-label" style="margin-top:18px;">Cities</div>`));
         const list2 = document.createElement("div");
         list2.className = "m-suggest-list";
         appendPlaceSuggestions(list2);
-        body.appendChild(list2);
-        return;
+        suggestSection.appendChild(list2);
+      } else {
+        appendPlaceSuggestions(list);
       }
-    }
 
-    appendPlaceSuggestions(list);
-    body.appendChild(list);
+      // Wire input — typing triggers inline address autocomplete
+      const input = wrap.querySelector("#mPlaceInput");
+      if (mState.addrQuery) {
+        input.value = mState.addrQuery;
+        suggestSection.style.display = "none";
+        renderAddrResults(resultsHost);
+      }
+      input.addEventListener("input", (e) => {
+        mState.addrQuery = e.target.value;
+        clearTimeout(addrFetchTimer);
+        const q = mState.addrQuery.trim();
+        const hasQuery = q.length >= 2;
+        suggestSection.style.display = hasQuery ? "none" : "";
+        if (!hasQuery) {
+          resultsHost.innerHTML = "";
+          mState.addrResults = [];
+          mState.addrLoading = false;
+          return;
+        }
+        if (!addrSessionToken) freshAddrSession();
+        const seq = ++addrFetchSeq;
+        mState.addrLoading = true;
+        renderAddrResults(resultsHost);
+        addrFetchTimer = setTimeout(async () => {
+          const results = await fetchAddressSuggestions(q);
+          if (seq !== addrFetchSeq) return;
+          mState.addrResults = results;
+          mState.addrLoading = false;
+          renderAddrResults(resultsHost);
+        }, 220);
+      });
+    } else {
+      const worldwide = el(`
+        <div class="m-suggest-item" role="option">
+          <div class="m-suggest-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          </div>
+          <div class="m-suggest-text">
+            <div class="m-suggest-name">Worldwide</div>
+            <div class="m-suggest-sub">Browse every destination — no geo filter.</div>
+          </div>
+        </div>
+      `);
+      worldwide.addEventListener("click", () => {
+        mSetFieldValue("where", "Worldwide", "");
+        mAdvance();
+      });
+      list.appendChild(worldwide);
+      appendPlaceSuggestions(list);
+    }
   }
 
   function appendPlaceSuggestions(list) {
@@ -3810,6 +3823,8 @@
     back.addEventListener("click", () => {
       mState.placeMode = "list";
       mState.pickedAddress = null;
+      mState.addrQuery = "";
+      mState.addrResults = [];
       mRender();
     });
     body.appendChild(back);
