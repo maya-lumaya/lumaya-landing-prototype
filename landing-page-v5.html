@@ -466,7 +466,7 @@
       opacity: var(--shrink, 0);
       pointer-events: none;
     }
-    .hero { padding: 28px 0 48px !important; }
+    .hero { min-height: 80svh; padding: 28px 0 48px !important; display: flex; align-items: center; }
     .hero .hero-inner { gap: 0 !important; }
     .hero .hero-copy h1 { font-size: 32px !important; }
     .section { padding: 56px 0 32px !important; }
@@ -558,6 +558,7 @@
   .hero {
     position: relative; overflow: visible;
     padding: 100px 0 96px;
+    z-index: 1;
   }
   .hero-bg-img {
     position: absolute; inset: 0;
@@ -1577,7 +1578,6 @@
   <img class="hero-bg-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnSsxtaujAmURIu4lP-NmqDczil3MLwxAFnka8D4pp_GGQNYJTcS6Xs8ishGLcmlreaia9JJEXXpf7Ye7Zjt2ocDlzxCx91Bw24iYlDYrLhE5WqwKLAWR-ChL9MxvOfmPTStuxlqIxz0hWt96awKc5J7rFaMHU89j9K2HyvG7mehS7QWosCcH3b0pEeVseJyO285r-qZoAokYg5Ndb0G_u4a90aaF_hSm4of4G4lFSRmuu6slaovxMQoyRO9Qe30dITc1XqKSUL98" alt="" aria-hidden="true">
   <div class="container hero-inner">
     <div class="hero-copy">
-      <span class="eyebrow">Conscious events · retreats · trainings</span>
       <h1>A quiet place to find what you're actually <em>looking for</em>.</h1>
       <p class="lede">From a Tuesday-evening yoga class nearby to a 200-hour training in Rishikesh — Lumaya gathers real practice, real teachers, and real places in one calm marketplace.</p>
     </div>
