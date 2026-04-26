@@ -461,7 +461,10 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(249, 246, 239, 0.96);
+      /* Fade from opaque cream (search pill) to transparent (tab row) so hero image bleeds through */
+      background: linear-gradient(to bottom,
+        rgba(249, 246, 239, 0.97) 42%,
+        rgba(249, 246, 239, 0.0) 100%);
       backdrop-filter: saturate(120%) blur(14px);
       -webkit-backdrop-filter: saturate(120%) blur(14px);
     }
@@ -471,7 +474,8 @@
       opacity: var(--shrink, 0);
       pointer-events: none;
     }
-    .hero { min-height: 60svh; padding: 28px 0 48px !important; display: flex; align-items: center; }
+    /* Pull hero up so its image extends behind the tab row */
+    .hero { min-height: 60svh; margin-top: -72px; padding: calc(72px + 28px) 0 48px !important; display: flex; align-items: center; }
     .hero .hero-inner { gap: 0 !important; }
     .hero .hero-copy h1 { font-size: 32px !important; }
     .section { padding: 56px 0 32px !important; }
