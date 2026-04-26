@@ -558,7 +558,7 @@
   .hero {
     position: relative; overflow: visible;
     padding: 100px 0 96px;
-    z-index: 1;
+    z-index: 50;
   }
   .hero-bg-img {
     position: absolute; inset: 0;
@@ -908,6 +908,7 @@
     box-shadow: var(--shadow-sm);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease);
     display: flex; flex-direction: column;
+    isolation: isolate;
   }
   .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .card-media { aspect-ratio: 4 / 3; position: relative; overflow: hidden; }
@@ -947,6 +948,7 @@
     position: relative; aspect-ratio: 3 / 2;
     border-radius: var(--radius-sm); overflow: hidden;
     color: #FFF6E9; transition: transform .2s var(--ease);
+    isolation: isolate;
   }
   .destination:hover { transform: scale(1.015); }
   .destination .bg { position: absolute; inset: 0; }
