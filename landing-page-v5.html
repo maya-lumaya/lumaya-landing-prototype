@@ -160,7 +160,10 @@
     display: none;
     flex-direction: column;
   }
-  .m-modal.open { display: flex; }
+  .m-modal.open    { display: flex; animation: modalIn  .22s cubic-bezier(.4,0,.2,1); }
+  .m-modal.closing { display: flex; animation: modalOut .18s cubic-bezier(.4,0,.2,1) forwards; pointer-events: none; }
+  @keyframes modalIn  { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes modalOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-10px); } }
   .m-modal-head {
     display: flex; align-items: center; gap: 10px;
     padding: 14px 16px 12px;
@@ -186,7 +189,7 @@
     width: 36px; height: 36px; border-radius: 50%;
     background: var(--bg); border: 1px solid var(--line);
     display: grid; place-items: center; cursor: pointer;
-    flex: 0 0 auto;
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
   }
   .m-modal-close svg { width: 14px; height: 14px; stroke: var(--text); stroke-width: 2; stroke-linecap: round; }
   .m-modal-body {
@@ -1250,7 +1253,7 @@
     .menu-toggle:active         { transform: scale(.96); }
     .destination:active         { transform: scale(.98); }
     .card-cta:active            { transform: scale(.98); }
-    .m-modal-close:active,
+    .m-modal-close:active       { transform: translateY(-50%) scale(.96); }
     .m-back-btn:active,
     .m-suggest-remove:active    { transform: scale(.96); }
     .m-clear:active, .m-next:active,
@@ -1285,6 +1288,7 @@
     .btn, .btn-ghost, .icon-btn, .menu-toggle, .m-step,
     .m-bn-btn--cta { transition: none !important; }
     .is-tap-flash, .is-tap-flash * { animation: none !important; }
+    .m-modal.open, .m-modal.closing { animation: none !important; }
   }
 
   /* ============= Mobile account menu (fullscreen) ============= */
@@ -3450,8 +3454,11 @@
     syncTopMobileTabs();
   }
   function closeMobileModal() {
-    mModal.classList.remove("open");
-    document.body.classList.remove("m-locked");
+    mModal.classList.add("closing");
+    mModal.addEventListener("animationend", () => {
+      mModal.classList.remove("open", "closing");
+      document.body.classList.remove("m-locked");
+    }, { once: true });
   }
   function syncTopMobileTabs() {
     document.querySelectorAll(".m-tab-btn").forEach(b => {
