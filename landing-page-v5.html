@@ -896,7 +896,7 @@
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   @media (max-width: 980px) { .cards { grid-template-columns: 1fr; } }
   .card {
-    background: var(--surface); border: 1px solid var(--border);
+    background: var(--surface);
     border-radius: var(--radius-md); overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease);
@@ -986,13 +986,13 @@
   @media (max-width: 980px) { .cats-pillars { grid-template-columns: 1fr; } }
   .cat-group {
     background: var(--surface);
-    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 24px 24px 20px;
     display: flex; flex-direction: column;
-    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow .2s var(--ease);
   }
-  .cat-group:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .cat-group:hover { box-shadow: var(--shadow-md); }
   .cat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; }
   .cat-head h3 { font-size: 20px; line-height: 1.2; display: flex; align-items: center; gap: 10px; }
   .cat-head .icon {
@@ -1053,12 +1053,13 @@
   .editorial-item {
     display: grid; grid-template-columns: 110px 1fr; gap: 20px;
     padding: 16px; border-radius: var(--radius-md);
-    border: 1px solid var(--border); background: var(--surface);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
     align-items: center;
-    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+    transition: box-shadow .2s var(--ease);
     cursor: pointer;
   }
-  .editorial-item:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .editorial-item:hover { box-shadow: var(--shadow-md); }
   .editorial-item .thumb { width: 110px; height: 80px; border-radius: var(--radius-sm); }
   .editorial-item h4 { font-family: 'Lora', serif; font-size: 17px; margin: 0 0 4px; line-height: 1.25; }
   .editorial-item p { font-size: 13px; margin: 0; color: var(--text-muted); }
