@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Berlin — Viluma · Conscious events in Berlin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+:root {
+  --bg: #FCF9F4;
+  --bg-2: #F6F3EE;
+  --bg-3: #EBE8E3;
+  --surface: #FFFFFF;
+  --text: #1C1C19;
+  --text-muted: #5C5C5C;
+  --text-subtle: #8A8A8A;
+  --border: #C2C8C3;
+  --primary: #182c24;
+  --surface-low: #F6F3EE;
+  --surface-container: #F0EDE8;
+  --outline-variant: rgba(194, 200, 195, 0.35);
+  --olive-100: #E4E6DB;
+  --olive-500: #41452F;
+  --olive-900: #1C1D13;
+  --orange-300: #E4BB86;
+  --orange-500: #D69543;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(29,29,33,0.04), 0 2px 6px rgba(29,29,33,0.04);
+  --shadow-md: 0 4px 14px rgba(29,29,33,0.06), 0 10px 30px rgba(29,29,33,0.05);
+  --shadow-lg: 0 20px 60px rgba(29,29,33,0.10);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; line-height: 1.55;
+}
+h1, h2, h3, h4 {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 500; letter-spacing: -0.012em; margin: 0;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+img { display: block; }
+
+.container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 640px) { .container { padding: 0 18px; } }
+
+/* ── Header ────────────────────────────────── */
+header.site {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(252, 249, 244, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(194, 200, 195, 0.18);
+}
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; gap: 24px;
+}
+.logo {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--primary); letter-spacing: -0.02em; flex-shrink: 0;
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 14px; font-weight: 500; color: var(--text-muted);
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--primary); }
+.nav-links a.is-active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary); padding-bottom: 2px;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; color: var(--text-muted);
+  transition: color 0.15s; padding: 6px 0;
+}
+.nav-back .material-symbols-outlined { font-size: 16px; }
+.nav-back:hover { color: var(--primary); }
+.nav-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); transition: background 0.15s, color 0.15s;
+}
+.icon-btn:hover { background: var(--bg-3); color: var(--primary); }
+.icon-btn .material-symbols-outlined { font-size: 18px; }
+
+/* ── Hero ────────────────────────────────────── */
+.hero {
+  position: relative; width: 100%;
+  min-height: 560px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding: 0 32px 56px;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+.hero-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(252,249,244,0.25) 0%,
+    rgba(28,28,25,0.05) 35%,
+    rgba(252,249,244,0.88) 100%
+  );
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; width: 100%; max-width: 700px;
+  margin: 0 auto 36px;
+}
+.hero-eyebrow {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--primary); margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; flex: 0 0 32px; height: 1px;
+  background: var(--primary); opacity: 0.4;
+}
+h1.hero-title {
+  font-size: clamp(52px, 8vw, 84px);
+  line-height: 1.02; font-weight: 500;
+  color: var(--text); margin-bottom: 16px;
+}
+.hero-subtitle {
+  font-size: 17px; color: var(--text-muted); line-height: 1.6;
+  max-width: 540px; margin: 0 auto;
+}
+
+/* Discovery bar */
+.discovery-bar {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 800px; margin: 0 auto;
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 28px rgba(28,28,25,0.10), 0 1px 4px rgba(28,28,25,0.06);
+  border: 1px solid rgba(194, 200, 195, 0.22);
+  display: flex; align-items: stretch;
+}
+.db-field {
+  flex: 1; padding: 14px 22px;
+  border-right: 1px solid rgba(194, 200, 195, 0.22);
+  cursor: pointer; transition: background 0.15s; text-align: left;
+}
+.db-field:first-child { border-radius: var(--radius-pill) 0 0 var(--radius-pill); }
+.db-field:hover { background: #faf7f2; }
+.db-cta {
+  flex: 0 0 auto; display: flex; align-items: center;
+  gap: 12px; padding: 8px 10px 8px 22px;
+  border-right: none; cursor: default;
+}
+.db-label {
+  font: 700 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.04em; color: var(--text); margin-bottom: 5px;
+}
+.db-value { font-size: 13px; color: var(--text-muted); }
+.db-search-btn {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s; flex-shrink: 0; cursor: pointer;
+}
+.db-search-btn:hover { opacity: 0.85; }
+.db-search-btn .material-symbols-outlined { font-size: 19px; }
+
+/* ── SEO text ──────────────────────────────── */
+.seo-section {
+  max-width: 760px; margin: 0 auto;
+  padding: 72px 32px;
+  text-align: center;
+}
+.seo-section p {
+  font-size: 17px; line-height: 1.75; color: var(--text-muted);
+}
+
+/* ── Section wrapper ───────────────────────── */
+.section { padding: 64px 0; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 36px; gap: 16px; flex-wrap: wrap;
+}
+.section-header h2 { font-size: 30px; line-height: 1.15; }
+.view-all {
+  font: 600 13px/1 'Inter', sans-serif;
+  color: var(--primary);
+  display: inline-flex; align-items: center; gap: 5px;
+  white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0;
+}
+.view-all:hover { opacity: 0.7; }
+.view-all .material-symbols-outlined { font-size: 15px; }
+
+/* ── Event cards ───────────────────────────── */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1100px) { .events-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 820px)  { .events-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .events-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+
+.event-card {
+  display: block; cursor: pointer;
+  color: inherit; text-decoration: none;
+}
+.event-img {
+  width: 100%; aspect-ratio: 4/5;
+  border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--bg-3);
+  position: relative; margin-bottom: 12px;
+}
+.event-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.event-card:hover .event-img img { transform: scale(1.04); }
+.event-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(252, 249, 244, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font: 600 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.06em; color: var(--primary);
+  text-transform: capitalize;
+}
+.event-title {
+  font: 600 13px/1.35 'Inter', sans-serif;
+  color: var(--text); margin-bottom: 4px;
+}
+.event-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-price { font-size: 12px; color: var(--text); }
+.event-price strong { font-weight: 700; }
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #EBE8E3 25%, #F0EDE8 50%, #EBE8E3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skel-card .event-img { background: linear-gradient(90deg, #EBE8E3 25%, #F0EDE8 50%, #EBE8E3 75%); background-size: 200% 100%; animation: shimmer 1.6s infinite; }
+.skel-line { height: 13px; border-radius: 4px; margin-bottom: 6px; }
+.skel-line.w80 { width: 80%; }
+.skel-line.w55 { width: 55%; }
+.skel-line.w40 { width: 40%; }
+
+/* ── Guides section ────────────────────────── */
+.guides-section { padding: 80px 0; background: var(--surface-low); }
+.guides-header { text-align: center; margin-bottom: 56px; }
+.guides-header h2 { font-size: 36px; margin-bottom: 14px; }
+.guides-header p {
+  font-size: 16px; color: var(--text-muted);
+  max-width: 500px; margin: 0 auto; line-height: 1.65;
+}
+.guides-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px 56px;
+  max-width: 880px; margin: 0 auto;
+  padding: 0 32px;
+}
+.guide-card {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; cursor: pointer;
+  color: inherit; text-decoration: none;
+}
+.guide-avatar {
+  width: 176px; height: 176px; border-radius: 50%;
+  overflow: hidden; background: var(--bg-3);
+  border: 3px solid rgba(194, 200, 195, 0.45);
+  margin-bottom: 20px;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+  flex-shrink: 0;
+}
+.guide-card:hover .guide-avatar {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+}
+.guide-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.guide-name {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 20px; font-weight: 500;
+  color: var(--text); margin-bottom: 8px;
+}
+.guide-desc {
+  font-size: 14px; color: var(--text-muted);
+  line-height: 1.6; max-width: 220px;
+}
+
+/* ── Footer ────────────────────────────────── */
+footer.site {
+  width: 100%; padding: 64px 32px;
+  background: #f0ede8;
+  border-top: 1px solid rgba(194, 200, 195, 0.15);
+}
+.footer-inner {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 48px; max-width: 1240px; margin: 0 auto;
+}
+.footer-brand-col { display: flex; flex-direction: column; gap: 20px; }
+.footer-brand-name {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px; font-weight: 400; color: #182c24; margin: 0;
+}
+.footer-brand-tagline {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.7); line-height: 1.65; margin: 0;
+}
+.footer-link-col { display: flex; flex-direction: column; gap: 16px; }
+.footer-col-heading {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(24,44,36,0.4); margin: 0;
+}
+.footer-link-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.footer-link-col a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.7); transition: color 0.2s;
+}
+.footer-link-col a:hover { color: #182c24; }
+.footer-bottom {
+  max-width: 1240px; margin: 56px auto 0;
+  padding-top: 28px; border-top: 1px solid rgba(194,200,195,0.2);
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.footer-copyright {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.5); margin: 0;
+}
+.footer-legal-links { display: flex; gap: 28px; }
+.footer-legal-links a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.5); transition: color 0.2s;
+}
+.footer-legal-links a:hover { color: #182c24; }
+
+/* ── Responsive ────────────────────────────── */
+@media (max-width: 900px) {
+  .guides-grid { grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 0 18px; }
+  .guide-avatar { width: 140px; height: 140px; }
+  .footer-inner { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+}
+@media (max-width: 720px) {
+  .hero { padding: 0 18px 44px; min-height: 520px; }
+  .discovery-bar { flex-direction: column; border-radius: var(--radius-lg); }
+  .db-field { border-right: none; border-bottom: 1px solid rgba(194,200,195,0.22); }
+  .db-field:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .db-cta { border-bottom: none; padding: 12px 18px; }
+  .section { padding: 48px 0; }
+  .section-header h2 { font-size: 26px; }
+  .seo-section { padding: 48px 18px; }
+  .guides-section { padding: 60px 0; }
+  .guides-header h2 { font-size: 28px; }
+  .guides-grid { grid-template-columns: 1fr; max-width: 280px; gap: 44px; }
+  .guide-avatar { width: 160px; height: 160px; }
+  footer.site { padding: 48px 18px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="site">
+  <div class="container nav">
+    <a href="landing-page-v5.html" class="logo" aria-label="Viluma home">Viluma</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="landing-page-v5.html">Events</a>
+      <a href="landing-page-v5.html">Retreats</a>
+      <a href="landing-page-v5.html">Trainings</a>
+      <a href="berlin.html" class="is-active">Berlin</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" aria-label="Saved">
+        <span class="material-symbols-outlined">bookmark</span>
+      </button>
+      <button class="icon-btn" aria-label="Account">
+        <span class="material-symbols-outlined">account_circle</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg">
+    <img
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPUb-2OJqqwvSzrkPtBWw_2w9d0dfUI1HGRHl80BI80IFCBGPhKEC0inQr1EMDx5jv61bz5obduEQqYlzXU58B85tZiavblEGZlrWzISO6QbXEnv3BzH9r4-Rs5PFBWlZhCWCZt-pZPmRxl1ofMMSzsn1lWVA_Z9nJBB66zaRv_0dt_LP7IYsq38Z9OA0WTRjes1rqdJjzQRY7-qv9x3TuXnDznVRJSewmgsInUK9fdFnd36dzHLnhYm7xSFWauWWZR9srRhhHGsk"
+      alt="Berlin skyline at golden hour"
+    >
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Regional Hub</p>
+    <h1 class="hero-title">Berlin</h1>
+    <p class="hero-subtitle">Discover conscious events, mindful spaces, and curated experiences in the city.</p>
+  </div>
+
+  <!-- Discovery bar -->
+  <div class="discovery-bar">
+    <div class="db-field">
+      <div class="db-label">Location</div>
+      <div class="db-value">Berlin, Germany</div>
+    </div>
+    <div class="db-field">
+      <div class="db-label">When</div>
+      <div class="db-value">Any time</div>
+    </div>
+    <div class="db-field">
+      <div class="db-label">Category</div>
+      <div class="db-value">All experiences</div>
+    </div>
+    <div class="db-cta">
+      <button class="db-search-btn" aria-label="Search">
+        <span class="material-symbols-outlined">search</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── SEO text ── -->
+<section class="seo-section">
+  <p>Welcome to Viluma Berlin — a curated space for finding authentic conscious experiences in the city. From intimate cacao ceremonies in Kreuzberg to sound healing journeys and ecstatic dance, discover events led by local guides who bring real practice and genuine care to every gathering.</p>
+</section>
+
+<!-- ── Upcoming Experiences ── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Upcoming Experiences</h2>
+      <a href="https://lumaya.co/events?location=berlin" target="_blank" rel="noopener noreferrer" class="view-all">
+        View all <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+    </div>
+    <div class="events-grid" id="events-grid">
+      <!-- skeleton cards -->
+      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Meet the Guides ── -->
+<section class="guides-section">
+  <div class="guides-header">
+    <h2>Meet the Guides of Berlin</h2>
+    <p>Connect with experienced practitioners who create and hold space for conscious gatherings in the city.</p>
+  </div>
+  <div class="guides-grid" id="guides-grid">
+    <!-- skeleton -->
+    <div class="guide-card"><div class="guide-avatar" style="animation: shimmer 1.6s infinite; background: linear-gradient(90deg,#EBE8E3 25%,#F0EDE8 50%,#EBE8E3 75%); background-size: 200% 100%;"></div><div class="skeleton skel-line w80" style="width:120px; height:18px; margin:0 auto 8px;"></div><div class="skeleton skel-line w80" style="width:160px; height:12px; margin:0 auto 4px;"></div><div class="skeleton skel-line w55" style="width:120px; height:12px; margin:0 auto;"></div></div>
+    <div class="guide-card"><div class="guide-avatar" style="animation: shimmer 1.6s infinite; background: linear-gradient(90deg,#EBE8E3 25%,#F0EDE8 50%,#EBE8E3 75%); background-size: 200% 100%;"></div><div class="skeleton skel-line w80" style="width:120px; height:18px; margin:0 auto 8px;"></div><div class="skeleton skel-line w80" style="width:160px; height:12px; margin:0 auto 4px;"></div><div class="skeleton skel-line w55" style="width:120px; height:12px; margin:0 auto;"></div></div>
+    <div class="guide-card"><div class="guide-avatar" style="animation: shimmer 1.6s infinite; background: linear-gradient(90deg,#EBE8E3 25%,#F0EDE8 50%,#EBE8E3 75%); background-size: 200% 100%;"></div><div class="skeleton skel-line w80" style="width:120px; height:18px; margin:0 auto 8px;"></div><div class="skeleton skel-line w80" style="width:160px; height:12px; margin:0 auto 4px;"></div><div class="skeleton skel-line w55" style="width:120px; height:12px; margin:0 auto;"></div></div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="site">
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <h2 class="footer-brand-name">Viluma</h2>
+      <p class="footer-brand-tagline">Elevating the human experience through intentional spaces and curated presence.</p>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Explore</h4>
+      <ul>
+        <li><a href="landing-page-v5.html">Events</a></li>
+        <li><a href="landing-page-v5.html">Retreats</a></li>
+        <li><a href="landing-page-v5.html">Trainings</a></li>
+      </ul>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Cities</h4>
+      <ul>
+        <li><a href="berlin.html">Berlin</a></li>
+      </ul>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">For Organisers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copyright">© 2026 Viluma. All rights reserved.</p>
+    <div class="footer-legal-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── API slugs ─────────────────────────────────────────────── */
+  const PROFILE_SLUGS = [
+    'kuschelraum',
+    'ram-chama',
+    'wind-wasser-by-nicole-breathwork-cacao-feng-shui'
+  ];
+
+  const EVENT_SLUGS = [
+    'private-one-on-one-session-sound-therapy-sound-bowl-journey-reiki-rituals',
+    'shamanic-ceremony-rape-blue-lotus-tea-1',
+    'kakaozeremonie-berlin-cacao-meditation',
+    'ecstatic-dance-breath-cacao-movement-kreuzberg',
+    'alive-roots-retreat'
+  ];
+
+  const API = 'https://api.lumaya.co';
+
+  /* ── Helpers ───────────────────────────────────────────────── */
+  function formatPrice(price) {
+    if (!price) return '';
+    if (price.type === 'FREE') return 'Free';
+    if (price.type === 'PAID_RANGE') return `€${price.amountMin} – €${price.amountMax}`;
+    return `€${price.amount}`;
+  }
+
+  function formatCategory(cats) {
+    if (!cats || !cats.length) return '';
+    return cats[0].replace(/_/g, ' ');
+  }
+
+  function formatAddress(addr) {
+    if (!addr) return '';
+    const parts = addr.split(',');
+    return parts.length > 1 ? parts.slice(0, 2).join(',').trim() : addr;
+  }
+
+  function truncate(str, max) {
+    if (!str) return '';
+    const clean = str.replace(/\*\*/g, '').replace(/\n/g, ' ').trim();
+    return clean.length > max ? clean.slice(0, max).trimEnd() + '…' : clean;
+  }
+
+  /* ── Render event card ─────────────────────────────────────── */
+  function renderEvent(ev) {
+    const bd = ev.basicDetails || {};
+    const img = (ev.media && ev.media.imageUrls && ev.media.imageUrls[0]) || '';
+    const title = bd.title || '';
+    const price = formatPrice(bd.price);
+    const cat = formatCategory(bd.categories);
+    const addr = formatAddress((bd.location && bd.location.address) || '');
+
+    const a = document.createElement('a');
+    a.className = 'event-card';
+    a.href = `https://lumaya.co/events/${ev.slug}`;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.innerHTML = `
+      <div class="event-img">
+        ${img ? `<img src="${img}" alt="${title.replace(/"/g, '&quot;')}" loading="lazy">` : ''}
+        ${cat ? `<span class="event-badge">${cat}</span>` : ''}
+      </div>
+      <div class="event-title">${title}</div>
+      ${addr ? `<div class="event-meta">${addr}</div>` : ''}
+      ${price ? `<div class="event-price"><strong>${price}</strong></div>` : ''}
+    `;
+    return a;
+  }
+
+  /* ── Render guide card ─────────────────────────────────────── */
+  function renderGuide(profile) {
+    const desc = truncate(profile.slogan || profile.description || '', 110);
+
+    const a = document.createElement('a');
+    a.className = 'guide-card';
+    a.href = `https://lumaya.co/profiles/${profile.slug}`;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.innerHTML = `
+      <div class="guide-avatar">
+        ${profile.avatarImageUrl
+          ? `<img src="${profile.avatarImageUrl}" alt="${profile.name.replace(/"/g, '&quot;')}" loading="lazy">`
+          : ''}
+      </div>
+      <div class="guide-name">${profile.name}</div>
+      <div class="guide-desc">${desc}</div>
+    `;
+    return a;
+  }
+
+  /* ── Bootstrap ─────────────────────────────────────────────── */
+  async function init() {
+    const [events, profiles] = await Promise.all([
+      Promise.all(
+        EVENT_SLUGS.map(slug =>
+          fetch(`${API}/api/v3/events/${slug}`)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null)
+        )
+      ),
+      Promise.all(
+        PROFILE_SLUGS.map(slug =>
+          fetch(`${API}/api/v1/profiles/${slug}`)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null)
+        )
+      )
+    ]);
+
+    const eventsGrid = document.getElementById('events-grid');
+    eventsGrid.innerHTML = '';
+    events.filter(Boolean).forEach(ev => eventsGrid.appendChild(renderEvent(ev)));
+
+    const guidesGrid = document.getElementById('guides-grid');
+    guidesGrid.innerHTML = '';
+    profiles.filter(Boolean).forEach(p => guidesGrid.appendChild(renderGuide(p)));
+  }
+
+  init();
+</script>
+
+</body>
+</html>
