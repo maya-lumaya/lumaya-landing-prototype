@@ -369,10 +369,8 @@
   /* Taxonomy accordion */
   .m-tax-list { display: flex; flex-direction: column; }
   .m-tax-pillar {
-    border-bottom: 1px solid var(--line);
     padding: 14px 4px;
   }
-  .m-tax-pillar:last-child { border-bottom: 0; }
   .m-tax-pillar-head {
     display: flex; align-items: center; gap: 12px;
     cursor: pointer;
@@ -453,7 +451,6 @@
     /* On mobile, the search bar IS the header — hide the desktop chrome */
     header.site { display: none; }
     .hero .search-stage { display: none; }
-    .hero-bg-img { display: none; }
     .m-search {
       display: block;
       position: sticky;
@@ -731,6 +728,18 @@
     font-size: 12px; color: var(--text-subtle); line-height: 1.5;
   }
   .dd-footer strong { color: var(--text-muted); font-weight: 600; }
+  .dd-addr-wrap {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; margin-bottom: 6px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .dd-addr-wrap svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--text-subtle); stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .dd-addr-input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font: 14px/1 "Inter", system-ui, sans-serif; color: var(--text);
+  }
+  .dd-addr-input::placeholder { color: var(--text-subtle); }
 
   /* Wide flat dropdown (for Events tab + All tab) */
   .dropdown.wide { min-width: 520px; max-width: 560px; }
@@ -2650,6 +2659,108 @@
   }
 
   function renderPlaceDropdown(dd, fieldEl, f) {
+    if (state.tab === "events") {
+      // Address search input
+      const inputWrap = el(`
+        <div class="dd-addr-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="dd-addr-input" type="text" placeholder="Search city or address…" autocomplete="off" />
+        </div>
+      `);
+      dd.appendChild(inputWrap);
+
+      // Near me
+      const nearMe = el(`
+        <div class="dd-item" role="option">
+          <div class="name">
+            <span class="marker" style="background:#FEF1E2;color:#D97706;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></span>
+            <span>Near me <span class="kind"> · use my location</span></span>
+          </div>
+        </div>
+      `);
+      nearMe.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        state.where = "Near me"; state.whereSlug = "near-me";
+        setFieldValue(fieldEl, "Near me");
+        closeActive(); updateUrlPreview();
+      });
+      dd.appendChild(nearMe);
+
+      const suggestTitle = el(`<div class="dd-title">Nearby cities</div>`);
+      dd.appendChild(suggestTitle);
+
+      const citySuggestions = document.createElement("div");
+      PLACE_SUGGESTIONS.filter(p => p.kind === "city").forEach(p => {
+        const item = el(`
+          <div class="dd-item" role="option">
+            <div class="name">
+              <span class="marker">${PIN_ICON}</span>
+              <span>${p.name}<span class="kind"> · ${p.kind}</span></span>
+            </div>
+            <span class="meta">${p.counts}</span>
+          </div>
+        `);
+        item.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          state.where = p.name; state.whereSlug = p.slug;
+          setFieldValue(fieldEl, p.name);
+          closeActive(); updateUrlPreview();
+        });
+        citySuggestions.appendChild(item);
+      });
+      dd.appendChild(citySuggestions);
+
+      const addrResults = document.createElement("div");
+      dd.appendChild(addrResults);
+
+      const input = inputWrap.querySelector(".dd-addr-input");
+      input.addEventListener("input", () => {
+        const query = input.value.trim();
+        if (!query) {
+          addrResults.innerHTML = "";
+          suggestTitle.textContent = "Nearby cities";
+          citySuggestions.style.display = "";
+          return;
+        }
+        suggestTitle.textContent = "Address results";
+        citySuggestions.style.display = "none";
+        clearTimeout(addrFetchTimer);
+        addrFetchTimer = setTimeout(async () => {
+          const seq = ++addrFetchSeq;
+          addrResults.innerHTML = `<div class="dd-title" style="color:var(--text-subtle)">Searching…</div>`;
+          const results = await fetchAddressSuggestions(query);
+          if (seq !== addrFetchSeq) return;
+          addrResults.innerHTML = "";
+          if (!results.length) {
+            addrResults.appendChild(el(`<div class="dd-item" style="color:var(--text-subtle);">No results found</div>`));
+            return;
+          }
+          results.forEach(r => {
+            const item = el(`
+              <div class="dd-item" role="option">
+                <div class="name">
+                  <span class="marker">${PIN_ICON}</span>
+                  <span>${r.name}<span class="kind"> · ${r.sub}</span></span>
+                </div>
+              </div>
+            `);
+            item.addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              const label = r.name + (r.sub ? ", " + r.sub.split(",")[0] : "");
+              state.where = label; state.whereSlug = slugify(r.name);
+              setFieldValue(fieldEl, label);
+              closeActive(); updateUrlPreview();
+              addrHistoryPrepend(r);
+            });
+            addrResults.appendChild(item);
+          });
+        }, 280);
+      });
+      input.addEventListener("click", ev => ev.stopPropagation());
+      setTimeout(() => input.focus(), 20);
+      return;
+    }
+
     dd.appendChild(el(`<div class="dd-title">Suggested places · with availability</div>`));
     PLACE_SUGGESTIONS.forEach(p => {
       const item = el(`
