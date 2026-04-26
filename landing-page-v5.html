@@ -455,7 +455,8 @@
   @media (max-width: 720px) {
     /* On mobile, the search bar IS the header — hide the desktop chrome */
     header.site { display: none; }
-    .search-wrap { display: none; }
+    .hero .search-stage { display: none; }
+    .hero-bg-img { display: none; }
     .m-search {
       display: block;
       position: sticky;
@@ -473,7 +474,6 @@
     }
     .hero { padding: 28px 0 48px !important; }
     .hero .hero-inner { gap: 0 !important; }
-    .hero .hero-image { display: none; }
     .hero .hero-copy h1 { font-size: 32px !important; }
     .section { padding: 56px 0 32px !important; }
     .cats-section { padding: 56px 0 32px !important; }
@@ -561,8 +561,23 @@
   }
 
   /* ---------- Hero ---------- */
-  .hero { position: relative; padding: 72px 0 40px; }
-  .hero-inner { display: grid; gap: 44px; }
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 100px 0 96px;
+  }
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.30; z-index: 0;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to bottom,
+      rgba(252,249,244,0) 0%,
+      rgba(252,249,244,0.40) 55%,
+      rgba(252,249,244,1) 100%);
+  }
+  .hero-inner { position: relative; z-index: 2; display: grid; gap: 44px; }
   .hero-copy { max-width: 780px; text-align: center; margin: 0 auto; }
   .eyebrow {
     display: inline-block; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
@@ -576,30 +591,8 @@
     font-size: 17px; color: var(--text-muted);
     max-width: 580px; margin: 0 auto; line-height: 1.6;
   }
-  .hero-image {
-    width: 100%; aspect-ratio: 24 / 8; border-radius: var(--radius-lg);
-    overflow: hidden; position: relative; box-shadow: var(--shadow-md);
-  }
-  .hero-image .photo-hero { position: absolute; inset: 0; }
-  .hero-image::before {
-    content: ""; position: absolute; inset: 0; z-index: 1;
-    background: linear-gradient(to bottom,
-      rgba(252,249,244,0) 0%,
-      rgba(252,249,244,0.40) 55%,
-      rgba(252,249,244,1) 100%);
-  }
-  .hero-image .img-caption {
-    position: absolute; left: 20px; bottom: 16px;
-    font-size: 11px; color: rgba(255,246,233,0.72);
-    letter-spacing: 0.04em; z-index: 2;
-  }
-
-  /* ---------- Search ---------- */
-  /* z-index 50 keeps the entire search bar (tabs + pill + dropdowns) above
-     the curated cards section below — otherwise card chips like "NEAR YOU ·
-     TONIGHT" can paint over the expanded dropdown. */
-  .search-wrap { position: relative; z-index: 50; padding: 32px 0 80px; }
-  .search-stage { max-width: 1080px; margin: 0 auto; }
+  /* Search lives inside hero — keep dropdowns above subsequent sections */
+  .hero .search-stage { position: relative; z-index: 50; max-width: 1080px; margin: 0 auto; }
 
   .tabs-row { display: flex; justify-content: center; gap: 2px; margin-bottom: 18px; position: relative; }
   .tab {
@@ -888,7 +881,7 @@
   }
 
   /* ---------- Section base ---------- */
-  .section { padding: 96px 0 32px; }
+  .section { padding: 72px 0 32px; }
   .section-header { display: flex; justify-content: space-between; align-items: end; margin-bottom: 32px; gap: 24px; flex-wrap: wrap; }
   .section-header h2 { font-size: 30px; line-height: 1.15; max-width: 620px; }
   .section-header p { color: var(--text-muted); margin: 10px 0 0; max-width: 520px; font-size: 15px; }
@@ -980,7 +973,6 @@
   .card-cta:hover { color: var(--orange-700); border-color: var(--orange-600); }
 
   /* Photo gradients */
-  .photo-hero     { width: 100%; height: 100%; object-fit: cover; opacity: 0.35; display: block; }
   .photo-events   { background: linear-gradient(140deg, #F1E3CE 0%, #C9A672 60%, #6B3E11 100%); }
   .photo-dest-1   { background: linear-gradient(120deg, #CDB88A 0%, #7A6B3C 100%); }
   .photo-dest-2   { background: linear-gradient(120deg, #D5B793 0%, #5C4A2E 100%); }
@@ -1573,23 +1565,15 @@
   </div>
 </section>
 
-<!-- ============ HERO ============ -->
+<!-- ============ HERO + SEARCH ============ -->
 <section class="hero">
+  <img class="hero-bg-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnSsxtaujAmURIu4lP-NmqDczil3MLwxAFnka8D4pp_GGQNYJTcS6Xs8ishGLcmlreaia9JJEXXpf7Ye7Zjt2ocDlzxCx91Bw24iYlDYrLhE5WqwKLAWR-ChL9MxvOfmPTStuxlqIxz0hWt96awKc5J7rFaMHU89j9K2HyvG7mehS7QWosCcH3b0pEeVseJyO285r-qZoAokYg5Ndb0G_u4a90aaF_hSm4of4G4lFSRmuu6slaovxMQoyRO9Qe30dITc1XqKSUL98" alt="" aria-hidden="true">
   <div class="container hero-inner">
     <div class="hero-copy">
       <span class="eyebrow">Conscious events · retreats · trainings</span>
       <h1>A quiet place to find what you're actually <em>looking for</em>.</h1>
       <p class="lede">From a Tuesday-evening yoga class nearby to a 200-hour training in Rishikesh — Lumaya gathers real practice, real teachers, and real places in one calm marketplace.</p>
     </div>
-    <div class="hero-image" aria-hidden="true">
-      <img class="photo-hero" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnSsxtaujAmURIu4lP-NmqDczil3MLwxAFnka8D4pp_GGQNYJTcS6Xs8ishGLcmlreaia9JJEXXpf7Ye7Zjt2ocDlzxCx91Bw24iYlDYrLhE5WqwKLAWR-ChL9MxvOfmPTStuxlqIxz0hWt96awKc5J7rFaMHU89j9K2HyvG7mehS7QWosCcH3b0pEeVseJyO285r-qZoAokYg5Ndb0G_u4a90aaF_hSm4of4G4lFSRmuu6slaovxMQoyRO9Qe30dITc1XqKSUL98" alt="">
-    </div>
-  </div>
-</section>
-
-<!-- ============ SEARCH ============ -->
-<section class="search-wrap">
-  <div class="container">
     <div class="search-stage">
 
       <div class="tabs-row" role="tablist" id="tabs">
