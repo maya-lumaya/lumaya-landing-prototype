@@ -281,14 +281,13 @@ h1.page-title {
 .split {
   display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   gap: 28px;
-  align-items: start;
   padding-bottom: 80px;
 }
 .results-pane { min-width: 0; }
 .detail-pane {
-  position: sticky; top: 88px;
+  position: sticky; top: 72px;
   align-self: start;
-  height: calc(100vh - 108px);
+  height: calc(100vh - 72px);
   min-height: 520px;
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -319,6 +318,7 @@ h1.page-title {
   font: 500 12px/1 'Inter', sans-serif;
   color: var(--text-muted);
   box-shadow: var(--shadow-sm);
+  z-index: 4;
 }
 .map-loader.is-visible { display: inline-flex; }
 .map-loader .dot {
@@ -334,37 +334,40 @@ h1.page-title {
 
 /* ── Result list ───────────────────────────────── */
 .results-list {
-  display: flex; flex-direction: column; gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 .split.is-grid .results-list {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 22px 18px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px 14px;
 }
 
-/* ── Result row card (default, split mode) ────── */
+/* ── Vertical event card ────────────────────────── */
 .row-card {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 16px;
   background: var(--surface);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-md);
-  padding: 12px;
+  overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.2s, transform 0.15s;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s, border-color 0.15s;
+  display: flex; flex-direction: column;
 }
 .row-card:hover {
-  border-color: rgba(194,200,195,0.85);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  border-color: rgba(194,200,195,0.7);
 }
 .row-card.is-selected {
   border-color: var(--orange-300);
   box-shadow: 0 0 0 2px rgba(228,187,134,0.35), var(--shadow-md);
 }
 .row-card .rc-img {
-  position: relative; aspect-ratio: 4/5;
-  border-radius: var(--radius-sm);
-  overflow: hidden; background: var(--bg-3);
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--bg-3);
+  flex-shrink: 0;
 }
 .row-card .rc-img img {
   width: 100%; height: 100%; object-fit: cover;
@@ -372,78 +375,40 @@ h1.page-title {
 }
 .row-card:hover .rc-img img { transform: scale(1.04); }
 .row-card .rc-badge {
-  position: absolute; top: 8px; left: 8px;
+  position: absolute; top: 10px; left: 10px;
   background: rgba(252,249,244,0.92);
   backdrop-filter: blur(6px);
-  padding: 3px 9px; border-radius: var(--radius-pill);
+  padding: 4px 10px; border-radius: var(--radius-pill);
   font: 600 10px/1.4 'Inter', sans-serif;
   letter-spacing: 0.05em; color: var(--primary);
-  text-transform: capitalize;
+  text-transform: capitalize; white-space: nowrap;
 }
 .row-card .rc-content {
+  padding: 10px 12px 14px;
   display: flex; flex-direction: column;
-  min-width: 0; padding: 4px 6px 4px 0;
+  flex: 1;
 }
 .row-card .rc-title {
-  font: 600 16px/1.3 'Inter', sans-serif;
-  color: var(--text); margin-bottom: 6px;
+  font: 500 14px/1.3 'Inter', sans-serif;
+  color: var(--text); margin-bottom: 4px;
   display: -webkit-box; -webkit-line-clamp: 2;
   -webkit-box-orient: vertical; overflow: hidden;
 }
-.row-card .rc-meta {
-  font-size: 13px; color: var(--text-muted);
-  display: flex; flex-wrap: wrap; gap: 4px 12px;
-  margin-bottom: 8px;
-}
-.row-card .rc-meta .meta-item {
-  display: inline-flex; align-items: center; gap: 4px;
-}
-.row-card .rc-meta .material-symbols-outlined { font-size: 14px; color: var(--text-subtle); }
-.row-card .rc-foot {
-  margin-top: auto;
-  display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 12px;
+.row-card .rc-address {
+  font-size: 12px; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: auto; padding-bottom: 8px;
 }
 .row-card .rc-price {
-  font: 700 15px/1 'Inter', sans-serif; color: var(--text);
+  font: 700 14px/1 'Inter', sans-serif; color: var(--text);
+  padding-top: 8px;
 }
 .row-card .rc-price.free { color: var(--orange-600); }
-.row-card .rc-host {
-  font-size: 12px; color: var(--text-muted);
-  display: inline-flex; align-items: center; gap: 6px;
-  min-width: 0;
-}
-.row-card .rc-host .host-avatar {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--bg-3); flex-shrink: 0;
-  overflow: hidden;
-}
-.row-card .rc-host .host-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.row-card .rc-host .host-name {
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-/* GRID-mode card (compact, vertical) */
-.split.is-grid .row-card {
-  grid-template-columns: 1fr;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-.split.is-grid .row-card:hover { box-shadow: none; }
-.split.is-grid .row-card.is-selected {
-  border: 0; box-shadow: none;
-}
-.split.is-grid .row-card .rc-img { margin-bottom: 12px; }
-.split.is-grid .row-card .rc-content { padding: 0; }
-.split.is-grid .row-card .rc-title { font-size: 14px; -webkit-line-clamp: 2; }
-.split.is-grid .row-card .rc-foot { margin-top: 4px; }
-.split.is-grid .row-card .rc-price { font-size: 13px; }
 
 /* ── Event detail card (overlay above the map) ── */
 .event-detail-card {
   position: absolute; left: 0; right: 0; bottom: 0;
-  height: 70%;
+  height: 72%;
   background: var(--surface);
   border-top: 1px solid var(--outline-variant);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -614,19 +579,18 @@ h1.page-title {
   border-radius: var(--radius-sm);
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.skel-row {
-  display: grid; grid-template-columns: 200px 1fr;
-  gap: 16px; padding: 12px;
+.skel-card {
+  background: var(--surface);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-md);
-  background: var(--surface);
+  overflow: hidden;
 }
-.skel-row .skel-img { aspect-ratio: 4/5; border-radius: var(--radius-sm); }
-.skel-row .skel-lines { display: flex; flex-direction: column; gap: 8px; padding: 4px; }
-.skel-row .skel-line { height: 13px; border-radius: 4px; }
-.skel-row .skel-line.w80 { width: 80%; }
-.skel-row .skel-line.w55 { width: 55%; }
-.skel-row .skel-line.w40 { width: 40%; }
+.skel-card .skel-img { aspect-ratio: 3/4; border-radius: 0; }
+.skel-card .skel-body { padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.skel-card .skel-line { height: 13px; border-radius: 4px; }
+.skel-card .skel-line.w80 { width: 80%; }
+.skel-card .skel-line.w55 { width: 55%; }
+.skel-card .skel-line.w40 { width: 40%; }
 
 /* ── Empty / error ─────────────────────────────── */
 .state-block {
@@ -635,6 +599,7 @@ h1.page-title {
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
   color: var(--text-muted);
+  grid-column: 1 / -1;
 }
 .state-block .material-symbols-outlined {
   font-size: 42px; color: var(--text-subtle); margin-bottom: 14px;
@@ -651,7 +616,7 @@ h1.page-title {
   font: 600 13px/1 'Inter', sans-serif;
 }
 
-/* ── Mobile bottom-sheet ───────────────────────── */
+/* ── Sheet backdrop ────────────────────────────── */
 .sheet-backdrop {
   position: fixed; inset: 0;
   background: rgba(28,28,25,0.45);
@@ -662,26 +627,24 @@ h1.page-title {
 .sheet-backdrop.is-open {
   opacity: 1; pointer-events: auto;
 }
-.sheet {
-  position: fixed; left: 0; right: 0; bottom: 0;
-  z-index: 101;
-  background: var(--surface);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  box-shadow: 0 -10px 40px rgba(28,28,25,0.18);
-  transform: translateY(100%);
-  transition: transform 0.32s var(--ease);
-  max-height: 90vh;
-  display: flex; flex-direction: column;
-  overflow: hidden;
+
+/* ── Mobile map FAB ────────────────────────────── */
+.mobile-map-fab {
+  display: none;
+  position: fixed;
+  bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 95;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-pill);
+  padding: 12px 22px;
+  font: 600 14px/1 'Inter', sans-serif;
+  align-items: center; gap: 8px;
+  box-shadow: 0 8px 28px rgba(24,44,36,0.3);
+  white-space: nowrap;
+  transition: opacity 0.15s, box-shadow 0.15s;
 }
-.sheet.is-open { transform: translateY(0); }
-.sheet-grabber {
-  width: 44px; height: 4px;
-  background: var(--bg-3);
-  border-radius: 999px;
-  margin: 10px auto 0;
-  flex-shrink: 0;
-}
+.mobile-map-fab:hover { opacity: 0.92; }
+.mobile-map-fab .material-symbols-outlined { font-size: 18px; }
 
 /* ── Footer (reused) ───────────────────────────── */
 footer.site {
@@ -738,32 +701,73 @@ footer.site {
 /* ── Responsive ────────────────────────────────── */
 @media (max-width: 1080px) {
   .split { grid-template-columns: 1fr; }
+
+  /* detail-pane becomes a bottom sheet on mobile */
   .detail-pane {
     position: fixed;
     inset: auto 0 0 0; top: auto;
-    height: auto; max-height: 90vh;
+    height: 88vh;
     min-height: 0;
     z-index: 101;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     border: 0;
+    box-shadow: 0 -8px 40px rgba(28,28,25,0.18);
     transform: translateY(100%);
     transition: transform 0.32s var(--ease);
   }
-  .detail-pane.sheet-open { transform: translateY(0); }
+
+  /* sheet-open: slide up for event detail */
+  .detail-pane.sheet-open {
+    transform: translateY(0);
+  }
+  /* hide map when in sheet mode — show only event detail */
+  .detail-pane.sheet-open .map-host { visibility: hidden; }
+  /* event detail card fills the entire pane */
+  .detail-pane.sheet-open .event-detail-card {
+    height: 100% !important;
+    transform: translateY(0) !important;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* map-mode: full-screen map below header */
+  .detail-pane.map-mode {
+    position: fixed;
+    inset: 72px 0 0 0 !important;
+    top: 72px !important;
+    height: auto !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    z-index: 40 !important;
+    box-shadow: none !important;
+  }
+  .detail-pane.map-mode .map-host { visibility: visible; }
+  /* event detail card retains its own slide-up animation in map mode */
+  .detail-pane.map-mode .event-detail-card {
+    height: 72% !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    box-shadow: 0 -10px 30px rgba(28,28,25,0.10) !important;
+    transform: translateY(102%);
+  }
+  .detail-pane.map-mode .event-detail-card.is-open {
+    transform: translateY(0) !important;
+  }
+
   .fb-toggle { display: none; }
-  .event-detail-card { height: 100%; border-radius: 0; box-shadow: none; }
+  .mobile-map-fab { display: inline-flex; }
 }
+
 @media (max-width: 720px) {
-  .row-card { grid-template-columns: 132px 1fr; gap: 12px; padding: 10px; }
-  .row-card .rc-title { font-size: 14px; }
-  .row-card .rc-meta { font-size: 12px; }
-  .row-card .rc-price { font-size: 14px; }
-  .skel-row { grid-template-columns: 132px 1fr; }
+  .results-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   h1.page-title { font-size: 26px; }
   .filterbar-search { flex-basis: 100%; order: -1; }
   footer.site { padding: 48px 18px; }
   .footer-inner { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+@media (max-width: 420px) {
+  .results-list { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -857,10 +861,10 @@ footer.site {
       <div class="results-pane">
         <div class="results-list" id="resultsList">
           <!-- skeletons -->
-          <div class="skel-row"><div class="skeleton skel-img"></div><div class="skel-lines"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
-          <div class="skel-row"><div class="skeleton skel-img"></div><div class="skel-lines"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
-          <div class="skel-row"><div class="skeleton skel-img"></div><div class="skel-lines"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
-          <div class="skel-row"><div class="skeleton skel-img"></div><div class="skel-lines"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
         </div>
       </div>
 
@@ -878,6 +882,12 @@ footer.site {
 
   </div>
 </div>
+
+<!-- Mobile map FAB -->
+<button class="mobile-map-fab" id="mobileMapFab" type="button" aria-label="Toggle map view">
+  <span class="material-symbols-outlined">map</span>
+  <span id="mobileMapFabLabel">Map</span>
+</button>
 
 <div class="sheet-backdrop" id="sheetBackdrop"></div>
 
@@ -924,7 +934,6 @@ footer.site {
   /* ── Constants ─────────────────────────────────────────── */
   const API = 'https://api.lumaya.co';
 
-  // Static area metadata (mirrors backend AreaController.AREAS).
   const AREAS = {
     rishikesh:   { id: 'rishikesh',   name: 'Rishikesh' },
     berlin:      { id: 'berlin',      name: 'Berlin' },
@@ -948,7 +957,6 @@ footer.site {
   };
 
   /* ── State ─────────────────────────────────────────────── */
-  // Production query params: q, areaId, from, to, categoryId, lat, lng, radiusMeters, label
   const state = {
     q: '',
     areaId: '',
@@ -959,14 +967,16 @@ footer.site {
     label: '',
     datePreset: 'any',
     sort: 'DATE_ASC',
-    view: 'split',          // 'split' | 'grid'
+    view: 'split',
     selectedSlug: null,
     events: [],
     loading: true,
     error: null
   };
 
-  /* ── Format helpers (shared with event.html) ──────────── */
+  let mobileMapMode = false;
+
+  /* ── Format helpers ───────────────────────────────────── */
   function formatPrice(p) {
     if (!p) return '';
     if (p.type === 'FREE' || (p.amount === 0 && !p.amountMin)) return 'Free';
@@ -1021,7 +1031,6 @@ footer.site {
     state.lat = lat ? parseFloat(lat) : null;
     state.lng = lng ? parseFloat(lng) : null;
     state.radiusMeters = r ? parseFloat(r) : null;
-    // local-only
     state.datePreset = p.get('datePreset') || (state.from ? 'custom' : 'any');
     state.sort = p.get('sort') || 'DATE_ASC';
     state.view = p.get('view') === 'grid' ? 'grid' : 'split';
@@ -1044,7 +1053,7 @@ footer.site {
     history[replace ? 'replaceState' : 'pushState'](null, '', url);
   }
 
-  /* ── Date preset to from/to ────────────────────────────── */
+  /* ── Date preset ───────────────────────────────────────── */
   function applyDatePreset(key) {
     state.datePreset = key;
     if (key === 'any') {
@@ -1054,7 +1063,7 @@ footer.site {
     if (!preset) return;
     const now = new Date();
     if (key === 'weekend') {
-      const day = now.getDay(); // 0=Sun ... 6=Sat
+      const day = now.getDay();
       const sat = new Date(now); sat.setDate(now.getDate() + ((6 - day + 7) % 7));
       sat.setHours(0,0,0,0);
       const sun = new Date(sat); sun.setDate(sat.getDate() + 1); sun.setHours(23,59,59,0);
@@ -1075,8 +1084,8 @@ footer.site {
     const sub     = document.getElementById('ev-page-sub');
 
     let t = 'All events', e = 'Browse', s = '';
-    if (state.q && state.areaId)         { t = `“${state.q}” in ${areaName(state.areaId)}`; e = 'Search results'; }
-    else if (state.q)                    { t = `Search results for “${state.q}”`; e = 'Search results'; }
+    if (state.q && state.areaId)         { t = `"${state.q}" in ${areaName(state.areaId)}`; e = 'Search results'; }
+    else if (state.q)                    { t = `Search results for "${state.q}"`; e = 'Search results'; }
     else if (state.areaId)               { t = `Events in ${areaName(state.areaId)}`; e = 'Regional hub'; }
     else if (state.label)                { t = `Events near ${state.label}`; e = 'Nearby'; }
 
@@ -1096,13 +1105,11 @@ footer.site {
 
   /* ── Filter bar render ─────────────────────────────────── */
   function renderFilterBar() {
-    // search
     const wrap = document.getElementById('searchWrap');
     const inp = document.getElementById('searchInput');
     if (inp.value !== state.q) inp.value = state.q;
     wrap.classList.toggle('has-text', !!state.q);
 
-    // area pill
     const areaPill = document.getElementById('areaPill');
     const areaLabel = areaPill.querySelector('.label');
     const areaClear = areaPill.querySelector('[data-clear="area"]');
@@ -1120,7 +1127,6 @@ footer.site {
       areaClear.hidden = true;
     }
 
-    // date pill
     const datePill = document.getElementById('datePill');
     const dateLabel = datePill.querySelector('.label');
     const dateClear = datePill.querySelector('[data-clear="date"]');
@@ -1134,16 +1140,13 @@ footer.site {
       dateClear.hidden = true;
     }
 
-    // sort
     document.getElementById('sortSelect').value = state.sort;
-
-    // view toggle
     document.getElementById('viewSplitBtn').classList.toggle('is-active', state.view === 'split');
     document.getElementById('viewGridBtn').classList.toggle('is-active', state.view === 'grid');
     document.getElementById('split').classList.toggle('is-grid', state.view === 'grid');
   }
 
-  /* ── Category chips (derived from result set + popular) ── */
+  /* ── Category chips ────────────────────────────────────── */
   const POPULAR_CATEGORIES = [
     'meditation', 'yoga', 'breathwork', 'sound_healing', 'cacao_ceremony',
     'tantra', 'embodiment', 'kirtan', 'temple_night', 'festival'
@@ -1155,7 +1158,6 @@ footer.site {
       const cats = ev.basicDetails?.categories || [];
       cats.forEach(c => found.add(c));
     }
-    // Always show popular + present categories, with "All" first
     const list = Array.from(new Set(['', ...POPULAR_CATEGORIES.filter(c => found.has(c) || !state.events.length), ...Array.from(found)]));
     row.innerHTML = list.map(slug => {
       const isAll = slug === '';
@@ -1165,7 +1167,7 @@ footer.site {
     }).join('');
   }
 
-  /* ── Sorting (client-side) ─────────────────────── */
+  /* ── Sorting ───────────────────────────────────────────── */
   function sortEvents(events, key) {
     const copy = events.slice();
     const dir = key === 'DATE_DESC' ? -1 : 1;
@@ -1193,10 +1195,13 @@ footer.site {
     const cat = formatCategory(bd.categories);
     const price = formatPrice(bd.price);
     const isFree = price === 'Free';
-    const next = nextAppointmentLabel(ev);
-    const loc = formatLocationType(bd.location?.locationType);
-    const profile = ev.profile;
+    const address = bd.location?.address || '';
+    const areaId = bd.location?.areaId;
+    const locationStr = address
+      ? address
+      : (areaId ? areaName(areaId) : formatLocationType(bd.location?.locationType));
     const isSelected = state.selectedSlug === ev.slug;
+
     return `
       <article class="row-card${isSelected ? ' is-selected' : ''}" data-slug="${htmlEscape(ev.slug)}">
         <div class="rc-img">
@@ -1205,17 +1210,8 @@ footer.site {
         </div>
         <div class="rc-content">
           <div class="rc-title">${htmlEscape(title)}</div>
-          <div class="rc-meta">
-            <span class="meta-item"><span class="material-symbols-outlined">calendar_today</span>${htmlEscape(next)}</span>
-            <span class="meta-item"><span class="material-symbols-outlined">${bd.location?.locationType === 'ONLINE' ? 'videocam' : 'group'}</span>${htmlEscape(loc)}</span>
-          </div>
-          <div class="rc-foot">
-            <div class="rc-price${isFree ? ' free' : ''}">${htmlEscape(price || '—')}</div>
-            ${profile ? `<div class="rc-host">
-              <div class="host-avatar">${profile.avatarImageUrl ? `<img src="${htmlEscape(profile.avatarImageUrl)}" alt="">` : ''}</div>
-              <div class="host-name">${htmlEscape(profile.name || '')}</div>
-            </div>` : ''}
-          </div>
+          ${locationStr ? `<div class="rc-address">${htmlEscape(locationStr)}</div>` : ''}
+          <div class="rc-price${isFree ? ' free' : ''}">${htmlEscape(price || '—')}</div>
         </div>
       </article>
     `;
@@ -1226,10 +1222,14 @@ footer.site {
     const count = document.getElementById('resultCount');
     if (state.loading) {
       list.innerHTML = Array.from({ length: 4 }).map(() =>
-        `<div class="skel-row"><div class="skeleton skel-img"></div><div class="skel-lines">
-          <div class="skeleton skel-line w80"></div>
-          <div class="skeleton skel-line w55"></div>
-          <div class="skeleton skel-line w40"></div></div></div>`).join('');
+        `<div class="skel-card">
+          <div class="skeleton skel-img"></div>
+          <div class="skel-body">
+            <div class="skeleton skel-line w80"></div>
+            <div class="skeleton skel-line w55"></div>
+            <div class="skeleton skel-line w40"></div>
+          </div>
+        </div>`).join('');
       count.innerHTML = `<span class="muted">Searching…</span>`;
       return;
     }
@@ -1266,7 +1266,7 @@ footer.site {
     list.innerHTML = filtered.map(rowCard).join('');
   }
 
-  /* ── Mock description (placeholder while backend doesn't expose) ── */
+  /* ── Mock description ──────────────────────────────────── */
   const MOCK_PARAGRAPHS = [
     'Step into a carefully held container where breath, body and stillness become the practice. This gathering invites you to slow down, listen inward, and reconnect with the part of yourself that already knows how to be at peace.',
     'Whether you arrive curious or seasoned, you are welcome exactly as you are. The space is shaped to meet beginners and long-time practitioners alike, with gentle guidance, small group attention, and time to integrate what arises.',
@@ -1281,9 +1281,9 @@ footer.site {
     return `${opener}\n\n${MOCK_PARAGRAPHS.join('\n\n')}`;
   }
 
-  /* ── Single-event fetch with cache ─────────────── */
-  const fullEventCache = new Map(); // slug → full event
-  const fullEventInflight = new Map(); // slug → Promise
+  /* ── Single-event fetch with cache ─────────────────────── */
+  const fullEventCache = new Map();
+  const fullEventInflight = new Map();
   async function fetchFullEvent(slug) {
     if (fullEventCache.has(slug)) return fullEventCache.get(slug);
     if (fullEventInflight.has(slug)) return fullEventInflight.get(slug);
@@ -1299,7 +1299,7 @@ footer.site {
     return p;
   }
 
-  /* ── Concurrency-limited parallel runner ──────── */
+  /* ── Concurrency-limited parallel runner ────────────────── */
   async function runWithLimit(items, limit, worker) {
     const queue = items.slice();
     const runners = Array.from({ length: Math.min(limit, queue.length) }, async () => {
@@ -1311,13 +1311,13 @@ footer.site {
     await Promise.all(runners);
   }
 
-  /* ── Map ────────────────────────────────────────── */
+  /* ── Map ────────────────────────────────────────────────── */
   const mapState = {
     map: null,
     apiReady: false,
-    markers: new Map(),    // slug → google.maps.Marker
+    markers: new Map(),
     bounds: null,
-    pendingPlot: null,     // events to plot once api is ready
+    pendingPlot: null,
     infoWindow: null
   };
 
@@ -1337,13 +1337,18 @@ footer.site {
     const host = document.getElementById('mapHost');
     if (!host) return;
     mapState.map = new google.maps.Map(host, {
-      center: { lat: 52.520008, lng: 13.404954 }, // Berlin default
+      center: { lat: 52.520008, lng: 13.404954 },
       zoom: 11,
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: false,
       clickableIcons: false,
       gestureHandling: 'greedy',
+      minZoom: 2,
+      restriction: {
+        latLngBounds: { north: 85, south: -85, east: 180, west: -180 },
+        strictBounds: false
+      },
       styles: [
         { featureType: 'poi', stylers: [{ visibility: 'off' }] },
         { featureType: 'transit.station', stylers: [{ visibility: 'off' }] }
@@ -1368,7 +1373,6 @@ footer.site {
 
   function makeMarkerIcon(isSelected) {
     const fill = isSelected ? '#C4812B' : '#182c24';
-    const stroke = isSelected ? '#C4812B' : '#182c24';
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" width="34" height="42" viewBox="0 0 34 42">
         <path d="M17 1.5c-8.56 0-15.5 6.94-15.5 15.5 0 11.6 13.7 22.6 14.3 23.1.7.55 1.7.55 2.4 0 .6-.5 14.3-11.5 14.3-23.1C32.5 8.44 25.56 1.5 17 1.5z"
@@ -1410,6 +1414,7 @@ footer.site {
       state.selectedSlug = ev.slug;
       refreshSelectionState();
       openEventDetail(ev.slug);
+      // On mobile in map mode, open the event detail card directly (no sheet toggle)
     });
     mapState.markers.set(ev.slug, marker);
   }
@@ -1422,7 +1427,6 @@ footer.site {
     initMap();
     clearMarkers();
     const slugsToFetch = events.filter(e => !fullEventCache.has(e.slug)).map(e => e.slug);
-    // Add markers immediately for any cached events
     for (const ev of events) {
       const cached = fullEventCache.get(ev.slug);
       if (cached) addMarkerForEvent(cached);
@@ -1451,7 +1455,6 @@ footer.site {
   }
 
   function refreshSelectionState() {
-    // Update marker icons and card highlights
     for (const [slug, marker] of mapState.markers.entries()) {
       marker.setIcon(makeMarkerIcon(slug === state.selectedSlug));
       marker.setZIndex(slug === state.selectedSlug ? 999 : undefined);
@@ -1461,20 +1464,18 @@ footer.site {
     });
   }
 
-  /* ── Event detail card (slide-up over the map) ── */
+  /* ── Event detail card ──────────────────────────────────── */
   function openEventDetail(slug) {
     const card = document.getElementById('eventDetailCard');
     card.classList.add('is-open');
     card.setAttribute('aria-hidden', 'false');
     renderEventDetailCardLoading();
     fetchFullEvent(slug).then(full => {
-      // ignore if user moved on
       if (state.selectedSlug !== slug) return;
       addMarkerForEvent(full);
       const marker = mapState.markers.get(slug);
       if (marker && mapState.map) {
-        const pos = marker.getPosition();
-        mapState.map.panTo(pos);
+        mapState.map.panTo(marker.getPosition());
       }
       renderEventDetailCard(full);
     }).catch(err => {
@@ -1511,7 +1512,7 @@ footer.site {
     const card = document.getElementById('eventDetailCard');
     card.innerHTML = `
       <div class="grabber"></div>
-      <div class="state-block" style="margin:24px;border-radius:var(--radius-md)">
+      <div class="state-block" style="margin:24px;border-radius:var(--radius-md);grid-column:auto">
         <span class="material-symbols-outlined">error_outline</span>
         <h3>Couldn't load event</h3>
         <p>Please try selecting another event or refresh the page.</p>
@@ -1635,7 +1636,6 @@ footer.site {
       state.events = sortEvents(Array.isArray(list) ? list : [], state.sort);
       state.loading = false;
 
-      // If a previously-selected event no longer matches the result set, clear it
       if (state.selectedSlug && !state.events.find(e => e.slug === state.selectedSlug)) {
         state.selectedSlug = null;
         const card = document.getElementById('eventDetailCard');
@@ -1652,8 +1652,51 @@ footer.site {
     }
   }
 
+  /* ── Sheet / mobile map helpers ────────────────────────── */
+  function openSheet() {
+    if (mobileMapMode) return; // In map mode, card opens inline over the map
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('map-mode');
+    pane.classList.add('sheet-open');
+    document.getElementById('sheetBackdrop').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSheet() {
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('sheet-open');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  function enterMapMode() {
+    mobileMapMode = true;
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('sheet-open');
+    pane.classList.add('map-mode');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('mobileMapFabLabel').textContent = 'List';
+    document.querySelector('#mobileMapFab .material-symbols-outlined').textContent = 'list';
+    // Ensure map is initialized and events are plotted
+    if (!mapState.map && mapState.apiReady) initMap();
+    if (state.events.length) plotEventsOnMap(state.events);
+    closeEventDetail();
+  }
+
+  function exitMapMode() {
+    mobileMapMode = false;
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('map-mode');
+    pane.classList.remove('sheet-open');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.getElementById('mobileMapFabLabel').textContent = 'Map';
+    document.querySelector('#mobileMapFab .material-symbols-outlined').textContent = 'map';
+    closeEventDetail();
+  }
+
   /* ── Wiring ────────────────────────────────────────────── */
-  // Search input (debounced)
   let searchDebounce;
   document.getElementById('searchInput').addEventListener('input', e => {
     clearTimeout(searchDebounce);
@@ -1662,7 +1705,6 @@ footer.site {
       state.q = v.trim();
       writeUrl();
       fetchEvents();
-      // sync header label state
       document.getElementById('searchWrap').classList.toggle('has-text', !!state.q);
     }, 300);
   });
@@ -1672,7 +1714,6 @@ footer.site {
     writeUrl(); fetchEvents();
   });
 
-  // Area pill
   document.getElementById('areaPill').addEventListener('click', e => {
     if (e.target.closest('[data-clear="area"]')) {
       state.areaId = ''; state.label = ''; state.lat = state.lng = state.radiusMeters = null;
@@ -1682,10 +1723,7 @@ footer.site {
     cycleAreaPicker();
   });
   function cycleAreaPicker() {
-    // Lightweight area picker: cycle through known areas using a prompt-like menu.
-    // For prototype simplicity, open a tiny inline picker dialog.
     const ids = Object.keys(AREAS);
-    const labels = ids.map(id => `${AREAS[id].name}`).join('\n');
     const next = window.prompt(`Pick an area:\n\n${ids.map((id,i) => `${i+1}. ${AREAS[id].name}`).join('\n')}\n\nType a number, or leave blank to clear.`, '');
     if (next === null) return;
     if (next === '') {
@@ -1702,7 +1740,6 @@ footer.site {
     writeUrl(); fetchEvents();
   }
 
-  // Date pill
   document.getElementById('datePill').addEventListener('click', e => {
     if (e.target.closest('[data-clear="date"]')) {
       applyDatePreset('any');
@@ -1716,14 +1753,12 @@ footer.site {
     writeUrl(); fetchEvents();
   });
 
-  // Sort (client-side; no refetch needed)
   document.getElementById('sortSelect').addEventListener('change', e => {
     state.sort = e.target.value;
     state.events = sortEvents(state.events, state.sort);
     writeUrl(); render();
   });
 
-  // View toggle
   document.getElementById('viewSplitBtn').addEventListener('click', () => {
     state.view = 'split'; writeUrl(); render();
   });
@@ -1731,7 +1766,6 @@ footer.site {
     state.view = 'grid'; writeUrl(); render();
   });
 
-  // Chip click (event delegation)
   document.getElementById('chipRow').addEventListener('click', e => {
     const btn = e.target.closest('[data-cat]');
     if (!btn) return;
@@ -1741,7 +1775,7 @@ footer.site {
     writeUrl(); fetchEvents();
   });
 
-  // Result row click — selects map pin + opens detail card (sheet on mobile)
+  // Card click — select + open detail
   document.getElementById('resultsList').addEventListener('click', e => {
     const card = e.target.closest('.row-card');
     if (card) {
@@ -1766,26 +1800,27 @@ footer.site {
   document.getElementById('eventDetailCard').addEventListener('click', e => {
     if (e.target.closest('#dpClose')) {
       closeEventDetail();
-      if (window.matchMedia('(max-width: 1080px)').matches) closeSheet();
+      if (window.matchMedia('(max-width: 1080px)').matches) {
+        if (!mobileMapMode) closeSheet();
+      }
     }
   });
+
+  // Backdrop click — close sheet
   document.getElementById('sheetBackdrop').addEventListener('click', () => {
     closeSheet();
     closeEventDetail();
   });
 
-  function openSheet() {
-    document.getElementById('detailPane').classList.add('sheet-open');
-    document.getElementById('sheetBackdrop').classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeSheet() {
-    document.getElementById('detailPane').classList.remove('sheet-open');
-    document.getElementById('sheetBackdrop').classList.remove('is-open');
-    document.body.style.overflow = '';
-  }
+  // Mobile map FAB toggle
+  document.getElementById('mobileMapFab').addEventListener('click', () => {
+    if (mobileMapMode) {
+      exitMapMode();
+    } else {
+      enterMapMode();
+    }
+  });
 
-  // Browser back/forward
   window.addEventListener('popstate', () => {
     readUrl();
     if (state.datePreset !== 'any' && state.datePreset !== 'custom') applyDatePreset(state.datePreset);
@@ -1796,7 +1831,6 @@ footer.site {
   /* ── Bootstrap ─────────────────────────────────────────── */
   function init() {
     readUrl();
-    // If from/to absent but a preset is set, regenerate.
     if (state.datePreset && state.datePreset !== 'any' && state.datePreset !== 'custom' && !state.from) {
       applyDatePreset(state.datePreset);
     }
