@@ -715,6 +715,13 @@
     border: 1px solid var(--orange-100);
     padding: 2px 7px; border-radius: var(--radius-pill);
   }
+  .dd-item .dd-remove {
+    flex: 0 0 auto; width: 28px; height: 28px;
+    border: 0; background: transparent; border-radius: 6px; cursor: pointer;
+    color: var(--text-subtle); display: grid; place-items: center;
+  }
+  .dd-item .dd-remove:hover { background: var(--bg-3); color: var(--text); }
+  .dd-item .dd-remove svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
   .dd-footer {
     padding: 10px 14px; margin-top: 4px;
     border-top: 1px dashed var(--border);
@@ -2765,6 +2772,42 @@
       });
       dd.appendChild(nearMe);
 
+      // Recent addresses (history)
+      const history = addrHistoryRead();
+      let historySection = null;
+      if (history.length) {
+        historySection = document.createElement("div");
+        historySection.appendChild(el(`<div class="dd-title">Recent addresses</div>`));
+        history.forEach(item => {
+          const row = el(`
+            <div class="dd-item" role="option">
+              <div class="name">
+                <span class="marker" style="background:#F1EAD9;color:#7A6027;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></span>
+                <span>${item.name}<span class="kind">${item.sub ? ' · ' + item.sub.split(',')[0] : ''}${item.radiusKm ? ' · ' + item.radiusKm + ' km' : ''}</span></span>
+              </div>
+              <button class="dd-remove" type="button" aria-label="Remove from history">
+                <svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg>
+              </button>
+            </div>
+          `);
+          row.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const label = item.name + (item.sub ? ", " + item.sub.split(",")[0] : "");
+            state.where = label; state.whereSlug = slugify(item.name);
+            setFieldValue(fieldEl, label);
+            closeActive(); updateUrlPreview();
+          });
+          row.querySelector(".dd-remove").addEventListener("click", (e) => {
+            e.stopPropagation();
+            addrHistoryRemove(item.id);
+            row.remove();
+            if (!historySection.querySelector(".dd-item")) historySection.remove();
+          });
+          historySection.appendChild(row);
+        });
+        dd.appendChild(historySection);
+      }
+
       const suggestTitle = el(`<div class="dd-title">Suggested places</div>`);
       dd.appendChild(suggestTitle);
 
@@ -2799,10 +2842,12 @@
           addrResults.innerHTML = "";
           suggestTitle.textContent = "Suggested places";
           citySuggestions.style.display = "";
+          if (historySection) historySection.style.display = "";
           return;
         }
         suggestTitle.textContent = "Address results";
         citySuggestions.style.display = "none";
+        if (historySection) historySection.style.display = "none";
         clearTimeout(addrFetchTimer);
         addrFetchTimer = setTimeout(async () => {
           const seq = ++addrFetchSeq;
@@ -3262,9 +3307,21 @@
 
   function submitSearch(e) {
     e.preventDefault();
-    const url = buildUrl();
     if (window.Haptics) window.Haptics.fire("success");
-    toast(`Submit search · routes to <code>${url}</code>`);
+
+    // For the Events tab, route to the live events.html search-results page
+    // using the production query params (q, areaId, categoryId).
+    if (state.tab === "events") {
+      const p = new URLSearchParams();
+      if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
+      if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+      const target = "events.html" + (p.toString() ? `?${p.toString()}` : "");
+      location.href = target;
+      return false;
+    }
+
+    // Retreats / trainings remain on the prototype path-style preview.
+    toast(`Submit search · routes to <code>${buildUrl()}</code>`);
     return false;
   }
 
@@ -3982,9 +4039,16 @@
 
   function mSubmit() {
     closeMobileModal();
-    const url = buildUrl();
     if (window.Haptics) window.Haptics.fire("success");
-    toast(`Submit search · routes to <code>${url}</code>`);
+
+    if (state.tab === "events") {
+      const p = new URLSearchParams();
+      if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
+      if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+      location.href = "events.html" + (p.toString() ? `?${p.toString()}` : "");
+      return;
+    }
+    toast(`Submit search · routes to <code>${buildUrl()}</code>`);
   }
 
   // Wire up triggers

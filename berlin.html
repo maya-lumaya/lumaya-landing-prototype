@@ -480,7 +480,7 @@ footer.site {
   </div>
 
   <!-- Discovery bar -->
-  <div class="discovery-bar">
+  <a href="events.html?areaId=berlin" class="discovery-bar" aria-label="Browse all Berlin events">
     <div class="db-field">
       <div class="db-label">Location</div>
       <div class="db-value">Berlin, Germany</div>
@@ -494,11 +494,11 @@ footer.site {
       <div class="db-value">All experiences</div>
     </div>
     <div class="db-cta">
-      <button class="db-search-btn" aria-label="Search">
+      <span class="db-search-btn" aria-hidden="true">
         <span class="material-symbols-outlined">search</span>
-      </button>
+      </span>
     </div>
-  </div>
+  </a>
 </section>
 
 <!-- ── SEO text ── -->
@@ -511,6 +511,7 @@ footer.site {
   <div class="container">
     <div class="section-header">
       <h2>Upcoming Experiences</h2>
+      <a class="view-all" href="events.html?areaId=berlin">View all in Berlin <span class="material-symbols-outlined">arrow_forward</span></a>
     </div>
     <div class="events-scroll-wrap">
       <div class="events-scroll" id="events-grid">
