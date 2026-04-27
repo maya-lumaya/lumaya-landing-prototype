@@ -29,6 +29,7 @@
   --olive-900: #1C1D13;
   --orange-300: #E4BB86;
   --orange-500: #D69543;
+  --orange-600: #C4812B;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
@@ -79,10 +80,10 @@ header.site {
   font-size: 14px; font-weight: 500; color: var(--text-muted);
   transition: color 0.15s;
 }
-.nav-links a:hover { color: var(--primary); }
+.nav-links a:hover { color: var(--orange-600); }
 .nav-links a.is-active {
-  color: var(--primary);
-  border-bottom: 2px solid var(--primary); padding-bottom: 2px;
+  color: var(--orange-600);
+  border-bottom: 2px solid var(--orange-600); padding-bottom: 2px;
 }
 .nav-back {
   display: inline-flex; align-items: center; gap: 6px;
@@ -90,14 +91,14 @@ header.site {
   transition: color 0.15s; padding: 6px 0;
 }
 .nav-back .material-symbols-outlined { font-size: 16px; }
-.nav-back:hover { color: var(--primary); }
+.nav-back:hover { color: var(--orange-600); }
 .nav-actions { display: flex; gap: 8px; align-items: center; }
 .icon-btn {
   width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   color: var(--text-muted); transition: background 0.15s, color 0.15s;
 }
-.icon-btn:hover { background: var(--bg-3); color: var(--primary); }
+.icon-btn:hover { background: var(--bg-3); color: var(--orange-600); }
 .icon-btn .material-symbols-outlined { font-size: 18px; }
 
 /* ── Hero ────────────────────────────────────── */
@@ -131,12 +132,12 @@ header.site {
 .hero-eyebrow {
   font: 600 11px/1 'Inter', sans-serif;
   letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--primary); margin-bottom: 18px;
+  color: var(--orange-600); margin-bottom: 18px;
   display: flex; align-items: center; justify-content: center; gap: 10px;
 }
 .hero-eyebrow::before, .hero-eyebrow::after {
   content: ''; flex: 0 0 32px; height: 1px;
-  background: var(--primary); opacity: 0.4;
+  background: var(--orange-300); opacity: 0.7;
 }
 h1.hero-title {
   font-size: clamp(52px, 8vw, 84px);
@@ -177,7 +178,7 @@ h1.hero-title {
 .db-value { font-size: 13px; color: var(--text-muted); }
 .db-search-btn {
   width: 46px; height: 46px; border-radius: 50%;
-  background: var(--primary); color: #fff;
+  background: var(--orange-500); color: #fff;
   display: flex; align-items: center; justify-content: center;
   transition: opacity 0.15s; flex-shrink: 0; cursor: pointer;
 }
@@ -226,7 +227,7 @@ h1.hero-title {
 .section-header h2 { font-size: 30px; line-height: 1.15; }
 .view-all {
   font: 600 13px/1 'Inter', sans-serif;
-  color: var(--primary);
+  color: var(--orange-600);
   display: inline-flex; align-items: center; gap: 5px;
   white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0;
 }
@@ -339,7 +340,7 @@ h1.hero-title {
   flex-shrink: 0;
 }
 .guide-card:hover .guide-avatar {
-  border-color: var(--primary);
+  border-color: var(--orange-300);
   transform: translateY(-3px);
 }
 .guide-avatar img { width: 100%; height: 100%; object-fit: cover; }

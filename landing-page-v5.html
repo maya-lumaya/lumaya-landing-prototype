@@ -640,7 +640,7 @@
   .search-pill {
     display: flex; align-items: stretch;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-pill); padding: 10px;
+    border-radius: var(--radius-pill); padding: 8px;
     box-shadow: var(--shadow-pill); position: relative;
     transition: box-shadow .25s var(--ease);
   }
@@ -649,14 +649,14 @@
 
   .field {
     position: relative; flex: 1 1 0; min-width: 0;
-    padding: 16px 28px; border-radius: var(--radius-pill);
+    padding: 8px 22px; border-radius: var(--radius-pill);
     cursor: pointer;
     display: flex; flex-direction: column; justify-content: center;
     transition: background .2s var(--ease), box-shadow .2s var(--ease);
   }
   /* First field gets a touch more left padding so the label clears the
      pill's rounded corner curve (border-radius is full pill ≈ half-height). */
-  .search-pill > .field:first-of-type { padding-left: 36px; }
+  .search-pill > .field:first-of-type { padding-left: 28px; }
   .field:hover { background: var(--surface); }
   .field.active { background: var(--surface); box-shadow: var(--shadow-field-active); z-index: 2; }
   .field + .field::before {
@@ -673,7 +673,7 @@
 
   .submit-wrap { display: flex; align-items: center; padding-left: 6px; }
   .submit {
-    height: 56px; padding: 0; width: 56px; border-radius: 50%;
+    height: 46px; padding: 0; width: 46px; border-radius: 50%;
     background: var(--orange-500); color: #FFFFFF;
     display: inline-flex; align-items: center; justify-content: center;
     transition: background .25s var(--ease), width .3s var(--ease), padding .3s var(--ease), transform .15s var(--ease);
