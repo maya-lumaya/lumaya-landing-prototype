@@ -14,7 +14,7 @@ The reference implementation is in `berlin.html` — read its `.seo-deep` block 
 ## The prompt (copy/paste into a fresh conversation)
 
 ```
-You are writing the deep SEO section for the {CITY} regional hub page on Viluma — a curated platform for conscious events.
+You are writing the deep SEO section for the {CITY} regional hub page on Lumaya — a curated platform for conscious events.
 
 ================================================================
 CONTEXT
@@ -89,9 +89,10 @@ HTML STRUCTURE (output exactly this skeleton, filled in)
     </p>
 
     <p>
-      {50–70 word closing CTA. Mention the events calendar above.
-       Include one internal link to lumaya.co/events?location={city-slug}
-       with target="_blank" rel="noopener noreferrer".}
+      {35–55 word closing CTA. Reference the events calendar above and
+       Lumaya's curation of hosts. Do NOT add any external link — the
+       prototype IS Lumaya, so a link to lumaya.co would be self-
+       referential. Keep the closing text-only.}
     </p>
   </div>
 </section>
@@ -181,7 +182,7 @@ After the agent generates the section, run this before merging:
 1. **Swap test** — replace the city name globally; does any paragraph still hold? If yes, rewrite that paragraph.
 2. **Word count** — total 480–620 words. Below 480 = thin; above 620 = bloated.
 3. **Keyword density** — bolded `<strong>` count between 12 and 22 across the section. Outside that range = either under-targeted or stuffed.
-4. **Internal link** — exactly one link to `lumaya.co/events?location={city-slug}`, in the closing paragraph, with `target="_blank" rel="noopener noreferrer"`.
+4. **No outbound brand links** — the prototype IS Lumaya, so the section must not link out to `lumaya.co` or any other Lumaya-owned domain. The only acceptable links are `<a>` tags pointing at on-page anchors, and even those should be rare.
 5. **Heading structure** — H2 once, H3 three times. No H4+.
 6. **Mobile sanity** — the existing `.seo-deep` responsive rules already handle mobile; no inline styles needed.
 7. **Lineage check** — every modality mentioned (Vipassana, 5Rhythms, MBSR, etc.) actually has a presence in that city. If unsure, drop it rather than invent.
