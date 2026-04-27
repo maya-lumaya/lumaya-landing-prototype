@@ -296,6 +296,37 @@ h1.page-title {
   border: 1px solid var(--outline-variant);
   box-shadow: var(--shadow-md);
 }
+.map-host {
+  position: absolute; inset: 0;
+  background: var(--bg-3);
+}
+.map-host.is-empty::before {
+  content: 'No locations to show on the map yet';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font: 500 13px/1.4 'Inter', sans-serif;
+  color: var(--text-subtle);
+  background: var(--bg-2);
+  text-align: center; padding: 24px;
+}
+.map-loader {
+  position: absolute; top: 14px; left: 14px;
+  display: none; align-items: center; gap: 8px;
+  height: 30px; padding: 0 12px;
+  background: rgba(252,249,244,0.95);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-pill);
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+}
+.map-loader.is-visible { display: inline-flex; }
+.map-loader .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orange-500);
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 0.4 } 50% { opacity: 1 } }
 
 /* GRID mode (no detail pane) */
 .split.is-grid { grid-template-columns: 1fr; }
@@ -409,20 +440,44 @@ h1.page-title {
 .split.is-grid .row-card .rc-foot { margin-top: 4px; }
 .split.is-grid .row-card .rc-price { font-size: 13px; }
 
-/* ── Detail pane content ───────────────────────── */
-.dp-empty {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100%; gap: 14px; color: var(--text-subtle);
-  padding: 32px;
+/* ── Event detail card (overlay above the map) ── */
+.event-detail-card {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 70%;
+  background: var(--surface);
+  border-top: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 -10px 30px rgba(28,28,25,0.10);
+  transform: translateY(102%);
+  transition: transform 0.35s var(--ease);
+  display: flex; flex-direction: column;
+  z-index: 5;
+  overflow: hidden;
 }
-.dp-empty .material-symbols-outlined { font-size: 48px; color: var(--bg-3); }
+.event-detail-card.is-open { transform: translateY(0); }
+.event-detail-card .grabber {
+  width: 36px; height: 4px;
+  background: var(--bg-3);
+  border-radius: 999px;
+  margin: 9px auto 0;
+  flex-shrink: 0;
+}
+.event-detail-card .dp-loading {
+  flex: 1; display: flex; flex-direction: column;
+  gap: 12px; padding: 22px 22px 0;
+}
+.event-detail-card .dp-loading .skeleton { height: 14px; border-radius: 4px; }
+.event-detail-card .dp-loading .skel-img-block {
+  height: 130px; border-radius: var(--radius-md);
+  margin-bottom: 4px;
+}
 .dp {
   display: flex; flex-direction: column; height: 100%;
   overflow: hidden;
 }
 .dp-img {
   position: relative; flex-shrink: 0;
-  height: 280px;
+  height: 200px;
   background: var(--bg-3);
 }
 .dp-img img {
@@ -446,8 +501,27 @@ h1.page-title {
   width: 32px; height: 32px; border-radius: 50%;
   background: rgba(252,249,244,0.95);
   backdrop-filter: blur(8px);
-  display: none; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s;
+  z-index: 2;
+}
+.dp-img-close:hover { background: #fff; }
+.dp-img-close .material-symbols-outlined { font-size: 18px; }
+.dp-description {
+  font-size: 14px; line-height: 1.65;
+  color: var(--text); margin: 0;
+  white-space: pre-wrap;
+}
+.dp-description .mock-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font: 600 9px/1 'Inter', sans-serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--orange-600);
+  background: rgba(228,187,134,0.18);
+  padding: 4px 8px; border-radius: var(--radius-pill);
+  margin-bottom: 10px;
 }
 .dp-body {
   flex: 1; overflow-y: auto;
@@ -676,8 +750,8 @@ footer.site {
     transition: transform 0.32s var(--ease);
   }
   .detail-pane.sheet-open { transform: translateY(0); }
-  .dp-img-close { display: flex; }
   .fb-toggle { display: none; }
+  .event-detail-card { height: 100%; border-radius: 0; box-shadow: none; }
 }
 @media (max-width: 720px) {
   .row-card { grid-template-columns: 132px 1fr; gap: 12px; padding: 10px; }
@@ -773,7 +847,7 @@ footer.site {
         <span>Sort:</span>
         <select id="sortSelect">
           <option value="DATE_ASC">Soonest first</option>
-          <option value="SCORE_DESC">Highest score</option>
+          <option value="DATE_DESC">Latest first</option>
         </select>
       </label>
     </div>
@@ -790,10 +864,14 @@ footer.site {
         </div>
       </div>
 
-      <aside class="detail-pane" id="detailPane" aria-label="Event preview">
-        <div class="dp-empty">
-          <span class="material-symbols-outlined">touch_app</span>
-          <div>Select an event to preview</div>
+      <aside class="detail-pane" id="detailPane" aria-label="Map of event locations">
+        <div class="map-host" id="mapHost"></div>
+        <div class="map-loader" id="mapLoader">
+          <span class="dot"></span>
+          <span>Loading locations…</span>
+        </div>
+        <div class="event-detail-card" id="eventDetailCard" aria-hidden="true">
+          <div class="grabber"></div>
         </div>
       </aside>
     </div>
@@ -1087,18 +1165,15 @@ footer.site {
     }).join('');
   }
 
-  /* ── Sorting (client-side, since backend only supports IMPORTANCE) ── */
+  /* ── Sorting (client-side) ─────────────────────── */
   function sortEvents(events, key) {
     const copy = events.slice();
-    if (key === 'SCORE_DESC') {
-      copy.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
-    } else {
-      copy.sort((a, b) => {
-        const ad = a.nextAppointment ? new Date(a.nextAppointment).getTime() : Number.POSITIVE_INFINITY;
-        const bd = b.nextAppointment ? new Date(b.nextAppointment).getTime() : Number.POSITIVE_INFINITY;
-        return ad - bd;
-      });
-    }
+    const dir = key === 'DATE_DESC' ? -1 : 1;
+    copy.sort((a, b) => {
+      const ad = a.nextAppointment ? new Date(a.nextAppointment).getTime() : Number.POSITIVE_INFINITY;
+      const bd = b.nextAppointment ? new Date(b.nextAppointment).getTime() : Number.POSITIVE_INFINITY;
+      return (ad - bd) * dir;
+    });
     return copy;
   }
 
@@ -1191,22 +1266,262 @@ footer.site {
     list.innerHTML = filtered.map(rowCard).join('');
   }
 
-  /* ── Detail pane ───────────────────────────────────────── */
-  function renderDetail() {
-    const pane = document.getElementById('detailPane');
-    if (!state.selectedSlug) {
-      pane.innerHTML = `
-        <div class="dp-empty">
-          <span class="material-symbols-outlined">touch_app</span>
-          <div>Select an event to preview</div>
-        </div>`;
+  /* ── Mock description (placeholder while backend doesn't expose) ── */
+  const MOCK_PARAGRAPHS = [
+    'Step into a carefully held container where breath, body and stillness become the practice. This gathering invites you to slow down, listen inward, and reconnect with the part of yourself that already knows how to be at peace.',
+    'Whether you arrive curious or seasoned, you are welcome exactly as you are. The space is shaped to meet beginners and long-time practitioners alike, with gentle guidance, small group attention, and time to integrate what arises.',
+    'Expect a thoughtful blend of grounding practice, embodied movement, and reflective silence. You\'ll leave with something concrete: a felt sense, a small ritual, or simply a clearer breath you can carry into the rest of your week.'
+  ];
+  function generateMockDescription(ev) {
+    const bd = ev.basicDetails || {};
+    const cats = (bd.categories || []).map(c => c.replace(/_/g, ' '));
+    const opener = cats.length
+      ? `A ${cats.slice(0, 2).join(' and ')} gathering held with care${bd.location?.areaId ? ` in ${areaName(bd.location.areaId)}` : ''}.`
+      : `A practice gathering held with care${bd.location?.areaId ? ` in ${areaName(bd.location.areaId)}` : ''}.`;
+    return `${opener}\n\n${MOCK_PARAGRAPHS.join('\n\n')}`;
+  }
+
+  /* ── Single-event fetch with cache ─────────────── */
+  const fullEventCache = new Map(); // slug → full event
+  const fullEventInflight = new Map(); // slug → Promise
+  async function fetchFullEvent(slug) {
+    if (fullEventCache.has(slug)) return fullEventCache.get(slug);
+    if (fullEventInflight.has(slug)) return fullEventInflight.get(slug);
+    const p = (async () => {
+      const r = await fetch(`${API}/api/v3/events/${encodeURIComponent(slug)}`, { headers: { 'Accept': 'application/json' } });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      fullEventCache.set(slug, data);
+      return data;
+    })();
+    fullEventInflight.set(slug, p);
+    p.finally(() => fullEventInflight.delete(slug));
+    return p;
+  }
+
+  /* ── Concurrency-limited parallel runner ──────── */
+  async function runWithLimit(items, limit, worker) {
+    const queue = items.slice();
+    const runners = Array.from({ length: Math.min(limit, queue.length) }, async () => {
+      while (queue.length) {
+        const next = queue.shift();
+        try { await worker(next); } catch (e) { /* swallow per-item */ }
+      }
+    });
+    await Promise.all(runners);
+  }
+
+  /* ── Map ────────────────────────────────────────── */
+  const mapState = {
+    map: null,
+    apiReady: false,
+    markers: new Map(),    // slug → google.maps.Marker
+    bounds: null,
+    pendingPlot: null,     // events to plot once api is ready
+    infoWindow: null
+  };
+
+  function onMapsReady() {
+    mapState.apiReady = true;
+    initMap();
+    if (mapState.pendingPlot) {
+      const events = mapState.pendingPlot;
+      mapState.pendingPlot = null;
+      plotEventsOnMap(events);
+    }
+  }
+  window.onMapsReady = onMapsReady;
+
+  function initMap() {
+    if (!mapState.apiReady || mapState.map) return;
+    const host = document.getElementById('mapHost');
+    if (!host) return;
+    mapState.map = new google.maps.Map(host, {
+      center: { lat: 52.520008, lng: 13.404954 }, // Berlin default
+      zoom: 11,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      clickableIcons: false,
+      gestureHandling: 'greedy',
+      styles: [
+        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit.station', stylers: [{ visibility: 'off' }] }
+      ]
+    });
+    mapState.infoWindow = new google.maps.InfoWindow({ pixelOffset: new google.maps.Size(0, -8) });
+  }
+
+  function clearMarkers() {
+    for (const m of mapState.markers.values()) m.setMap(null);
+    mapState.markers.clear();
+    if (mapState.infoWindow) mapState.infoWindow.close();
+  }
+
+  function setMapEmpty(isEmpty) {
+    document.getElementById('mapHost').classList.toggle('is-empty', isEmpty);
+  }
+
+  function setMapLoader(isLoading) {
+    document.getElementById('mapLoader').classList.toggle('is-visible', isLoading);
+  }
+
+  function makeMarkerIcon(isSelected) {
+    const fill = isSelected ? '#C4812B' : '#182c24';
+    const stroke = isSelected ? '#C4812B' : '#182c24';
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="34" height="42" viewBox="0 0 34 42">
+        <path d="M17 1.5c-8.56 0-15.5 6.94-15.5 15.5 0 11.6 13.7 22.6 14.3 23.1.7.55 1.7.55 2.4 0 .6-.5 14.3-11.5 14.3-23.1C32.5 8.44 25.56 1.5 17 1.5z"
+          fill="${fill}" stroke="#FCF9F4" stroke-width="2.2"/>
+        <circle cx="17" cy="17" r="5.2" fill="#FCF9F4"/>
+      </svg>`;
+    return {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+      scaledSize: new google.maps.Size(34, 42),
+      anchor: new google.maps.Point(17, 41)
+    };
+  }
+
+  function fitBoundsIfReady() {
+    if (!mapState.map || mapState.markers.size === 0) return;
+    if (mapState.markers.size === 1) {
+      const m = mapState.markers.values().next().value;
+      mapState.map.setCenter(m.getPosition());
+      mapState.map.setZoom(13);
       return;
     }
-    const ev = state.events.find(e => e.slug === state.selectedSlug);
-    if (!ev) {
-      pane.innerHTML = `<div class="dp-empty"><span class="material-symbols-outlined">help_outline</span><div>Event not found</div></div>`;
+    const bounds = new google.maps.LatLngBounds();
+    for (const m of mapState.markers.values()) bounds.extend(m.getPosition());
+    mapState.map.fitBounds(bounds, 64);
+  }
+
+  function addMarkerForEvent(ev) {
+    const loc = ev.basicDetails?.location;
+    if (!loc || typeof loc.latitude !== 'number' || typeof loc.longitude !== 'number') return;
+    if (mapState.markers.has(ev.slug)) return;
+    const marker = new google.maps.Marker({
+      position: { lat: loc.latitude, lng: loc.longitude },
+      map: mapState.map,
+      title: ev.basicDetails?.title || '',
+      icon: makeMarkerIcon(state.selectedSlug === ev.slug),
+      optimized: false
+    });
+    marker.addListener('click', () => {
+      state.selectedSlug = ev.slug;
+      refreshSelectionState();
+      openEventDetail(ev.slug);
+    });
+    mapState.markers.set(ev.slug, marker);
+  }
+
+  function plotEventsOnMap(events) {
+    if (!mapState.apiReady) {
+      mapState.pendingPlot = events;
       return;
     }
+    initMap();
+    clearMarkers();
+    const slugsToFetch = events.filter(e => !fullEventCache.has(e.slug)).map(e => e.slug);
+    // Add markers immediately for any cached events
+    for (const ev of events) {
+      const cached = fullEventCache.get(ev.slug);
+      if (cached) addMarkerForEvent(cached);
+    }
+    fitBoundsIfReady();
+    if (slugsToFetch.length === 0) {
+      setMapEmpty(mapState.markers.size === 0);
+      return;
+    }
+    setMapLoader(true);
+    setMapEmpty(false);
+    let pending = slugsToFetch.length;
+    runWithLimit(slugsToFetch, 6, async (slug) => {
+      try {
+        const full = await fetchFullEvent(slug);
+        addMarkerForEvent(full);
+        fitBoundsIfReady();
+      } finally {
+        pending -= 1;
+        if (pending === 0) {
+          setMapLoader(false);
+          setMapEmpty(mapState.markers.size === 0);
+        }
+      }
+    });
+  }
+
+  function refreshSelectionState() {
+    // Update marker icons and card highlights
+    for (const [slug, marker] of mapState.markers.entries()) {
+      marker.setIcon(makeMarkerIcon(slug === state.selectedSlug));
+      marker.setZIndex(slug === state.selectedSlug ? 999 : undefined);
+    }
+    document.querySelectorAll('.row-card').forEach(c => {
+      c.classList.toggle('is-selected', c.dataset.slug === state.selectedSlug);
+    });
+  }
+
+  /* ── Event detail card (slide-up over the map) ── */
+  function openEventDetail(slug) {
+    const card = document.getElementById('eventDetailCard');
+    card.classList.add('is-open');
+    card.setAttribute('aria-hidden', 'false');
+    renderEventDetailCardLoading();
+    fetchFullEvent(slug).then(full => {
+      // ignore if user moved on
+      if (state.selectedSlug !== slug) return;
+      addMarkerForEvent(full);
+      const marker = mapState.markers.get(slug);
+      if (marker && mapState.map) {
+        const pos = marker.getPosition();
+        mapState.map.panTo(pos);
+      }
+      renderEventDetailCard(full);
+    }).catch(err => {
+      console.error('Failed to load event:', err);
+      renderEventDetailCardError();
+    });
+  }
+
+  function closeEventDetail() {
+    const card = document.getElementById('eventDetailCard');
+    card.classList.remove('is-open');
+    card.setAttribute('aria-hidden', 'true');
+    state.selectedSlug = null;
+    refreshSelectionState();
+    if (mapState.infoWindow) mapState.infoWindow.close();
+    writeUrl();
+  }
+
+  function renderEventDetailCardLoading() {
+    const card = document.getElementById('eventDetailCard');
+    card.innerHTML = `
+      <div class="grabber"></div>
+      <div class="dp-loading">
+        <div class="skeleton skel-img-block"></div>
+        <div class="skeleton" style="width:70%"></div>
+        <div class="skeleton" style="width:40%"></div>
+        <div class="skeleton" style="width:90%"></div>
+        <div class="skeleton" style="width:85%"></div>
+      </div>
+    `;
+  }
+
+  function renderEventDetailCardError() {
+    const card = document.getElementById('eventDetailCard');
+    card.innerHTML = `
+      <div class="grabber"></div>
+      <div class="state-block" style="margin:24px;border-radius:var(--radius-md)">
+        <span class="material-symbols-outlined">error_outline</span>
+        <h3>Couldn't load event</h3>
+        <p>Please try selecting another event or refresh the page.</p>
+        <button class="reset-btn" type="button" id="dpClose"><span class="material-symbols-outlined">close</span> Close</button>
+      </div>
+    `;
+  }
+
+  function renderEventDetailCard(ev) {
+    const card = document.getElementById('eventDetailCard');
     const bd = ev.basicDetails || {};
     const img = ev.media?.imageUrls?.[0] || '';
     const title = bd.title || 'Untitled event';
@@ -1216,8 +1531,13 @@ footer.site {
     const profile = ev.profile;
     const cats = bd.categories || [];
     const eventUrl = `event.html?slug=${encodeURIComponent(ev.slug)}`;
+    const realDesc = (bd.description || '').trim();
+    const isMock = !realDesc;
+    const description = realDesc || generateMockDescription(ev);
+    const address = bd.location?.address || '';
 
-    pane.innerHTML = `
+    card.innerHTML = `
+      <div class="grabber"></div>
       <div class="dp">
         <div class="dp-img">
           ${img ? `<img src="${htmlEscape(img)}" alt="${htmlEscape(title)}">` : ''}
@@ -1230,9 +1550,9 @@ footer.site {
         <div class="dp-body">
           <div class="dp-title">${htmlEscape(title)}</div>
           <div class="dp-meta">
-            ${ev.timezone ? `<span class="meta-item"><span class="material-symbols-outlined">schedule</span>${htmlEscape(ev.timezone)}</span>` : ''}
-            <span class="meta-item"><span class="material-symbols-outlined">${bd.location?.locationType === 'ONLINE' ? 'videocam' : 'group'}</span>${htmlEscape(formatLocationType(bd.location?.locationType))}</span>
+            <span class="meta-item"><span class="material-symbols-outlined">${bd.location?.locationType === 'ONLINE' ? 'videocam' : 'place'}</span>${htmlEscape(address || formatLocationType(bd.location?.locationType))}</span>
             ${bd.language ? `<span class="meta-item"><span class="material-symbols-outlined">translate</span>${htmlEscape(languageLabel(bd.language))}</span>` : ''}
+            ${ev.timezone ? `<span class="meta-item"><span class="material-symbols-outlined">schedule</span>${htmlEscape(ev.timezone)}</span>` : ''}
           </div>
 
           <div class="dp-section">
@@ -1240,8 +1560,14 @@ footer.site {
               <div class="dp-stat"><div class="label">Next</div><div class="value">${next ? htmlEscape(formatDate(next, { weekday: 'short', day: 'numeric', month: 'short' })) : 'On request'}</div></div>
               <div class="dp-stat"><div class="label">Duration</div><div class="value">${htmlEscape(formatDuration(dur))}</div></div>
               <div class="dp-stat"><div class="label">Sessions</div><div class="value">${ev.appointmentCount != null ? ev.appointmentCount + ' upcoming' : '—'}</div></div>
-              <div class="dp-stat"><div class="label">Score</div><div class="value">${ev.score != null ? ev.score + '/10' : '—'}</div></div>
+              <div class="dp-stat"><div class="label">Practice</div><div class="value">${cat ? htmlEscape(cat.charAt(0).toUpperCase() + cat.slice(1)) : '—'}</div></div>
             </div>
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-section-label">About this event</div>
+            ${isMock ? `<span class="mock-pill"><span class="material-symbols-outlined" style="font-size:11px">science</span> Mock copy</span>` : ''}
+            <p class="dp-description">${htmlEscape(description)}</p>
           </div>
 
           ${cats.length > 1 ? `
@@ -1255,7 +1581,7 @@ footer.site {
           ${profile ? `
             <div class="dp-section">
               <div class="dp-section-label">Hosted by</div>
-              <a class="dp-host" href="https://lumaya.co/profiles/${htmlEscape(profile.slug || '')}" target="_blank" rel="noopener">
+              <a class="dp-host" href="host.html?slug=${htmlEscape(profile.slug || '')}">
                 <div class="host-avatar">${profile.avatarImageUrl ? `<img src="${htmlEscape(profile.avatarImageUrl)}" alt="">` : ''}</div>
                 <div class="host-info">
                   <div class="host-eyebrow">Lumaya host</div>
@@ -1279,7 +1605,6 @@ footer.site {
     renderFilterBar();
     renderChips();
     renderList();
-    renderDetail();
   }
 
   /* ── Fetch ─────────────────────────────────────────────── */
@@ -1310,13 +1635,14 @@ footer.site {
       state.events = sortEvents(Array.isArray(list) ? list : [], state.sort);
       state.loading = false;
 
-      // Auto-select first event on desktop only (split view)
-      if (window.matchMedia('(min-width: 1081px)').matches && state.events.length && !state.selectedSlug) {
-        state.selectedSlug = state.events[0].slug;
-      } else if (state.selectedSlug && !state.events.find(e => e.slug === state.selectedSlug)) {
+      // If a previously-selected event no longer matches the result set, clear it
+      if (state.selectedSlug && !state.events.find(e => e.slug === state.selectedSlug)) {
         state.selectedSlug = null;
+        const card = document.getElementById('eventDetailCard');
+        if (card) { card.classList.remove('is-open'); card.setAttribute('aria-hidden', 'true'); }
       }
       render();
+      plotEventsOnMap(state.events);
     } catch (err) {
       if (seq !== fetchSeq) return;
       console.error('Search failed:', err);
@@ -1415,12 +1741,13 @@ footer.site {
     writeUrl(); fetchEvents();
   });
 
-  // Result row click — selects detail pane (or opens sheet on mobile)
+  // Result row click — selects map pin + opens detail card (sheet on mobile)
   document.getElementById('resultsList').addEventListener('click', e => {
     const card = e.target.closest('.row-card');
     if (card) {
       state.selectedSlug = card.dataset.slug;
-      render();
+      refreshSelectionState();
+      openEventDetail(card.dataset.slug);
       if (window.matchMedia('(max-width: 1080px)').matches) {
         openSheet();
       }
@@ -1435,11 +1762,17 @@ footer.site {
     }
   });
 
-  // Detail pane close (mobile sheet)
-  document.getElementById('detailPane').addEventListener('click', e => {
-    if (e.target.closest('#dpClose')) closeSheet();
+  // Detail card close
+  document.getElementById('eventDetailCard').addEventListener('click', e => {
+    if (e.target.closest('#dpClose')) {
+      closeEventDetail();
+      if (window.matchMedia('(max-width: 1080px)').matches) closeSheet();
+    }
   });
-  document.getElementById('sheetBackdrop').addEventListener('click', closeSheet);
+  document.getElementById('sheetBackdrop').addEventListener('click', () => {
+    closeSheet();
+    closeEventDetail();
+  });
 
   function openSheet() {
     document.getElementById('detailPane').classList.add('sheet-open');
@@ -1471,6 +1804,10 @@ footer.site {
     fetchEvents();
   }
   init();
+</script>
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDczbg9VHL3msQ5e_JN-yd3CY9obrYBw14&v=weekly&loading=async&callback=onMapsReady">
 </script>
 
 </body>
