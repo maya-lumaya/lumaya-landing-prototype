@@ -1705,10 +1705,16 @@ footer.site {
     document.body.style.overflow = 'hidden';
     document.getElementById('mobileMapFabLabel').textContent = 'List';
     document.querySelector('#mobileMapFab .material-symbols-outlined').textContent = 'list';
-    // Ensure map is initialized and events are plotted
     if (!mapState.map && mapState.apiReady) initMap();
     if (state.events.length) plotEventsOnMap(state.events);
     closeEventDetail();
+    // Container size changed (88vh → calc(100vh-72px)) — tell Maps to re-measure
+    requestAnimationFrame(() => {
+      if (mapState.map) {
+        google.maps.event.trigger(mapState.map, 'resize');
+        fitBoundsIfReady();
+      }
+    });
   }
 
   function exitMapMode() {
