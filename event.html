@@ -356,6 +356,19 @@ h1.page-title {
 .dates-empty {
   font-size: 14px; color: var(--text-muted); font-style: italic;
 }
+.date-card--more {
+  justify-content: center; align-items: center;
+  background: var(--bg-3); border-style: dashed;
+  min-width: 100px;
+}
+.date-card--more .dc-more-count {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 26px; font-weight: 500; color: var(--text);
+  line-height: 1;
+}
+.date-card--more .dc-more-label {
+  font-size: 12px; color: var(--text-muted); margin-top: 4px;
+}
 
 /* ── Map ───────────────────────────────────── */
 .map-wrap {
@@ -1236,7 +1249,8 @@ footer.site {
     if (!upcoming.length) {
       datesEl.innerHTML = `<div class="dates-empty">No upcoming dates published — contact the host directly to schedule.</div>`;
     } else {
-      upcoming.slice(0, 12).forEach(a => {
+      const MAX_CARDS = 20;
+      upcoming.slice(0, MAX_CARDS).forEach(a => {
         const d = new Date(a.startDate);
         const month = d.toLocaleString('en-GB', { month: 'short' });
         const day = d.getDate();
@@ -1255,6 +1269,19 @@ footer.site {
         }
         datesEl.appendChild(card);
       });
+      if (upcoming.length > MAX_CARDS) {
+        const remaining = upcoming.length - MAX_CARDS;
+        const more = document.createElement('div');
+        more.className = 'date-card date-card--more';
+        more.innerHTML = `
+          <div class="dc-more-count">+${remaining}</div>
+          <div class="dc-more-label">more date${remaining === 1 ? '' : 's'}</div>
+        `;
+        if (ev.bookingInfo && ev.bookingInfo.url) {
+          more.addEventListener('click', () => window.open(ev.bookingInfo.url, '_blank', 'noopener'));
+        }
+        datesEl.appendChild(more);
+      }
     }
 
     /* Map */
