@@ -320,6 +320,25 @@ h1.page-title {
 .skel-line { height: 13px; border-radius: 4px; margin-bottom: 8px; }
 
 /* ── Dates / Calendar ──────────────────────── */
+.dates-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.dates-section-header .section-title { margin-bottom: 0; }
+.dates-nav { display: flex; gap: 6px; }
+.dates-nav-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.15s, border-color 0.15s;
+  color: var(--text);
+}
+.dates-nav-btn:hover { background: var(--bg-3); border-color: var(--orange-300); }
+.dates-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.dates-nav-btn .material-symbols-outlined { font-size: 18px; }
+@media (max-width: 767px) { .dates-nav { display: none; } }
+
 .dates-row {
   display: flex; gap: 10px; overflow-x: auto;
   padding: 4px 48px 4px 2px; scrollbar-width: none;
@@ -818,7 +837,17 @@ footer.site {
 
         <!-- Dates -->
         <section>
-          <h2 class="section-title">Upcoming dates</h2>
+          <div class="dates-section-header">
+            <h2 class="section-title">Upcoming dates</h2>
+            <div class="dates-nav">
+              <button class="dates-nav-btn" id="dates-prev" aria-label="Scroll left" disabled>
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <button class="dates-nav-btn" id="dates-next" aria-label="Scroll right">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </div>
           <div class="dates-row" id="ev-dates">
             <div class="date-card" style="border-color:transparent;background:transparent;">
               <div class="skeleton" style="width:60px;height:11px"></div>
@@ -1285,6 +1314,23 @@ footer.site {
         datesEl.appendChild(more);
       }
     }
+
+    /* Dates nav buttons */
+    (function () {
+      const row = datesEl;
+      const prev = document.getElementById('dates-prev');
+      const next = document.getElementById('dates-next');
+      if (!prev || !next) return;
+      const SCROLL_BY = 300;
+      function updateNav() {
+        prev.disabled = row.scrollLeft <= 0;
+        next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 1;
+      }
+      prev.addEventListener('click', () => { row.scrollBy({ left: -SCROLL_BY, behavior: 'smooth' }); });
+      next.addEventListener('click', () => { row.scrollBy({ left: SCROLL_BY, behavior: 'smooth' }); });
+      row.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    })();
 
     /* Map */
     const mapWrap = document.getElementById('ev-map');
