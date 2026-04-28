@@ -322,7 +322,9 @@ h1.page-title {
 /* ── Dates / Calendar ──────────────────────── */
 .dates-row {
   display: flex; gap: 10px; overflow-x: auto;
-  padding-bottom: 4px; scrollbar-width: none;
+  padding: 4px 48px 4px 2px; scrollbar-width: none;
+  mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
 }
 .dates-row::-webkit-scrollbar { display: none; }
 .date-card {
