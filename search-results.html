@@ -116,6 +116,24 @@ header.site {
   color: var(--text-muted); transition: background 0.15s, color 0.15s;
 }
 .icon-btn:hover { background: var(--bg-3); color: var(--orange-600); }
+.user-menu-wrap { position: relative; }
+.user-dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 186px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.06);
+  z-index: 300; padding: 5px 0; overflow: hidden;
+}
+.user-dropdown.open { display: block; }
+.user-dd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; font: 500 14px/1 'Inter', system-ui, sans-serif;
+  color: var(--text); text-decoration: none; background: none; border: none;
+  width: 100%; text-align: left; cursor: pointer; transition: background .12s;
+}
+.user-dd-item:hover { background: var(--bg-2); }
+.user-dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
 .icon-btn .material-symbols-outlined { font-size: 18px; }
 
 @media (max-width: 760px) {
@@ -798,9 +816,18 @@ footer.site {
       <button class="icon-btn" aria-label="Saved">
         <span class="material-symbols-outlined">bookmark</span>
       </button>
-      <button class="icon-btn" aria-label="Account">
-        <span class="material-symbols-outlined">account_circle</span>
-      </button>
+      <div class="user-menu-wrap">
+        <button class="icon-btn" id="userMenuBtn" aria-label="Account" aria-expanded="false">
+          <span class="material-symbols-outlined">account_circle</span>
+        </button>
+        <div class="user-dropdown" id="userDropdown" role="menu">
+          <a href="auth.html" class="user-dd-item" role="menuitem">Sign in</a>
+          <a href="auth.html?mode=signup" class="user-dd-item" role="menuitem">Create account</a>
+          <div class="user-dd-sep"></div>
+          <a href="#" class="user-dd-item" role="menuitem">Saved events</a>
+          <a href="host.html" class="user-dd-item" role="menuitem">For organisers</a>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -1875,6 +1902,16 @@ footer.site {
 
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDczbg9VHL3msQ5e_JN-yd3CY9obrYBw14&v=weekly&loading=async&callback=onMapsReady">
+</script>
+<script>
+  (function() {
+    const btn = document.getElementById("userMenuBtn");
+    const dd  = document.getElementById("userDropdown");
+    if (!btn || !dd) return;
+    btn.addEventListener("click", (e) => { e.stopPropagation(); const o = dd.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });
+    document.addEventListener("click", () => { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); } });
+  })();
 </script>
 
 </body>

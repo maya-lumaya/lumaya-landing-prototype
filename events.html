@@ -107,6 +107,24 @@ header.site {
   color: var(--text-muted); transition: background 0.15s, color 0.15s;
 }
 .icon-btn:hover { background: var(--bg-3); color: var(--orange-600); }
+.user-menu-wrap { position: relative; }
+.user-dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 186px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.06);
+  z-index: 300; padding: 5px 0; overflow: hidden;
+}
+.user-dropdown.open { display: block; }
+.user-dd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; font: 500 14px/1 'Inter', system-ui, sans-serif;
+  color: var(--text); text-decoration: none; background: none; border: none;
+  width: 100%; text-align: left; cursor: pointer; transition: background .12s;
+}
+.user-dd-item:hover { background: var(--bg-2); }
+.user-dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
 .icon-btn .material-symbols-outlined { font-size: 18px; }
 
 /* ── Hero ────────────────────────────────────── */
@@ -116,7 +134,7 @@ header.site {
   display: flex; flex-direction: column;
   align-items: center; justify-content: flex-end;
   padding: 0 32px 64px;
-  overflow: hidden;
+  overflow: visible;
 }
 .hero-bg {
   position: absolute; inset: 0; z-index: 0;
@@ -280,9 +298,12 @@ h1.hero-title {
 }
 .city-chip:hover { background: var(--bg-2); border-color: var(--border-strong); }
 .city-chip:active { transform: scale(0.97); }
-.city-chip .chip-flag { font-size: 16px; line-height: 1; }
 .city-chip .chip-name { font-weight: 600; }
-.city-chip .chip-count { font-size: 11px; color: var(--text-muted); }
+.city-chip .chip-country {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+  color: var(--text-subtle); background: var(--bg-3);
+  padding: 2px 5px; border-radius: 4px;
+}
 
 /* ── Popular Events Section ─────────────────── */
 .popular-section { padding: 56px 0; }
@@ -365,10 +386,11 @@ h1.hero-title {
 /* Skeleton loader */
 .skel-card { flex: 0 0 220px; }
 .skel-card .event-img { background: linear-gradient(90deg,#EBE8E3 25%,#F0EDE8 50%,#EBE8E3 75%); background-size: 200% 100%; animation: shimmer 1.6s infinite; }
-.skeleton { border-radius: 6px; background: linear-gradient(90deg,#EBE8E3 25%,#F0EDE8 50%,#EBE8E3 75%); background-size: 200% 100%; animation: shimmer 1.6s infinite; height: 12px; margin-bottom: 8px; }
-.w80 { width: 80%; }
-.w55 { width: 55%; }
-.w40 { width: 40%; }
+.skeleton { border-radius: var(--radius-sm); background: linear-gradient(90deg,#EBE8E3 25%,#F0EDE8 50%,#EBE8E3 75%); background-size: 200% 100%; animation: shimmer 1.6s infinite; }
+.skel-line { height: 13px; border-radius: 4px; margin-bottom: 6px; }
+.skel-line.w80 { width: 80%; }
+.skel-line.w55 { width: 55%; }
+.skel-line.w40 { width: 40%; }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
 /* View-all card */
@@ -586,9 +608,18 @@ footer.site {
       <button class="icon-btn" aria-label="Saved">
         <span class="material-symbols-outlined">bookmark</span>
       </button>
-      <button class="icon-btn" aria-label="Account">
-        <span class="material-symbols-outlined">account_circle</span>
-      </button>
+      <div class="user-menu-wrap">
+        <button class="icon-btn" id="userMenuBtn" aria-label="Account" aria-expanded="false">
+          <span class="material-symbols-outlined">account_circle</span>
+        </button>
+        <div class="user-dropdown" id="userDropdown" role="menu">
+          <a href="auth.html" class="user-dd-item" role="menuitem">Sign in</a>
+          <a href="auth.html?mode=signup" class="user-dd-item" role="menuitem">Create account</a>
+          <div class="user-dd-sep"></div>
+          <a href="#" class="user-dd-item" role="menuitem">Saved events</a>
+          <a href="host.html" class="user-dd-item" role="menuitem">For organisers</a>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -641,49 +672,48 @@ footer.site {
       <h2>Browse by city</h2>
       <span class="chips-count">10 active hubs</span>
     </div>
-  </div>
-  <div class="chips-scroll-wrap">
-    <div class="chips-scroll">
-      <a href="events-hub.html?areaId=berlin" class="city-chip">
-        <span class="chip-flag">🇩🇪</span>
-        <span class="chip-name">Berlin</span>
-      </a>
-      <a href="events-hub.html?areaId=vienna" class="city-chip">
-        <span class="chip-flag">🇦🇹</span>
-        <span class="chip-name">Vienna</span>
-      </a>
-      <a href="events-hub.html?areaId=munich" class="city-chip">
-        <span class="chip-flag">🇩🇪</span>
-        <span class="chip-name">Munich</span>
-      </a>
-      <a href="events-hub.html?areaId=hamburg" class="city-chip">
-        <span class="chip-flag">🇩🇪</span>
-        <span class="chip-name">Hamburg</span>
-      </a>
-      <a href="events-hub.html?areaId=london" class="city-chip">
-        <span class="chip-flag">🇬🇧</span>
-        <span class="chip-name">London</span>
-      </a>
-      <a href="events-hub.html?areaId=amsterdam" class="city-chip">
-        <span class="chip-flag">🇳🇱</span>
-        <span class="chip-name">Amsterdam</span>
-      </a>
-      <a href="events-hub.html?areaId=zurich" class="city-chip">
-        <span class="chip-flag">🇨🇭</span>
-        <span class="chip-name">Zurich</span>
-      </a>
-      <a href="events-hub.html?areaId=lisbon" class="city-chip">
-        <span class="chip-flag">🇵🇹</span>
-        <span class="chip-name">Lisbon</span>
-      </a>
-      <a href="events-hub.html?areaId=barcelona" class="city-chip">
-        <span class="chip-flag">🇪🇸</span>
-        <span class="chip-name">Barcelona</span>
-      </a>
-      <a href="events-hub.html?areaId=online" class="city-chip">
-        <span class="chip-flag">🌐</span>
-        <span class="chip-name">Online</span>
-      </a>
+    <div class="chips-scroll-wrap">
+      <div class="chips-scroll">
+        <a href="events-hub.html?areaId=berlin" class="city-chip">
+          <span class="chip-name">Berlin</span>
+          <span class="chip-country">DE</span>
+        </a>
+        <a href="events-hub.html?areaId=vienna" class="city-chip">
+          <span class="chip-name">Vienna</span>
+          <span class="chip-country">AT</span>
+        </a>
+        <a href="events-hub.html?areaId=munich" class="city-chip">
+          <span class="chip-name">Munich</span>
+          <span class="chip-country">DE</span>
+        </a>
+        <a href="events-hub.html?areaId=hamburg" class="city-chip">
+          <span class="chip-name">Hamburg</span>
+          <span class="chip-country">DE</span>
+        </a>
+        <a href="events-hub.html?areaId=london" class="city-chip">
+          <span class="chip-name">London</span>
+          <span class="chip-country">GB</span>
+        </a>
+        <a href="events-hub.html?areaId=amsterdam" class="city-chip">
+          <span class="chip-name">Amsterdam</span>
+          <span class="chip-country">NL</span>
+        </a>
+        <a href="events-hub.html?areaId=zurich" class="city-chip">
+          <span class="chip-name">Zurich</span>
+          <span class="chip-country">CH</span>
+        </a>
+        <a href="events-hub.html?areaId=lisbon" class="city-chip">
+          <span class="chip-name">Lisbon</span>
+          <span class="chip-country">PT</span>
+        </a>
+        <a href="events-hub.html?areaId=barcelona" class="city-chip">
+          <span class="chip-name">Barcelona</span>
+          <span class="chip-country">ES</span>
+        </a>
+        <a href="events-hub.html?areaId=online" class="city-chip">
+          <span class="chip-name">Online</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -705,15 +735,15 @@ footer.site {
         </button>
       </div>
     </div>
-  </div>
-  <div class="events-scroll-wrap">
-    <div class="events-scroll" id="popular-track">
-      <!-- skeleton cards while loading -->
-      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton w80"></div><div class="skeleton w55"></div><div class="skeleton w40"></div></div>
-      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton w80"></div><div class="skeleton w55"></div><div class="skeleton w40"></div></div>
-      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton w80"></div><div class="skeleton w55"></div><div class="skeleton w40"></div></div>
-      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton w80"></div><div class="skeleton w55"></div><div class="skeleton w40"></div></div>
-      <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton w80"></div><div class="skeleton w55"></div><div class="skeleton w40"></div></div>
+    <div class="events-scroll-wrap">
+      <div class="events-scroll" id="popular-track">
+        <!-- skeleton cards while loading -->
+        <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+        <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+        <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+        <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+        <div class="skel-card event-card"><div class="event-img"></div><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1140,6 +1170,16 @@ footer.site {
   })();
 
   loadPopularEvents();
+</script>
+<script>
+  (function() {
+    const btn = document.getElementById("userMenuBtn");
+    const dd  = document.getElementById("userDropdown");
+    if (!btn || !dd) return;
+    btn.addEventListener("click", (e) => { e.stopPropagation(); const o = dd.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });
+    document.addEventListener("click", () => { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); } });
+  })();
 </script>
 </body>
 </html>
