@@ -776,7 +776,7 @@ footer.site {
     <nav class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
       <a href="index.html">Lumaya</a>
       <span class="sep">›</span>
-      <a href="berlin.html" id="bc-region">Region</a>
+      <a href="events-hub.html" id="bc-region">Region</a>
       <span class="sep">›</span>
       <span class="current" id="bc-current">Event</span>
     </nav>
@@ -877,7 +877,7 @@ footer.site {
         </section>
 
         <!-- Host -->
-        <section>
+        <section id="host-section">
           <h2 class="section-title">Hosted by</h2>
           <a class="host-card" id="ev-host" href="#" target="_blank" rel="noopener noreferrer">
             <div class="host-avatar skel"></div>
@@ -979,7 +979,7 @@ footer.site {
     <div class="footer-link-col">
       <h4 class="footer-col-heading">Explore</h4>
       <ul>
-        <li><a href="index.html">Events</a></li>
+        <li><a href="events.html">Events</a></li>
         <li><a href="index.html">Retreats</a></li>
         <li><a href="index.html">Trainings</a></li>
       </ul>
@@ -987,7 +987,7 @@ footer.site {
     <div class="footer-link-col">
       <h4 class="footer-col-heading">Cities</h4>
       <ul>
-        <li><a href="berlin.html">Berlin</a></li>
+        <li><a href="events-hub.html">Berlin</a></li>
       </ul>
     </div>
     <div class="footer-link-col">
@@ -1361,7 +1361,7 @@ footer.site {
         <span class="host-cta">View profile <span class="material-symbols-outlined">arrow_forward</span></span>
       `;
     } else {
-      hostEl.innerHTML = `<div style="font-size:14px;color:var(--text-muted)">Host details unavailable.</div>`;
+      document.getElementById('host-section').style.display = 'none';
     }
 
     /* Booking sidebar */

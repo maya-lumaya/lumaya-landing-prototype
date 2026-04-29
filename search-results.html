@@ -1,0 +1,1881 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events — Lumaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+:root {
+  --bg: #FCF9F4;
+  --bg-2: #F6F3EE;
+  --bg-3: #EBE8E3;
+  --surface: #FFFFFF;
+  --text: #1C1C19;
+  --text-muted: #5C5C5C;
+  --text-subtle: #8A8A8A;
+  --border: #C2C8C3;
+  --primary: #182c24;
+  --surface-low: #F6F3EE;
+  --surface-container: #F0EDE8;
+  --outline-variant: rgba(194, 200, 195, 0.35);
+  --olive-100: #E4E6DB;
+  --olive-500: #41452F;
+  --olive-900: #1C1D13;
+  --orange-300: #E4BB86;
+  --orange-500: #D69543;
+  --orange-600: #C4812B;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(29,29,33,0.04), 0 2px 6px rgba(29,29,33,0.04);
+  --shadow-md: 0 4px 14px rgba(29,29,33,0.06), 0 10px 30px rgba(29,29,33,0.05);
+  --shadow-lg: 0 20px 60px rgba(29,29,33,0.10);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; line-height: 1.55;
+}
+h1, h2, h3, h4 {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 500; letter-spacing: -0.012em; margin: 0;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+img { display: block; }
+
+.container { width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 28px; }
+@media (max-width: 640px) { .container { padding: 0 16px; } }
+
+/* ── Header (reused) ───────────────────────────── */
+header.site {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(252, 249, 244, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(194, 200, 195, 0.18);
+}
+.nav {
+  display: flex; align-items: center; gap: 16px;
+  height: 72px;
+}
+.logo {
+  font-family: 'Noto Serif', serif;
+  font-style: italic; font-weight: 400;
+  font-size: 24px; letter-spacing: -0.025em;
+  color: #182c24; flex-shrink: 0;
+}
+.header-search {
+  flex: 1; max-width: 460px; margin: 0 auto;
+  display: flex; align-items: center; gap: 0;
+  background: var(--surface);
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  height: 44px; padding: 0 6px 0 0;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+.header-search:hover {
+  box-shadow: 0 4px 16px rgba(28,28,25,0.08);
+  border-color: rgba(194,200,195,0.65);
+}
+.header-search .hs-segment {
+  padding: 0 16px; font-size: 13px; font-weight: 500;
+  color: var(--text); white-space: nowrap;
+}
+.header-search .hs-segment + .hs-segment {
+  border-left: 1px solid rgba(194,200,195,0.35);
+}
+.header-search .hs-segment.muted { color: var(--text-muted); font-weight: 400; }
+.header-search .hs-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--orange-500); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  margin-left: auto; flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.header-search .hs-btn:hover { opacity: 0.88; }
+.header-search .hs-btn .material-symbols-outlined { font-size: 16px; }
+
+.nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); transition: background 0.15s, color 0.15s;
+}
+.icon-btn:hover { background: var(--bg-3); color: var(--orange-600); }
+.icon-btn .material-symbols-outlined { font-size: 18px; }
+
+@media (max-width: 760px) {
+  .header-search .hs-segment:nth-child(2),
+  .header-search .hs-segment:nth-child(3) { display: none; }
+  .header-search { max-width: none; }
+}
+@media (max-width: 480px) {
+  .nav-actions .icon-btn:first-child { display: none; }
+}
+
+/* ── Page wrap ─────────────────────────────────── */
+.page { padding: 28px 0 0; }
+
+/* ── Title row ─────────────────────────────────── */
+.title-row { margin-bottom: 22px; }
+.eyebrow {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--orange-600); margin-bottom: 12px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.eyebrow::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--orange-300);
+}
+h1.page-title {
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.08; font-weight: 500;
+  color: var(--text); margin-bottom: 8px;
+}
+.title-sub {
+  font-size: 14px; color: var(--text-muted);
+}
+
+/* ── Filter bar ────────────────────────────────── */
+.filterbar {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 10px; padding: 14px 0 18px;
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: 18px;
+}
+.filterbar-search {
+  flex: 1 1 280px; min-width: 220px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  height: 40px; padding: 0 14px 0 16px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.filterbar-search:focus-within {
+  border-color: var(--orange-300);
+  box-shadow: 0 0 0 3px rgba(228, 187, 134, 0.18);
+}
+.filterbar-search .material-symbols-outlined { font-size: 17px; color: var(--text-muted); }
+.filterbar-search input {
+  flex: 1; border: 0; background: transparent;
+  outline: 0; font: 500 14px/1 'Inter', sans-serif;
+  color: var(--text); min-width: 0;
+}
+.filterbar-search input::placeholder { color: var(--text-subtle); font-weight: 400; }
+.filterbar-search .clear-btn {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg-3); color: var(--text-muted);
+  display: none; align-items: center; justify-content: center;
+}
+.filterbar-search .clear-btn .material-symbols-outlined { font-size: 14px; }
+.filterbar-search.has-text .clear-btn { display: flex; }
+
+.fb-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 16px;
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  font: 500 13px/1 'Inter', sans-serif;
+  color: var(--text); background: var(--surface);
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.fb-pill:hover { background: var(--bg-2); border-color: rgba(194,200,195,0.7); }
+.fb-pill .material-symbols-outlined { font-size: 16px; color: var(--text-muted); }
+.fb-pill .pill-clear {
+  margin-left: 4px; color: var(--text-subtle);
+  font-size: 16px; line-height: 1;
+}
+.fb-pill .pill-clear:hover { color: var(--text); }
+.fb-pill.is-active {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary);
+}
+.fb-pill.is-active .material-symbols-outlined,
+.fb-pill.is-active .pill-clear { color: rgba(255,255,255,0.75); }
+
+.fb-spacer { flex: 1; }
+
+.fb-toggle {
+  display: inline-flex; align-items: center;
+  background: var(--bg-2);
+  border: 1px solid rgba(194, 200, 195, 0.32);
+  border-radius: var(--radius-pill);
+  padding: 3px; height: 40px;
+}
+.fb-toggle button {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
+  border-radius: var(--radius-pill);
+  font: 500 13px/1 'Inter', sans-serif;
+  color: var(--text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+.fb-toggle button.is-active {
+  background: var(--surface); color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.fb-toggle .material-symbols-outlined { font-size: 16px; }
+
+/* ── Category chip row ─────────────────────────── */
+.chip-row {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 14px; margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.chip-row::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-muted); background: var(--surface);
+  transition: all 0.15s;
+  text-transform: capitalize;
+}
+.chip:hover { background: var(--bg-2); color: var(--text); }
+.chip.is-active {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary);
+}
+
+/* ── Result meta ───────────────────────────────── */
+.result-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.result-meta .count {
+  font: 600 14px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.result-meta .count .muted { color: var(--text-muted); font-weight: 400; }
+.sort-select {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 500 13px/1 'Inter', sans-serif; color: var(--text-muted);
+  cursor: pointer;
+}
+.sort-select select {
+  border: 0; background: transparent;
+  font: 500 13px/1 'Inter', sans-serif; color: var(--text);
+  cursor: pointer; outline: 0;
+}
+
+/* ── Split layout ──────────────────────────────── */
+.split {
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 28px;
+  padding-bottom: 80px;
+}
+.results-pane { min-width: 0; }
+.detail-pane {
+  position: sticky; top: 72px;
+  align-self: start;
+  height: calc(100vh - 72px);
+  min-height: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  box-shadow: var(--shadow-md);
+}
+.map-host {
+  position: absolute; inset: 0;
+  background: var(--bg-3);
+}
+.map-host.is-empty::before {
+  content: 'No locations to show on the map yet';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font: 500 13px/1.4 'Inter', sans-serif;
+  color: var(--text-subtle);
+  background: var(--bg-2);
+  text-align: center; padding: 24px;
+}
+.map-loader {
+  position: absolute; top: 14px; left: 14px;
+  display: none; align-items: center; gap: 8px;
+  height: 30px; padding: 0 12px;
+  background: rgba(252,249,244,0.95);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-pill);
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+  z-index: 4;
+}
+.map-loader.is-visible { display: inline-flex; }
+.map-loader .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orange-500);
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 0.4 } 50% { opacity: 1 } }
+
+/* GRID mode (no detail pane) */
+.split.is-grid { grid-template-columns: 1fr; }
+.split.is-grid .detail-pane { display: none; }
+
+/* ── Result list ───────────────────────────────── */
+.results-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.split.is-grid .results-list {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px 14px;
+}
+
+/* ── Vertical event card ────────────────────────── */
+.row-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s, border-color 0.15s;
+  display: flex; flex-direction: column;
+}
+.row-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(194,200,195,0.7);
+}
+.row-card.is-selected {
+  border-color: var(--orange-300);
+  box-shadow: 0 0 0 2px rgba(228,187,134,0.35), var(--shadow-md);
+}
+.row-card .rc-img {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--bg-3);
+  flex-shrink: 0;
+}
+.row-card .rc-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.row-card:hover .rc-img img { transform: scale(1.04); }
+.row-card .rc-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(252,249,244,0.92);
+  backdrop-filter: blur(6px);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font: 600 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.05em; color: var(--primary);
+  text-transform: capitalize; white-space: nowrap;
+}
+.row-card .rc-content {
+  padding: 10px 12px 14px;
+  display: flex; flex-direction: column;
+  flex: 1;
+}
+.row-card .rc-title {
+  font: 500 14px/1.3 'Inter', sans-serif;
+  color: var(--text); margin-bottom: 4px;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.row-card .rc-address {
+  font-size: 12px; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: auto; padding-bottom: 8px;
+}
+.row-card .rc-price {
+  font: 700 14px/1 'Inter', sans-serif; color: var(--text);
+  padding-top: 8px;
+}
+.row-card .rc-price.free { color: var(--orange-600); }
+
+/* ── Event detail card (overlay above the map) ── */
+.event-detail-card {
+  position: absolute; inset: 12px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 24px rgba(28,28,25,0.14);
+  transform: translateY(102%);
+  transition: transform 0.35s var(--ease);
+  display: flex; flex-direction: column;
+  z-index: 5;
+  overflow: hidden;
+}
+.event-detail-card.is-open { transform: translateY(0); }
+.event-detail-card .grabber {
+  width: 36px; height: 4px;
+  background: var(--bg-3);
+  border-radius: 999px;
+  margin: 9px auto 0;
+  flex-shrink: 0;
+  display: none;
+}
+.event-detail-card .dp-loading {
+  flex: 1; display: flex; flex-direction: column;
+  gap: 12px; padding: 22px 22px 0;
+}
+.event-detail-card .dp-loading .skeleton { height: 14px; border-radius: 4px; }
+.event-detail-card .dp-loading .skel-img-block {
+  height: 130px; border-radius: var(--radius-md);
+  margin-bottom: 4px;
+}
+.dp {
+  display: flex; flex-direction: column; height: 100%;
+  overflow: hidden;
+}
+.dp-img {
+  position: relative; flex-shrink: 0;
+  height: 200px;
+  background: var(--bg-3);
+}
+.dp-img img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.dp-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(28,28,25,0.55) 0%, rgba(28,28,25,0) 50%);
+}
+.dp-img-badge {
+  position: absolute; top: 14px; left: 14px;
+  background: rgba(252,249,244,0.95);
+  backdrop-filter: blur(8px);
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  font: 600 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.05em; color: var(--primary);
+  text-transform: capitalize;
+}
+.dp-img-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(252,249,244,0.95);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s;
+  z-index: 2;
+}
+.dp-img-close:hover { background: #fff; }
+.dp-img-close .material-symbols-outlined { font-size: 18px; }
+.dp-description {
+  font-size: 14px; line-height: 1.65;
+  color: var(--text); margin: 0;
+  white-space: pre-wrap;
+}
+.dp-description .mock-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font: 600 9px/1 'Inter', sans-serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--orange-600);
+  background: rgba(228,187,134,0.18);
+  padding: 4px 8px; border-radius: var(--radius-pill);
+  margin-bottom: 10px;
+}
+.dp-body {
+  flex: 1; overflow-y: auto;
+  padding: 24px 24px 0;
+}
+.dp-title {
+  font: 500 22px/1.2 'Lora', Georgia, serif;
+  color: var(--text); margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.dp-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  font-size: 13px; color: var(--text-muted); margin-bottom: 18px;
+}
+.dp-meta .meta-item {
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.dp-meta .material-symbols-outlined { font-size: 15px; color: var(--text-subtle); }
+.dp-section {
+  padding: 16px 0; border-top: 1px solid var(--outline-variant);
+}
+.dp-section:first-of-type { border-top: 0; padding-top: 0; }
+.dp-section-label {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-subtle); margin-bottom: 10px;
+}
+.dp-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+.dp-stat .label {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.04em; color: var(--text-subtle);
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.dp-stat .value { font-size: 14px; color: var(--text); font-weight: 500; }
+.dp-host {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px; background: var(--bg-2);
+  border-radius: var(--radius-md);
+}
+.dp-host .host-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-3); flex-shrink: 0; overflow: hidden;
+}
+.dp-host .host-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dp-host .host-info { flex: 1; min-width: 0; }
+.dp-host .host-eyebrow {
+  font: 600 9px/1 'Inter', sans-serif;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-subtle); margin-bottom: 4px;
+}
+.dp-host .host-name {
+  font: 500 14px/1.3 'Lora', Georgia, serif;
+  color: var(--text);
+}
+.dp-foot {
+  flex-shrink: 0;
+  border-top: 1px solid var(--outline-variant);
+  padding: 16px 24px;
+  background: var(--surface);
+  display: flex; align-items: center; gap: 12px;
+}
+.dp-foot .price {
+  flex: 1;
+  font: 700 18px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.dp-foot .price .per {
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-muted); margin-left: 4px;
+}
+.dp-foot .view-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 22px;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-pill);
+  font: 600 13px/1 'Inter', sans-serif;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.dp-foot .view-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+.dp-foot .view-btn .material-symbols-outlined { font-size: 17px; }
+
+/* ── Skeleton ──────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #EBE8E3 25%, #F0EDE8 50%, #EBE8E3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skel-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.skel-card .skel-img { aspect-ratio: 3/4; border-radius: 0; }
+.skel-card .skel-body { padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.skel-card .skel-line { height: 13px; border-radius: 4px; }
+.skel-card .skel-line.w80 { width: 80%; }
+.skel-card .skel-line.w55 { width: 55%; }
+.skel-card .skel-line.w40 { width: 40%; }
+
+/* ── Empty / error ─────────────────────────────── */
+.state-block {
+  text-align: center; padding: 64px 24px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  grid-column: 1 / -1;
+}
+.state-block .material-symbols-outlined {
+  font-size: 42px; color: var(--text-subtle); margin-bottom: 14px;
+}
+.state-block h3 {
+  font-size: 22px; color: var(--text); margin-bottom: 8px;
+}
+.state-block p { font-size: 14px; max-width: 360px; margin: 0 auto; }
+.state-block .reset-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 18px; padding: 10px 18px;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-pill);
+  font: 600 13px/1 'Inter', sans-serif;
+}
+
+/* ── Sheet backdrop ────────────────────────────── */
+.sheet-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(28,28,25,0.45);
+  z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s var(--ease);
+}
+.sheet-backdrop.is-open {
+  opacity: 1; pointer-events: auto;
+}
+
+/* ── Mobile map FAB ────────────────────────────── */
+.mobile-map-fab {
+  display: none;
+  position: fixed;
+  bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 95;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-pill);
+  padding: 12px 22px;
+  font: 600 14px/1 'Inter', sans-serif;
+  align-items: center; gap: 8px;
+  box-shadow: 0 8px 28px rgba(24,44,36,0.3);
+  white-space: nowrap;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+.mobile-map-fab:hover { opacity: 0.92; }
+.mobile-map-fab .material-symbols-outlined { font-size: 18px; }
+
+/* ── Footer (reused) ───────────────────────────── */
+footer.site {
+  width: 100%; padding: 64px 32px;
+  background: #f0ede8;
+  border-top: 1px solid rgba(194, 200, 195, 0.15);
+}
+.footer-inner {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 48px; max-width: 1240px; margin: 0 auto;
+}
+.footer-brand-col { display: flex; flex-direction: column; gap: 20px; }
+.footer-brand-name {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px; font-weight: 400; color: #182c24; margin: 0;
+}
+.footer-brand-tagline {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.7); line-height: 1.65; margin: 0;
+}
+.footer-link-col { display: flex; flex-direction: column; gap: 16px; }
+.footer-col-heading {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(24,44,36,0.4); margin: 0;
+}
+.footer-link-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.footer-link-col a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.7); transition: color 0.2s;
+}
+.footer-link-col a:hover { color: #182c24; }
+.footer-bottom {
+  max-width: 1240px; margin: 56px auto 0;
+  padding-top: 28px; border-top: 1px solid rgba(194,200,195,0.2);
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.footer-copyright {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.5); margin: 0;
+}
+.footer-legal-links { display: flex; gap: 28px; }
+.footer-legal-links a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px; letter-spacing: 0.025em;
+  color: rgba(24,44,36,0.5); transition: color 0.2s;
+}
+.footer-legal-links a:hover { color: #182c24; }
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 1080px) {
+  .split { grid-template-columns: 1fr; }
+
+  /* detail-pane becomes a bottom sheet on mobile */
+  .detail-pane {
+    position: fixed;
+    inset: auto 0 0 0; top: auto;
+    height: 88vh;
+    min-height: 0;
+    z-index: 101;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border: 0;
+    box-shadow: 0 -8px 40px rgba(28,28,25,0.18);
+    transform: translateY(100%);
+    transition: transform 0.32s var(--ease);
+  }
+
+  .event-detail-card .grabber {
+    display: block;
+    /* float over the top of the image so no white gap shows at rounded corners */
+    position: absolute;
+    top: 9px; left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 10;
+  }
+
+  /* sheet-open: slide up for event detail */
+  .detail-pane.sheet-open {
+    transform: translateY(0);
+  }
+  /* hide map when in sheet mode — show only event detail */
+  .detail-pane.sheet-open .map-host { visibility: hidden; }
+  /* event detail card fills the entire pane */
+  .detail-pane.sheet-open .event-detail-card {
+    inset: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: translateY(0) !important;
+  }
+
+  /* map-mode: full-screen map below header */
+  .detail-pane.map-mode {
+    position: fixed;
+    inset: 72px 0 0 0 !important;
+    top: 72px !important;
+    height: auto !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    z-index: 40 !important;
+    box-shadow: none !important;
+  }
+  .detail-pane.map-mode .map-host { visibility: visible; }
+  /* event detail card retains its own slide-up animation in map mode */
+  .detail-pane.map-mode .event-detail-card {
+    inset: auto 0 0 0 !important;
+    height: 72% !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    box-shadow: 0 -10px 30px rgba(28,28,25,0.10) !important;
+    transform: translateY(102%);
+  }
+  .detail-pane.map-mode .event-detail-card.is-open {
+    transform: translateY(0) !important;
+  }
+
+  .fb-toggle { display: none; }
+  .mobile-map-fab { display: inline-flex; }
+}
+
+@media (max-width: 720px) {
+  .results-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  h1.page-title { font-size: 26px; }
+  .filterbar-search { flex-basis: 100%; order: -1; }
+  footer.site { padding: 48px 18px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+@media (max-width: 420px) {
+  .results-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="site">
+  <div class="container nav">
+    <a href="index.html" class="logo" aria-label="Viluma home">Viluma</a>
+    <a class="header-search" id="headerSearch" href="index.html" aria-label="Open search">
+      <span class="hs-segment">Anywhere</span>
+      <span class="hs-segment muted">Any time</span>
+      <span class="hs-segment muted">Any practice</span>
+      <span class="hs-btn"><span class="material-symbols-outlined">search</span></span>
+    </a>
+    <div class="nav-actions">
+      <button class="icon-btn" aria-label="Saved">
+        <span class="material-symbols-outlined">bookmark</span>
+      </button>
+      <button class="icon-btn" aria-label="Account">
+        <span class="material-symbols-outlined">account_circle</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Page ── -->
+<div class="page">
+  <div class="container">
+
+    <!-- Title row -->
+    <div class="title-row">
+      <p class="eyebrow" id="ev-eyebrow">Browse</p>
+      <h1 class="page-title" id="ev-page-title">Events</h1>
+      <p class="title-sub" id="ev-page-sub">Loading conscious events…</p>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filterbar" id="filterbar">
+      <label class="filterbar-search" id="searchWrap">
+        <span class="material-symbols-outlined">search</span>
+        <input id="searchInput" type="search" placeholder="Search by title, host, or practice…" autocomplete="off">
+        <button class="clear-btn" id="searchClear" type="button" aria-label="Clear search">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </label>
+
+      <button class="fb-pill" id="areaPill" type="button" data-empty>
+        <span class="material-symbols-outlined">place</span>
+        <span class="label">Anywhere</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="area" hidden>close</span>
+      </button>
+
+      <button class="fb-pill" id="datePill" type="button">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="label">Any time</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="date" hidden>close</span>
+      </button>
+
+      <span class="fb-spacer"></span>
+
+      <div class="fb-toggle" role="tablist" aria-label="View mode">
+        <button id="viewSplitBtn" class="is-active" type="button" aria-pressed="true">
+          <span class="material-symbols-outlined">vertical_split</span> Split
+        </button>
+        <button id="viewGridBtn" type="button" aria-pressed="false">
+          <span class="material-symbols-outlined">grid_view</span> Grid
+        </button>
+      </div>
+    </div>
+
+    <!-- Category chips -->
+    <div class="chip-row" id="chipRow">
+      <!-- populated via JS -->
+    </div>
+
+    <!-- Result meta -->
+    <div class="result-meta">
+      <div class="count" id="resultCount"><span class="muted">Searching…</span></div>
+      <label class="sort-select">
+        <span>Sort:</span>
+        <select id="sortSelect">
+          <option value="DATE_ASC">Soonest first</option>
+          <option value="DATE_DESC">Latest first</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Split layout -->
+    <div class="split" id="split">
+      <div class="results-pane">
+        <div class="results-list" id="resultsList">
+          <!-- skeletons -->
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+        </div>
+      </div>
+
+      <aside class="detail-pane" id="detailPane" aria-label="Map of event locations">
+        <div class="map-host" id="mapHost"></div>
+        <div class="map-loader" id="mapLoader">
+          <span class="dot"></span>
+          <span>Loading locations…</span>
+        </div>
+        <div class="event-detail-card" id="eventDetailCard" aria-hidden="true">
+          <div class="grabber"></div>
+        </div>
+      </aside>
+    </div>
+
+  </div>
+</div>
+
+<!-- Mobile map FAB -->
+<button class="mobile-map-fab" id="mobileMapFab" type="button" aria-label="Toggle map view">
+  <span class="material-symbols-outlined">map</span>
+  <span id="mobileMapFabLabel">Map</span>
+</button>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+
+<!-- ── Footer ── -->
+<footer class="site">
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <h2 class="footer-brand-name">Viluma</h2>
+      <p class="footer-brand-tagline">Elevating the human experience through intentional spaces and curated presence.</p>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Explore</h4>
+      <ul>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="index.html">Retreats</a></li>
+        <li><a href="index.html">Trainings</a></li>
+      </ul>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Cities</h4>
+      <ul>
+        <li><a href="events-hub.html">Berlin</a></li>
+      </ul>
+    </div>
+    <div class="footer-link-col">
+      <h4 class="footer-col-heading">Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">For Organisers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copyright">© 2026 Lumaya. All rights reserved.</p>
+    <div class="footer-legal-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Constants ─────────────────────────────────────────── */
+  const API = 'https://api.lumaya.co';
+
+  const AREAS = {
+    rishikesh:   { id: 'rishikesh',   name: 'Rishikesh' },
+    berlin:      { id: 'berlin',      name: 'Berlin' },
+    freiburg:    { id: 'freiburg',    name: 'Freiburg' },
+    munich:      { id: 'munich',      name: 'München' },
+    leipzig:     { id: 'leipzig',     name: 'Leipzig' },
+    stuttgart:   { id: 'stuttgart',   name: 'Stuttgart' },
+    london:      { id: 'london',      name: 'London' },
+    pisac:       { id: 'pisac',       name: 'Písac' },
+    koh_phangan: { id: 'koh_phangan', name: 'Koh Phangan' },
+    ubud:        { id: 'ubud',        name: 'Ubud' },
+    online:      { id: 'online',      name: 'Online (Live)' }
+  };
+
+  const DATE_PRESETS = {
+    any:        { label: 'Any time',        from: null, to: null },
+    this_week:  { label: 'This week',       from: 0,    to: 7 },
+    this_month: { label: 'This month',      from: 0,    to: 30 },
+    next_3m:    { label: 'Next 3 months',   from: 0,    to: 90 },
+    weekend:    { label: 'Coming weekend',  from: 'sat',to: 'sun' }
+  };
+
+  /* ── State ─────────────────────────────────────────────── */
+  const state = {
+    q: '',
+    areaId: '',
+    from: '',
+    to: '',
+    categoryId: '',
+    lat: null, lng: null, radiusMeters: null,
+    label: '',
+    datePreset: 'any',
+    sort: 'DATE_ASC',
+    view: 'split',
+    selectedSlug: null,
+    events: [],
+    loading: true,
+    error: null
+  };
+
+  let mobileMapMode = false;
+
+  /* ── Format helpers ───────────────────────────────────── */
+  function formatPrice(p) {
+    if (!p) return '';
+    if (p.type === 'FREE' || (p.amount === 0 && !p.amountMin)) return 'Free';
+    if (p.type === 'PAID_RANGE') return `€${p.amountMin}–€${p.amountMax}`;
+    if (typeof p.amount === 'number') return `€${p.amount}`;
+    return '';
+  }
+  function formatCategory(cats) {
+    if (!cats || !cats.length) return '';
+    return cats[0].replace(/_/g, ' ');
+  }
+  function formatLocationType(t) {
+    if (!t) return '—';
+    return t === 'IN_PERSON' ? 'In person' : t === 'ONLINE' ? 'Online' : t === 'HYBRID' ? 'Hybrid' : t;
+  }
+  function formatDate(iso, opts) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleString('en-GB', opts || { day: 'numeric', month: 'short' });
+  }
+  function formatDuration(mins) {
+    if (!mins) return '—';
+    if (mins < 60) return `${mins} min`;
+    const h = Math.floor(mins / 60), m = mins % 60;
+    return m ? `${h}h ${m}m` : `${h}h`;
+  }
+  function languageLabel(code) {
+    if (!code) return '—';
+    const map = { en: 'English', de: 'German', fr: 'French', es: 'Spanish', it: 'Italian', pt: 'Portuguese' };
+    return map[code.toLowerCase()] || code.toUpperCase();
+  }
+  function htmlEscape(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function areaName(id) {
+    return (AREAS[id] && AREAS[id].name) || (id ? id.replace(/_/g, ' ') : '');
+  }
+  function categoryLabel(slug) {
+    return (slug || '').replace(/_/g, ' ');
+  }
+
+  /* ── URL <-> state ─────────────────────────────────────── */
+  function readUrl() {
+    const p = new URLSearchParams(location.search);
+    state.q          = p.get('q') || '';
+    state.areaId     = p.get('areaId') || '';
+    state.from       = p.get('from') || '';
+    state.to         = p.get('to') || '';
+    state.categoryId = p.get('categoryId') || '';
+    state.label      = p.get('label') || '';
+    const lat = p.get('lat'), lng = p.get('lng'), r = p.get('radiusMeters');
+    state.lat = lat ? parseFloat(lat) : null;
+    state.lng = lng ? parseFloat(lng) : null;
+    state.radiusMeters = r ? parseFloat(r) : null;
+    state.datePreset = p.get('datePreset') || (state.from ? 'custom' : 'any');
+    state.sort = p.get('sort') || 'DATE_ASC';
+    state.view = p.get('view') === 'grid' ? 'grid' : 'split';
+  }
+  function writeUrl(replace = true) {
+    const p = new URLSearchParams();
+    if (state.q)            p.set('q', state.q);
+    if (state.areaId)       p.set('areaId', state.areaId);
+    if (state.from)         p.set('from', state.from);
+    if (state.to)           p.set('to', state.to);
+    if (state.categoryId)   p.set('categoryId', state.categoryId);
+    if (state.lat != null)  p.set('lat', String(state.lat));
+    if (state.lng != null)  p.set('lng', String(state.lng));
+    if (state.radiusMeters != null) p.set('radiusMeters', String(state.radiusMeters));
+    if (state.label)        p.set('label', state.label);
+    if (state.datePreset && state.datePreset !== 'any') p.set('datePreset', state.datePreset);
+    if (state.sort && state.sort !== 'DATE_ASC') p.set('sort', state.sort);
+    if (state.view && state.view !== 'split') p.set('view', state.view);
+    const url = location.pathname + (p.toString() ? `?${p.toString()}` : '');
+    history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+
+  /* ── Date preset ───────────────────────────────────────── */
+  function applyDatePreset(key) {
+    state.datePreset = key;
+    if (key === 'any') {
+      state.from = ''; state.to = ''; return;
+    }
+    const preset = DATE_PRESETS[key];
+    if (!preset) return;
+    const now = new Date();
+    if (key === 'weekend') {
+      const day = now.getDay();
+      const sat = new Date(now); sat.setDate(now.getDate() + ((6 - day + 7) % 7));
+      sat.setHours(0,0,0,0);
+      const sun = new Date(sat); sun.setDate(sat.getDate() + 1); sun.setHours(23,59,59,0);
+      state.from = sat.toISOString();
+      state.to   = sun.toISOString();
+      return;
+    }
+    const from = new Date(now); from.setHours(0,0,0,0);
+    const to   = new Date(now); to.setDate(now.getDate() + preset.to); to.setHours(23,59,59,0);
+    state.from = from.toISOString();
+    state.to   = to.toISOString();
+  }
+
+  /* ── Title ─────────────────────────────────────────────── */
+  function renderTitle() {
+    const eyebrow = document.getElementById('ev-eyebrow');
+    const title   = document.getElementById('ev-page-title');
+    const sub     = document.getElementById('ev-page-sub');
+
+    let t = 'All events', e = 'Browse', s = '';
+    if (state.q && state.areaId)         { t = `"${state.q}" in ${areaName(state.areaId)}`; e = 'Search results'; }
+    else if (state.q)                    { t = `Search results for "${state.q}"`; e = 'Search results'; }
+    else if (state.areaId)               { t = `Events in ${areaName(state.areaId)}`; e = 'Regional hub'; }
+    else if (state.label)                { t = `Events near ${state.label}`; e = 'Nearby'; }
+
+    if (state.categoryId) {
+      s = `Filtered by ${categoryLabel(state.categoryId)}`;
+    } else if (state.datePreset && state.datePreset !== 'any') {
+      s = DATE_PRESETS[state.datePreset]?.label || '';
+    } else {
+      s = 'Browse upcoming gatherings, ceremonies, and practices.';
+    }
+
+    title.textContent = t;
+    eyebrow.textContent = e;
+    sub.textContent = s;
+    document.title = `${t} — Lumaya`;
+  }
+
+  /* ── Filter bar render ─────────────────────────────────── */
+  function renderFilterBar() {
+    const wrap = document.getElementById('searchWrap');
+    const inp = document.getElementById('searchInput');
+    if (inp.value !== state.q) inp.value = state.q;
+    wrap.classList.toggle('has-text', !!state.q);
+
+    const areaPill = document.getElementById('areaPill');
+    const areaLabel = areaPill.querySelector('.label');
+    const areaClear = areaPill.querySelector('[data-clear="area"]');
+    if (state.areaId) {
+      areaLabel.textContent = areaName(state.areaId);
+      areaPill.classList.add('is-active');
+      areaClear.hidden = false;
+    } else if (state.label) {
+      areaLabel.textContent = state.label;
+      areaPill.classList.add('is-active');
+      areaClear.hidden = false;
+    } else {
+      areaLabel.textContent = 'Anywhere';
+      areaPill.classList.remove('is-active');
+      areaClear.hidden = true;
+    }
+
+    const datePill = document.getElementById('datePill');
+    const dateLabel = datePill.querySelector('.label');
+    const dateClear = datePill.querySelector('[data-clear="date"]');
+    const presetLabel = DATE_PRESETS[state.datePreset]?.label || 'Any time';
+    dateLabel.textContent = presetLabel;
+    if (state.datePreset && state.datePreset !== 'any') {
+      datePill.classList.add('is-active');
+      dateClear.hidden = false;
+    } else {
+      datePill.classList.remove('is-active');
+      dateClear.hidden = true;
+    }
+
+    document.getElementById('sortSelect').value = state.sort;
+    document.getElementById('viewSplitBtn').classList.toggle('is-active', state.view === 'split');
+    document.getElementById('viewGridBtn').classList.toggle('is-active', state.view === 'grid');
+    document.getElementById('split').classList.toggle('is-grid', state.view === 'grid');
+  }
+
+  /* ── Category chips ────────────────────────────────────── */
+  const POPULAR_CATEGORIES = [
+    'meditation', 'yoga', 'breathwork', 'sound_healing', 'cacao_ceremony',
+    'tantra', 'embodiment', 'kirtan', 'temple_night', 'festival'
+  ];
+  function renderChips() {
+    const row = document.getElementById('chipRow');
+    const found = new Set();
+    for (const ev of state.events) {
+      const cats = ev.basicDetails?.categories || [];
+      cats.forEach(c => found.add(c));
+    }
+    const list = Array.from(new Set(['', ...POPULAR_CATEGORIES.filter(c => found.has(c) || !state.events.length), ...Array.from(found)]));
+    row.innerHTML = list.map(slug => {
+      const isAll = slug === '';
+      const label = isAll ? 'All practices' : categoryLabel(slug);
+      const active = (state.categoryId === slug) || (isAll && !state.categoryId);
+      return `<button class="chip${active ? ' is-active' : ''}" type="button" data-cat="${htmlEscape(slug)}">${htmlEscape(label)}</button>`;
+    }).join('');
+  }
+
+  /* ── Sorting ───────────────────────────────────────────── */
+  function sortEvents(events, key) {
+    const copy = events.slice();
+    const dir = key === 'DATE_DESC' ? -1 : 1;
+    copy.sort((a, b) => {
+      const ad = a.nextAppointment ? new Date(a.nextAppointment).getTime() : Number.POSITIVE_INFINITY;
+      const bd = b.nextAppointment ? new Date(b.nextAppointment).getTime() : Number.POSITIVE_INFINITY;
+      return (ad - bd) * dir;
+    });
+    return copy;
+  }
+
+  /* ── Result list ───────────────────────────────────────── */
+  function nextAppointmentLabel(ev) {
+    if (ev.nextAppointment) {
+      const d = new Date(ev.nextAppointment);
+      return d.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+    return 'On request';
+  }
+
+  function rowCard(ev) {
+    const bd = ev.basicDetails || {};
+    const img = ev.media?.imageUrls?.[0] || '';
+    const title = bd.title || 'Untitled event';
+    const cat = formatCategory(bd.categories);
+    const price = formatPrice(bd.price);
+    const isFree = price === 'Free';
+    const cachedFull = fullEventCache.get(ev.slug);
+    const address = cachedFull?.basicDetails?.location?.address
+      || bd.location?.address || '';
+    const locationStr = address || '';
+    const isSelected = state.selectedSlug === ev.slug;
+
+    return `
+      <article class="row-card${isSelected ? ' is-selected' : ''}" data-slug="${htmlEscape(ev.slug)}">
+        <div class="rc-img">
+          ${img ? `<img src="${htmlEscape(img)}" alt="${htmlEscape(title)}" loading="lazy">` : ''}
+          ${cat ? `<span class="rc-badge">${htmlEscape(cat)}</span>` : ''}
+        </div>
+        <div class="rc-content">
+          <div class="rc-title">${htmlEscape(title)}</div>
+          ${locationStr ? `<div class="rc-address">${htmlEscape(locationStr)}</div>` : ''}
+          <div class="rc-price${isFree ? ' free' : ''}">${htmlEscape(price || '—')}</div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderList() {
+    const list = document.getElementById('resultsList');
+    const count = document.getElementById('resultCount');
+    if (state.loading) {
+      list.innerHTML = Array.from({ length: 4 }).map(() =>
+        `<div class="skel-card">
+          <div class="skeleton skel-img"></div>
+          <div class="skel-body">
+            <div class="skeleton skel-line w80"></div>
+            <div class="skeleton skel-line w55"></div>
+            <div class="skeleton skel-line w40"></div>
+          </div>
+        </div>`).join('');
+      count.innerHTML = `<span class="muted">Searching…</span>`;
+      return;
+    }
+    if (state.error) {
+      list.innerHTML = `
+        <div class="state-block">
+          <span class="material-symbols-outlined">error_outline</span>
+          <h3>Something went wrong</h3>
+          <p>We couldn't load events. Check your connection and try again.</p>
+          <button class="reset-btn" type="button" id="retryBtn">
+            <span class="material-symbols-outlined">refresh</span> Retry
+          </button>
+        </div>`;
+      count.innerHTML = `<span class="muted">—</span>`;
+      return;
+    }
+    const filtered = state.events;
+    count.innerHTML = filtered.length
+      ? `<strong>${filtered.length}</strong> ${filtered.length === 1 ? 'event' : 'events'} ${state.areaId ? `in ${areaName(state.areaId)}` : 'found'}`
+      : `<span class="muted">No events match your filters</span>`;
+
+    if (!filtered.length) {
+      list.innerHTML = `
+        <div class="state-block">
+          <span class="material-symbols-outlined">event_busy</span>
+          <h3>No events found</h3>
+          <p>Try a different practice, expand the date range, or remove a filter.</p>
+          <button class="reset-btn" type="button" id="resetBtn">
+            <span class="material-symbols-outlined">restart_alt</span> Reset filters
+          </button>
+        </div>`;
+      return;
+    }
+    list.innerHTML = filtered.map(rowCard).join('');
+  }
+
+  /* ── Mock description ──────────────────────────────────── */
+  const MOCK_PARAGRAPHS = [
+    'Step into a carefully held container where breath, body and stillness become the practice. This gathering invites you to slow down, listen inward, and reconnect with the part of yourself that already knows how to be at peace.',
+    'Whether you arrive curious or seasoned, you are welcome exactly as you are. The space is shaped to meet beginners and long-time practitioners alike, with gentle guidance, small group attention, and time to integrate what arises.',
+    'Expect a thoughtful blend of grounding practice, embodied movement, and reflective silence. You\'ll leave with something concrete: a felt sense, a small ritual, or simply a clearer breath you can carry into the rest of your week.'
+  ];
+  function generateMockDescription(ev) {
+    const bd = ev.basicDetails || {};
+    const cats = (bd.categories || []).map(c => c.replace(/_/g, ' '));
+    const opener = cats.length
+      ? `A ${cats.slice(0, 2).join(' and ')} gathering held with care${bd.location?.areaId ? ` in ${areaName(bd.location.areaId)}` : ''}.`
+      : `A practice gathering held with care${bd.location?.areaId ? ` in ${areaName(bd.location.areaId)}` : ''}.`;
+    return `${opener}\n\n${MOCK_PARAGRAPHS.join('\n\n')}`;
+  }
+
+  /* ── Single-event fetch with cache ─────────────────────── */
+  const fullEventCache = new Map();
+  const fullEventInflight = new Map();
+  async function fetchFullEvent(slug) {
+    if (fullEventCache.has(slug)) return fullEventCache.get(slug);
+    if (fullEventInflight.has(slug)) return fullEventInflight.get(slug);
+    const p = (async () => {
+      const r = await fetch(`${API}/api/v3/events/${encodeURIComponent(slug)}`, { headers: { 'Accept': 'application/json' } });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      fullEventCache.set(slug, data);
+      return data;
+    })();
+    fullEventInflight.set(slug, p);
+    p.finally(() => fullEventInflight.delete(slug));
+    return p;
+  }
+
+  /* ── Concurrency-limited parallel runner ────────────────── */
+  async function runWithLimit(items, limit, worker) {
+    const queue = items.slice();
+    const runners = Array.from({ length: Math.min(limit, queue.length) }, async () => {
+      while (queue.length) {
+        const next = queue.shift();
+        try { await worker(next); } catch (e) { /* swallow per-item */ }
+      }
+    });
+    await Promise.all(runners);
+  }
+
+  /* ── Map ────────────────────────────────────────────────── */
+  const mapState = {
+    map: null,
+    apiReady: false,
+    markers: new Map(),
+    bounds: null,
+    pendingPlot: null,
+    infoWindow: null
+  };
+
+  function onMapsReady() {
+    mapState.apiReady = true;
+    initMap();
+    if (mapState.pendingPlot) {
+      const events = mapState.pendingPlot;
+      mapState.pendingPlot = null;
+      plotEventsOnMap(events);
+    }
+  }
+  window.onMapsReady = onMapsReady;
+
+  function initMap() {
+    if (!mapState.apiReady || mapState.map) return;
+    const host = document.getElementById('mapHost');
+    if (!host) return;
+    mapState.map = new google.maps.Map(host, {
+      center: { lat: 52.520008, lng: 13.404954 },
+      zoom: 11,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      clickableIcons: false,
+      gestureHandling: 'greedy',
+      minZoom: 2,
+      restriction: {
+        latLngBounds: { north: 85, south: -85, east: 180, west: -180 },
+        strictBounds: false
+      },
+      styles: [
+        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit.station', stylers: [{ visibility: 'off' }] }
+      ]
+    });
+    mapState.infoWindow = new google.maps.InfoWindow({ pixelOffset: new google.maps.Size(0, -8) });
+  }
+
+  function clearMarkers() {
+    for (const m of mapState.markers.values()) m.setMap(null);
+    mapState.markers.clear();
+    if (mapState.infoWindow) mapState.infoWindow.close();
+  }
+
+  function setMapEmpty(isEmpty) {
+    document.getElementById('mapHost').classList.toggle('is-empty', isEmpty);
+  }
+
+  function setMapLoader(isLoading) {
+    document.getElementById('mapLoader').classList.toggle('is-visible', isLoading);
+  }
+
+  function makeMarkerIcon(isSelected) {
+    const fill = isSelected ? '#C4812B' : '#182c24';
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="34" height="42" viewBox="0 0 34 42">
+        <path d="M17 1.5c-8.56 0-15.5 6.94-15.5 15.5 0 11.6 13.7 22.6 14.3 23.1.7.55 1.7.55 2.4 0 .6-.5 14.3-11.5 14.3-23.1C32.5 8.44 25.56 1.5 17 1.5z"
+          fill="${fill}" stroke="#FCF9F4" stroke-width="2.2"/>
+        <circle cx="17" cy="17" r="5.2" fill="#FCF9F4"/>
+      </svg>`;
+    return {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+      scaledSize: new google.maps.Size(34, 42),
+      anchor: new google.maps.Point(17, 41)
+    };
+  }
+
+  function fitBoundsIfReady() {
+    if (!mapState.map || mapState.markers.size === 0) return;
+    if (mapState.markers.size === 1) {
+      const m = mapState.markers.values().next().value;
+      mapState.map.setCenter(m.getPosition());
+      mapState.map.setZoom(13);
+      return;
+    }
+    const bounds = new google.maps.LatLngBounds();
+    for (const m of mapState.markers.values()) bounds.extend(m.getPosition());
+    mapState.map.fitBounds(bounds, 64);
+  }
+
+  function addMarkerForEvent(ev) {
+    const loc = ev.basicDetails?.location;
+    if (!loc || typeof loc.latitude !== 'number' || typeof loc.longitude !== 'number') return;
+    if (mapState.markers.has(ev.slug)) return;
+    const marker = new google.maps.Marker({
+      position: { lat: loc.latitude, lng: loc.longitude },
+      map: mapState.map,
+      title: ev.basicDetails?.title || '',
+      icon: makeMarkerIcon(state.selectedSlug === ev.slug),
+      optimized: false
+    });
+    marker.addListener('click', () => {
+      state.selectedSlug = ev.slug;
+      refreshSelectionState();
+      openEventDetail(ev.slug);
+      // On mobile in map mode, open the event detail card directly (no sheet toggle)
+    });
+    mapState.markers.set(ev.slug, marker);
+  }
+
+  function updateCardAddress(slug, full) {
+    const card = document.querySelector(`.row-card[data-slug="${CSS.escape(slug)}"]`);
+    if (!card) return;
+    const addr = full.basicDetails?.location?.address;
+    if (!addr) return;
+    let el = card.querySelector('.rc-address');
+    if (el) {
+      el.textContent = addr;
+    } else {
+      el = document.createElement('div');
+      el.className = 'rc-address';
+      el.textContent = addr;
+      card.querySelector('.rc-title')?.insertAdjacentElement('afterend', el);
+    }
+  }
+
+  function plotEventsOnMap(events) {
+    if (!mapState.apiReady) {
+      mapState.pendingPlot = events;
+      return;
+    }
+    initMap();
+    clearMarkers();
+    const slugsToFetch = events.filter(e => !fullEventCache.has(e.slug)).map(e => e.slug);
+    for (const ev of events) {
+      const cached = fullEventCache.get(ev.slug);
+      if (cached) addMarkerForEvent(cached);
+    }
+    fitBoundsIfReady();
+    if (slugsToFetch.length === 0) {
+      setMapEmpty(mapState.markers.size === 0);
+      return;
+    }
+    setMapLoader(true);
+    setMapEmpty(false);
+    let pending = slugsToFetch.length;
+    runWithLimit(slugsToFetch, 6, async (slug) => {
+      try {
+        const full = await fetchFullEvent(slug);
+        addMarkerForEvent(full);
+        updateCardAddress(slug, full);
+        fitBoundsIfReady();
+      } finally {
+        pending -= 1;
+        if (pending === 0) {
+          setMapLoader(false);
+          setMapEmpty(mapState.markers.size === 0);
+        }
+      }
+    });
+  }
+
+  function refreshSelectionState() {
+    for (const [slug, marker] of mapState.markers.entries()) {
+      marker.setIcon(makeMarkerIcon(slug === state.selectedSlug));
+      marker.setZIndex(slug === state.selectedSlug ? 999 : undefined);
+    }
+    document.querySelectorAll('.row-card').forEach(c => {
+      c.classList.toggle('is-selected', c.dataset.slug === state.selectedSlug);
+    });
+  }
+
+  /* ── Event detail card ──────────────────────────────────── */
+  function openEventDetail(slug) {
+    const card = document.getElementById('eventDetailCard');
+    card.classList.add('is-open');
+    card.setAttribute('aria-hidden', 'false');
+    renderEventDetailCardLoading();
+    fetchFullEvent(slug).then(full => {
+      if (state.selectedSlug !== slug) return;
+      addMarkerForEvent(full);
+      const marker = mapState.markers.get(slug);
+      if (marker && mapState.map) {
+        mapState.map.panTo(marker.getPosition());
+      }
+      renderEventDetailCard(full);
+    }).catch(err => {
+      console.error('Failed to load event:', err);
+      renderEventDetailCardError();
+    });
+  }
+
+  function closeEventDetail() {
+    const card = document.getElementById('eventDetailCard');
+    card.classList.remove('is-open');
+    card.setAttribute('aria-hidden', 'true');
+    state.selectedSlug = null;
+    refreshSelectionState();
+    if (mapState.infoWindow) mapState.infoWindow.close();
+    writeUrl();
+  }
+
+  function renderEventDetailCardLoading() {
+    const card = document.getElementById('eventDetailCard');
+    card.innerHTML = `
+      <div class="grabber"></div>
+      <div class="dp-loading">
+        <div class="skeleton skel-img-block"></div>
+        <div class="skeleton" style="width:70%"></div>
+        <div class="skeleton" style="width:40%"></div>
+        <div class="skeleton" style="width:90%"></div>
+        <div class="skeleton" style="width:85%"></div>
+      </div>
+    `;
+  }
+
+  function renderEventDetailCardError() {
+    const card = document.getElementById('eventDetailCard');
+    card.innerHTML = `
+      <div class="grabber"></div>
+      <div class="state-block" style="margin:24px;border-radius:var(--radius-md);grid-column:auto">
+        <span class="material-symbols-outlined">error_outline</span>
+        <h3>Couldn't load event</h3>
+        <p>Please try selecting another event or refresh the page.</p>
+        <button class="reset-btn" type="button" id="dpClose"><span class="material-symbols-outlined">close</span> Close</button>
+      </div>
+    `;
+  }
+
+  function renderEventDetailCard(ev) {
+    const card = document.getElementById('eventDetailCard');
+    const bd = ev.basicDetails || {};
+    const img = ev.media?.imageUrls?.[0] || '';
+    const title = bd.title || 'Untitled event';
+    const cat = formatCategory(bd.categories);
+    const next = ev.nextAppointment;
+    const dur = ev.appointmentConfigurations?.[0]?.durationInMinutes || 0;
+    const profile = ev.profile;
+    const cats = bd.categories || [];
+    const eventUrl = `event.html?slug=${encodeURIComponent(ev.slug)}`;
+    const realDesc = (bd.description || '').trim();
+    const isMock = !realDesc;
+    const description = realDesc || generateMockDescription(ev);
+    const address = bd.location?.address || '';
+
+    card.innerHTML = `
+      <div class="grabber"></div>
+      <div class="dp">
+        <div class="dp-img">
+          ${img ? `<img src="${htmlEscape(img)}" alt="${htmlEscape(title)}">` : ''}
+          <div class="dp-img-overlay"></div>
+          ${cat ? `<span class="dp-img-badge">${htmlEscape(cat)}</span>` : ''}
+          <button class="dp-img-close" id="dpClose" aria-label="Close preview">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="dp-body">
+          <div class="dp-title">${htmlEscape(title)}</div>
+          <div class="dp-meta">
+            <span class="meta-item"><span class="material-symbols-outlined">${bd.location?.locationType === 'ONLINE' ? 'videocam' : 'place'}</span>${htmlEscape(address || formatLocationType(bd.location?.locationType))}</span>
+            ${bd.language ? `<span class="meta-item"><span class="material-symbols-outlined">translate</span>${htmlEscape(languageLabel(bd.language))}</span>` : ''}
+            ${ev.timezone ? `<span class="meta-item"><span class="material-symbols-outlined">schedule</span>${htmlEscape(ev.timezone)}</span>` : ''}
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-stats">
+              <div class="dp-stat"><div class="label">Next</div><div class="value">${next ? htmlEscape(formatDate(next, { weekday: 'short', day: 'numeric', month: 'short' })) : 'On request'}</div></div>
+              <div class="dp-stat"><div class="label">Duration</div><div class="value">${htmlEscape(formatDuration(dur))}</div></div>
+              <div class="dp-stat"><div class="label">Sessions</div><div class="value">${ev.appointmentCount != null ? ev.appointmentCount + ' upcoming' : '—'}</div></div>
+              <div class="dp-stat"><div class="label">Practice</div><div class="value">${cat ? htmlEscape(cat.charAt(0).toUpperCase() + cat.slice(1)) : '—'}</div></div>
+            </div>
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-section-label">About this event</div>
+            ${isMock ? `<span class="mock-pill"><span class="material-symbols-outlined" style="font-size:11px">science</span> Mock copy</span>` : ''}
+            <p class="dp-description">${htmlEscape(description)}</p>
+          </div>
+
+          ${cats.length > 1 ? `
+            <div class="dp-section">
+              <div class="dp-section-label">Practices</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                ${cats.map(c => `<span class="chip" style="text-transform:capitalize;cursor:default">${htmlEscape(c.replace(/_/g,' '))}</span>`).join('')}
+              </div>
+            </div>` : ''}
+
+          ${profile ? `
+            <div class="dp-section">
+              <div class="dp-section-label">Hosted by</div>
+              <a class="dp-host" href="host.html?slug=${htmlEscape(profile.slug || '')}">
+                <div class="host-avatar">${profile.avatarImageUrl ? `<img src="${htmlEscape(profile.avatarImageUrl)}" alt="">` : ''}</div>
+                <div class="host-info">
+                  <div class="host-eyebrow">Lumaya host</div>
+                  <div class="host-name">${htmlEscape(profile.name || '')}</div>
+                </div>
+              </a>
+            </div>` : ''}
+        </div>
+
+        <div class="dp-foot">
+          <div class="price">${htmlEscape(formatPrice(bd.price) || '—')}<span class="per">${bd.price?.type === 'FREE' || formatPrice(bd.price) === 'Free' ? '' : ' / person'}</span></div>
+          <a class="view-btn" href="${eventUrl}">View event <span class="material-symbols-outlined">arrow_forward</span></a>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ── Render ────────────────────────────────────────────── */
+  function render() {
+    renderTitle();
+    renderFilterBar();
+    renderChips();
+    renderList();
+  }
+
+  /* ── Fetch ─────────────────────────────────────────────── */
+  let fetchSeq = 0;
+  async function fetchEvents() {
+    const seq = ++fetchSeq;
+    state.loading = true;
+    state.error = null;
+    renderList();
+
+    const p = new URLSearchParams();
+    if (state.q)             p.set('searchTerm', state.q);
+    if (state.areaId)        p.set('areaId', state.areaId);
+    if (state.from)          p.set('from', state.from);
+    if (state.to)            p.set('to', state.to);
+    if (state.categoryId)    p.set('categories', state.categoryId);
+    if (state.lat != null)   p.set('lat', String(state.lat));
+    if (state.lng != null)   p.set('lng', String(state.lng));
+    if (state.radiusMeters != null) p.set('radiusMeters', String(state.radiusMeters));
+    p.set('extendedDetails', 'true');
+
+    try {
+      const r = await fetch(`${API}/api/v3/events/search?${p.toString()}`, { headers: { 'Accept': 'application/json' } });
+      if (seq !== fetchSeq) return;
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const list = await r.json();
+      if (seq !== fetchSeq) return;
+      state.events = sortEvents(Array.isArray(list) ? list : [], state.sort);
+      state.loading = false;
+
+      if (state.selectedSlug && !state.events.find(e => e.slug === state.selectedSlug)) {
+        state.selectedSlug = null;
+        const card = document.getElementById('eventDetailCard');
+        if (card) { card.classList.remove('is-open'); card.setAttribute('aria-hidden', 'true'); }
+      }
+      render();
+      plotEventsOnMap(state.events);
+    } catch (err) {
+      if (seq !== fetchSeq) return;
+      console.error('Search failed:', err);
+      state.loading = false;
+      state.error = err;
+      render();
+    }
+  }
+
+  /* ── Sheet / mobile map helpers ────────────────────────── */
+  function openSheet() {
+    if (mobileMapMode) return; // In map mode, card opens inline over the map
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('map-mode');
+    pane.classList.add('sheet-open');
+    document.getElementById('sheetBackdrop').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSheet() {
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('sheet-open');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  function enterMapMode() {
+    mobileMapMode = true;
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('sheet-open');
+    pane.classList.add('map-mode');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('mobileMapFabLabel').textContent = 'List';
+    document.querySelector('#mobileMapFab .material-symbols-outlined').textContent = 'list';
+    if (!mapState.map && mapState.apiReady) initMap();
+    if (state.events.length) plotEventsOnMap(state.events);
+    closeEventDetail();
+    // Container size changed (88vh → calc(100vh-72px)) — tell Maps to re-measure
+    requestAnimationFrame(() => {
+      if (mapState.map) {
+        google.maps.event.trigger(mapState.map, 'resize');
+        fitBoundsIfReady();
+      }
+    });
+  }
+
+  function exitMapMode() {
+    mobileMapMode = false;
+    const pane = document.getElementById('detailPane');
+    pane.classList.remove('map-mode');
+    pane.classList.remove('sheet-open');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.getElementById('mobileMapFabLabel').textContent = 'Map';
+    document.querySelector('#mobileMapFab .material-symbols-outlined').textContent = 'map';
+    closeEventDetail();
+  }
+
+  /* ── Wiring ────────────────────────────────────────────── */
+  let searchDebounce;
+  document.getElementById('searchInput').addEventListener('input', e => {
+    clearTimeout(searchDebounce);
+    const v = e.target.value;
+    searchDebounce = setTimeout(() => {
+      state.q = v.trim();
+      writeUrl();
+      fetchEvents();
+      document.getElementById('searchWrap').classList.toggle('has-text', !!state.q);
+    }, 300);
+  });
+  document.getElementById('searchClear').addEventListener('click', () => {
+    state.q = '';
+    document.getElementById('searchInput').value = '';
+    writeUrl(); fetchEvents();
+  });
+
+  document.getElementById('areaPill').addEventListener('click', e => {
+    if (e.target.closest('[data-clear="area"]')) {
+      state.areaId = ''; state.label = ''; state.lat = state.lng = state.radiusMeters = null;
+      writeUrl(); fetchEvents();
+      return;
+    }
+    cycleAreaPicker();
+  });
+  function cycleAreaPicker() {
+    const ids = Object.keys(AREAS);
+    const next = window.prompt(`Pick an area:\n\n${ids.map((id,i) => `${i+1}. ${AREAS[id].name}`).join('\n')}\n\nType a number, or leave blank to clear.`, '');
+    if (next === null) return;
+    if (next === '') {
+      state.areaId = ''; state.label = ''; state.lat = state.lng = state.radiusMeters = null;
+    } else {
+      const idx = parseInt(next, 10) - 1;
+      if (idx >= 0 && idx < ids.length) {
+        state.areaId = ids[idx];
+        state.label = '';
+        state.lat = state.lng = state.radiusMeters = null;
+      }
+    }
+    state.selectedSlug = null;
+    writeUrl(); fetchEvents();
+  }
+
+  document.getElementById('datePill').addEventListener('click', e => {
+    if (e.target.closest('[data-clear="date"]')) {
+      applyDatePreset('any');
+      writeUrl(); fetchEvents();
+      return;
+    }
+    const keys = Object.keys(DATE_PRESETS);
+    const idx = keys.indexOf(state.datePreset);
+    const next = keys[(idx + 1) % keys.length];
+    applyDatePreset(next);
+    writeUrl(); fetchEvents();
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    state.sort = e.target.value;
+    state.events = sortEvents(state.events, state.sort);
+    writeUrl(); render();
+  });
+
+  document.getElementById('viewSplitBtn').addEventListener('click', () => {
+    state.view = 'split'; writeUrl(); render();
+  });
+  document.getElementById('viewGridBtn').addEventListener('click', () => {
+    state.view = 'grid'; writeUrl(); render();
+  });
+
+  document.getElementById('chipRow').addEventListener('click', e => {
+    const btn = e.target.closest('[data-cat]');
+    if (!btn) return;
+    const slug = btn.dataset.cat;
+    state.categoryId = (state.categoryId === slug) ? '' : slug;
+    state.selectedSlug = null;
+    writeUrl(); fetchEvents();
+  });
+
+  // Card click — select + open detail
+  document.getElementById('resultsList').addEventListener('click', e => {
+    const card = e.target.closest('.row-card');
+    if (card) {
+      state.selectedSlug = card.dataset.slug;
+      refreshSelectionState();
+      openEventDetail(card.dataset.slug);
+      if (window.matchMedia('(max-width: 1080px)').matches) {
+        openSheet();
+      }
+      return;
+    }
+    if (e.target.closest('#retryBtn')) { fetchEvents(); return; }
+    if (e.target.closest('#resetBtn')) {
+      state.q = ''; state.categoryId = ''; applyDatePreset('any');
+      document.getElementById('searchInput').value = '';
+      writeUrl(); fetchEvents();
+      return;
+    }
+  });
+
+  // Detail card close
+  document.getElementById('eventDetailCard').addEventListener('click', e => {
+    if (e.target.closest('#dpClose')) {
+      closeEventDetail();
+      if (window.matchMedia('(max-width: 1080px)').matches) {
+        if (!mobileMapMode) closeSheet();
+      }
+    }
+  });
+
+  // Backdrop click — close sheet
+  document.getElementById('sheetBackdrop').addEventListener('click', () => {
+    closeSheet();
+    closeEventDetail();
+  });
+
+  // Mobile map FAB toggle
+  document.getElementById('mobileMapFab').addEventListener('click', () => {
+    if (mobileMapMode) {
+      exitMapMode();
+    } else {
+      enterMapMode();
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    readUrl();
+    if (state.datePreset !== 'any' && state.datePreset !== 'custom') applyDatePreset(state.datePreset);
+    render();
+    fetchEvents();
+  });
+
+  /* ── Bootstrap ─────────────────────────────────────────── */
+  function init() {
+    readUrl();
+    if (state.datePreset && state.datePreset !== 'any' && state.datePreset !== 'custom' && !state.from) {
+      applyDatePreset(state.datePreset);
+    }
+    render();
+    fetchEvents();
+  }
+  init();
+</script>
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDczbg9VHL3msQ5e_JN-yd3CY9obrYBw14&v=weekly&loading=async&callback=onMapsReady">
+</script>
+
+</body>
+</html>

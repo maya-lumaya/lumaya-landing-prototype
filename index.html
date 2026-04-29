@@ -3315,7 +3315,7 @@
       const p = new URLSearchParams();
       if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
       if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
-      const target = "events.html" + (p.toString() ? `?${p.toString()}` : "");
+      const target = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
       location.href = target;
       return false;
     }
@@ -4045,7 +4045,7 @@
       const p = new URLSearchParams();
       if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
       if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
-      location.href = "events.html" + (p.toString() ? `?${p.toString()}` : "");
+      location.href = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
       return;
     }
     toast(`Submit search · routes to <code>${buildUrl()}</code>`);

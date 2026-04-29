@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auth Flow Mockup — Viluma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #FCF9F4;
+    --bg-2:         #F6F3EE;
+    --bg-3:         #EBE8E3;
+    --surface:      #FFFFFF;
+    --text:         #1C1C19;
+    --text-muted:   #5C5C5C;
+    --text-subtle:  #8A8A8A;
+    --border:       #C2C8C3;
+    --border-strong:#182C24;
+    --green:        #182C24;
+    --green-light:  #2A4A3A;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.1), 0 2px 6px rgba(0,0,0,.06);
+    --r: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  h1 { font-family: 'Lora', serif; font-size: 22px; font-weight: 400; margin-bottom: 4px; }
+  h2 { font: 600 11px/1 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 24px; }
+  h3 { font-family: 'Lora', serif; font-size: 18px; font-weight: 400; line-height: 1.3; }
+
+  .page-header { max-width: 900px; margin: 0 auto 48px; }
+  .page-header p { font-size: 14px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; max-width: 560px; }
+
+  /* ── Layout ── */
+  .concepts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 900px; margin: 0 auto; }
+
+  /* ── Card shell ── */
+  .concept-card {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .concept-label {
+    font: 600 10px/1 'Inter', sans-serif;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+  .concept-note {
+    font-size: 12px; color: var(--text-muted); line-height: 1.5;
+    padding: 10px 12px; background: var(--bg-3); border-radius: 8px;
+  }
+  .concept-note strong { color: var(--text); }
+
+  /* ── Modal shell ── */
+  .modal {
+    background: var(--surface);
+    border-radius: var(--r);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+  .modal-body { padding: 28px 24px 24px; }
+  .modal-header { margin-bottom: 22px; }
+  .modal-header h3 { margin-bottom: 6px; }
+  .modal-header p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── Social buttons ── */
+  .social-btn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 11px 14px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    font: 500 13.5px/1 'Inter', sans-serif; color: var(--text);
+    margin-bottom: 8px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .social-btn:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .social-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 16px 0;
+    font: 400 11px/1 'Inter', sans-serif; color: var(--text-subtle);
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── Form ── */
+  .field { margin-bottom: 12px; }
+  .field label {
+    display: block; font: 500 11px/1 'Inter', sans-serif;
+    color: var(--text-muted); margin-bottom: 5px; letter-spacing: .02em;
+  }
+  .field input {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font: 400 14px/1 'Inter', sans-serif; color: var(--text);
+    background: var(--bg); outline: none;
+    transition: border-color .15s;
+  }
+  .field input:focus { border-color: var(--border-strong); background: var(--surface); }
+  .field input::placeholder { color: var(--text-subtle); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── Primary button ── */
+  .btn-primary {
+    width: 100%; padding: 12px;
+    background: var(--green); color: #fff;
+    border: none; border-radius: 10px; cursor: pointer;
+    font: 600 13.5px/1 'Inter', sans-serif;
+    letter-spacing: .01em;
+    transition: background .15s;
+    margin-top: 4px;
+  }
+  .btn-primary:hover { background: var(--green-light); }
+
+  /* ── Micro-copy ── */
+  .micro {
+    font-size: 11.5px; color: var(--text-subtle);
+    text-align: center; line-height: 1.5;
+    margin-top: 14px;
+  }
+  .micro a { color: var(--text-muted); text-decoration: underline; cursor: pointer; }
+
+  /* ── Step indicator ── */
+  .step-dot-row { display: flex; gap: 5px; justify-content: center; margin-bottom: 18px; }
+  .step-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+  .step-dot.active { background: var(--green); width: 18px; border-radius: 3px; }
+
+  /* ── Password field with show/hide ── */
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 40px; }
+  .pw-toggle {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 0;
+    color: var(--text-subtle); font-size: 11px; font-weight: 500;
+  }
+
+  /* ── Name pills (progressive profiling) ── */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pill {
+    padding: 6px 12px; border: 1.5px solid var(--border);
+    border-radius: 20px; font: 500 12px/1 'Inter', sans-serif;
+    color: var(--text-muted); cursor: pointer; background: var(--surface);
+    transition: border-color .15s, color .15s;
+  }
+  .pill:hover { border-color: var(--border-strong); color: var(--text); }
+  .pill.selected { border-color: var(--green); color: var(--green); background: #f0f5f2; }
+
+  /* ── Mobile bottom-sheet hint ── */
+  .bottom-sheet-shell {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0,0,0,.12);
+    overflow: hidden;
+  }
+  .grabber-bar {
+    width: 36px; height: 4px; border-radius: 2px;
+    background: var(--border); margin: 10px auto 18px;
+  }
+  .bottom-sheet-shell .modal-body { padding: 0 24px 32px; }
+
+  /* ── Magic link state ── */
+  .sent-state { text-align: center; padding: 8px 0 4px; }
+  .sent-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: #f0f5f2; display: grid; place-items: center;
+    margin: 0 auto 14px; font-size: 22px;
+  }
+  .sent-state h3 { margin-bottom: 8px; }
+  .sent-state p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .resend-link { font: 500 13px/1 'Inter', sans-serif; color: var(--text-muted); text-decoration: underline; cursor: pointer; display: inline-block; margin-top: 14px; }
+
+  /* ── Section heading ── */
+  .section-heading {
+    max-width: 900px; margin: 48px auto 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-heading h2 { margin: 0; }
+
+  /* ── Overlay mockup ── */
+  .overlay-demo {
+    position: relative; border-radius: 12px; overflow: hidden;
+    background: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=60') center/cover;
+  }
+  .overlay-demo::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(24,44,36,.45);
+  }
+  .overlay-modal {
+    position: relative; z-index: 1;
+    margin: 32px 20px; border-radius: var(--r);
+    background: var(--surface); box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  /* ── Tags row ── */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag {
+    font: 500 10.5px/1 'Inter', sans-serif; letter-spacing: .03em;
+    padding: 4px 9px; border-radius: 20px;
+    background: var(--bg-3); color: var(--text-muted);
+  }
+  .tag.green { background: #e4ede8; color: #1a3d2a; }
+  .tag.amber { background: #fdf3e3; color: #7a4f1c; }
+
+  /* ── Annotations ── */
+  .annotation {
+    font: 400 11.5px/1.4 'Inter', sans-serif;
+    color: var(--text-subtle);
+    margin-top: 8px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Auth Flow Concepts — Viluma</h1>
+  <h2>Discussion Mockup · April 2026</h2>
+  <p>Three pattern options to evaluate. Each trades off friction, trust, and technical complexity differently. Pick a direction or mix-and-match parts.</p>
+</div>
+
+<!-- ════════════════════════════════════ PATTERN A ═════════════════════════════════════ -->
+<div class="section-heading">
+  <h2>Pattern A — Email-First, One Modal (Airbnb model)</h2>
+</div>
+
+<div class="concepts">
+
+  <!-- Step 1: Entry -->
+  <div class="concept-card">
+    <div class="concept-label">Step 1 · Enter email</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div class="modal-header">
+          <h3>Welcome to Viluma</h3>
+          <p>Sign in or create an account</p>
+        </div>
+
+        <button class="social-btn">
+          <svg class="social-icon" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z"/></svg>
+          Continue with Google
+        </button>
+        <button class="social-btn">
+          <svg class="social-icon" viewBox="0 0 18 18"><path d="M15.769 6.304c-.118.087-2.19 1.257-2.19 3.85 0 3.001 2.634 4.063 2.714 4.091-.012.075-.418 1.443-1.38 2.836-.858 1.233-1.756 2.464-3.115 2.464s-1.703-.79-3.264-.79c-1.518 0-2.06.817-3.303.817-1.243 0-2.118-1.148-3.122-2.556C.994 15.4.25 13.27.25 11.248c0-3.344 2.178-5.115 4.323-5.115 1.14 0 2.09.75 2.806.75.678 0 1.737-.795 3.06-.795.493 0 2.266.042 3.428 1.216Zm-4.048-2.23c.536-.636.916-1.52.916-2.404 0-.123-.01-.248-.032-.35-.875.033-1.916.583-2.545 1.311-.49.555-.948 1.44-.948 2.336 0 .136.022.272.032.316.054.01.141.022.23.022.785 0 1.774-.523 2.347-1.231Z" fill="currentColor"/></svg>
+          Continue with Apple
+        </button>
+
+        <div class="divider">or</div>
+
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" placeholder="you@example.com" value="">
+        </div>
+
+        <button class="btn-primary">Continue →</button>
+
+        <p class="micro">By continuing, you agree to our <a>Terms</a> and <a>Privacy Policy</a>.</p>
+      </div>
+    </div>
+    <p class="annotation">One screen handles both sign-in and sign-up — system decides after email lookup. Social logins above the fold.</p>
+  </div>
+
+  <!-- Step 2a: Returning user -->
+  <div class="concept-card">
+    <div class="concept-label">Step 2a · Returning user</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div class="step-dot-row">
+          <div class="step-dot"></div>
+          <div class="step-dot active"></div>
+        </div>
+        <div class="modal-header">
+          <h3>Welcome back, Sofia</h3>
+          <p>Signing in as sofia@example.com</p>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" placeholder="••••••••" value="••••••••">
+            <button class="pw-toggle">Show</button>
+          </div>
+        </div>
+
+        <button class="btn-primary">Sign in</button>
+
+        <p class="micro"><a>Forgot password?</a> · <a>Use a magic link instead</a></p>
+      </div>
+    </div>
+    <p class="annotation">No confirm-password field — removing it lifted conversion ~56% in studies. Magic link as escape hatch.</p>
+  </div>
+
+  <!-- Step 2b: New user -->
+  <div class="concept-card">
+    <div class="concept-label">Step 2b · New user</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div class="step-dot-row">
+          <div class="step-dot"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="modal-header">
+          <h3>Create your account</h3>
+          <p>One more thing and you're in.</p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>First name</label>
+            <input type="text" placeholder="Sofia">
+          </div>
+          <div class="field">
+            <label>Last name</label>
+            <input type="text" placeholder="Müller">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" placeholder="At least 8 characters">
+            <button class="pw-toggle">Show</button>
+          </div>
+        </div>
+
+        <button class="btn-primary">Create account →</button>
+
+        <p class="micro">We'll never post or share without your permission.</p>
+      </div>
+    </div>
+    <p class="annotation">Minimal fields — only what's needed to personalise. Profile details (interests, location) deferred to onboarding.</p>
+  </div>
+
+</div>
+
+
+<!-- ════════════════════════════════════ PATTERN B ═════════════════════════════════════ -->
+<div class="section-heading">
+  <h2>Pattern B — Passwordless / Magic Link First</h2>
+</div>
+
+<div class="concepts">
+
+  <!-- Magic link entry -->
+  <div class="concept-card">
+    <div class="concept-label">Step 1 · Request link</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div class="modal-header">
+          <h3>Sign in to Viluma</h3>
+          <p>We'll email you a secure link — no password needed.</p>
+        </div>
+
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+
+        <button class="btn-primary">Send me a link</button>
+
+        <div class="divider">or sign in with</div>
+
+        <button class="social-btn">
+          <svg class="social-icon" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z"/></svg>
+          Google
+        </button>
+
+        <p class="micro">Link expires in 15 min. <a>Set a password instead</a></p>
+      </div>
+    </div>
+    <p class="annotation">Lowest friction for new users. Removes password anxiety entirely — fits wellness/mindful brand voice well.</p>
+    <div class="tag-row">
+      <span class="tag green">+ no password management</span>
+      <span class="tag amber">− email-switch friction on mobile</span>
+    </div>
+  </div>
+
+  <!-- Magic link sent -->
+  <div class="concept-card">
+    <div class="concept-label">Step 2 · Email sent</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div class="sent-state">
+          <div class="sent-icon">✉️</div>
+          <h3>Check your inbox</h3>
+          <p>We sent a link to <strong>sofia@example.com</strong>.<br>Click it to sign in instantly.</p>
+          <a class="resend-link">Resend link</a>
+        </div>
+      </div>
+    </div>
+    <p class="annotation">Dead-simple confirmation. Timer or "open Gmail" deeplink helps on mobile.</p>
+  </div>
+
+  <!-- Pattern B: Progressive profiling -->
+  <div class="concept-card">
+    <div class="concept-label">Step 3 · Progressive profiling (new users only)</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div class="step-dot-row">
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot active"></div>
+        </div>
+        <div class="modal-header">
+          <h3>What draws you here?</h3>
+          <p>We'll personalise your experience.</p>
+        </div>
+
+        <div class="pill-row">
+          <span class="pill selected">Yoga retreats</span>
+          <span class="pill">Meditation</span>
+          <span class="pill selected">Hiking</span>
+          <span class="pill">Surf camps</span>
+          <span class="pill">Sound healing</span>
+          <span class="pill">Digital detox</span>
+        </div>
+
+        <button class="btn-primary" style="margin-top: 20px;">Continue →</button>
+        <p class="micro"><a>Skip for now</a></p>
+      </div>
+    </div>
+    <p class="annotation">Deferred profiling — collected after auth, not before. Improves feed personalisation without blocking signup.</p>
+  </div>
+
+</div>
+
+
+<!-- ════════════════════════════════════ PATTERN C ═════════════════════════════════════ -->
+<div class="section-heading">
+  <h2>Pattern C — Mobile: Bottom Sheet</h2>
+</div>
+
+<div class="concepts" style="grid-template-columns: repeat(auto-fit, minmax(280px, 380px));">
+
+  <!-- Bottom sheet -->
+  <div class="concept-card">
+    <div class="concept-label">Mobile · Bottom Sheet (320px sim)</div>
+    <div style="background: var(--bg-3); border-radius: 12px; padding: 20px 20px 0; max-width: 360px;">
+      <!-- fake page content behind -->
+      <div style="font: 400 13px/1.5 'Lora', serif; color: var(--text-muted); text-align: center; padding: 16px 8px 20px;">
+        <span style="font-size: 11px; letter-spacing:.08em; text-transform:uppercase; font-family:'Inter',sans-serif; color: var(--text-subtle);">Event details</span>
+        <p style="margin-top:6px; font-size: 15px; color: var(--text);">Morning Vinyasa in Sayulita</p>
+        <p style="font-size:12px; margin-top:4px;">Save this experience →</p>
+      </div>
+      <div class="bottom-sheet-shell">
+        <div class="grabber-bar"></div>
+        <div class="modal-body">
+          <div class="modal-header">
+            <h3>Sign in to save</h3>
+            <p>Create a free account to save events and get updates.</p>
+          </div>
+          <button class="social-btn">
+            <svg class="social-icon" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z"/></svg>
+            Continue with Google
+          </button>
+          <button class="social-btn">
+            <svg class="social-icon" viewBox="0 0 18 18"><path d="M15.769 6.304c-.118.087-2.19 1.257-2.19 3.85 0 3.001 2.634 4.063 2.714 4.091-.012.075-.418 1.443-1.38 2.836-.858 1.233-1.756 2.464-3.115 2.464s-1.703-.79-3.264-.79c-1.518 0-2.06.817-3.303.817-1.243 0-2.118-1.148-3.122-2.556C.994 15.4.25 13.27.25 11.248c0-3.344 2.178-5.115 4.323-5.115 1.14 0 2.09.75 2.806.75.678 0 1.737-.795 3.06-.795.493 0 2.266.042 3.428 1.216Zm-4.048-2.23c.536-.636.916-1.52.916-2.404 0-.123-.01-.248-.032-.35-.875.033-1.916.583-2.545 1.311-.49.555-.948 1.44-.948 2.336 0 .136.022.272.032.316.054.01.141.022.23.022.785 0 1.774-.523 2.347-1.231Z" fill="currentColor"/></svg>
+            Continue with Apple
+          </button>
+          <div class="divider">or use email</div>
+          <div class="field">
+            <input type="email" placeholder="your@email.com">
+          </div>
+          <button class="btn-primary">Continue →</button>
+          <p class="micro" style="margin-top:12px;">Free · No spam · Cancel anytime</p>
+        </div>
+      </div>
+    </div>
+    <p class="annotation">Triggered contextually — "save event", "book now", etc. Never interrupts browsing. Keeps page context visible.</p>
+    <div class="tag-row">
+      <span class="tag green">+ thumb-zone friendly</span>
+      <span class="tag green">+ feels native</span>
+      <span class="tag amber">− keyboard covers sheet on Android</span>
+    </div>
+  </div>
+
+  <!-- Recommendation card -->
+  <div class="concept-card">
+    <div class="concept-label">Recommendation summary</div>
+    <div class="modal">
+      <div class="modal-body">
+        <div style="margin-bottom: 16px;">
+          <div style="font: 600 11px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase; color: var(--text-subtle); margin-bottom: 8px;">My pick for Viluma</div>
+          <h3 style="font-size: 17px; margin-bottom: 10px;">Pattern A + C hybrid</h3>
+          <p style="font-size: 13px; line-height: 1.6; color: var(--text-muted);">
+            Email-first modal on desktop → bottom sheet on mobile. Progressive profiling (interests) after first login. Magic link as opt-in alternative, not default.
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+          <div style="display:flex; gap: 10px; align-items: flex-start;">
+            <span style="color: #2A7A4A; font-size: 15px; flex-shrink:0;">✓</span>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">Google/Apple social first — highest-converting path, especially for new users discovering via search</p>
+          </div>
+          <div style="display:flex; gap: 10px; align-items: flex-start;">
+            <span style="color: #2A7A4A; font-size: 15px; flex-shrink:0;">✓</span>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">Email-first means one screen handles both flows — no "login vs. register" decision for users</p>
+          </div>
+          <div style="display:flex; gap: 10px; align-items: flex-start;">
+            <span style="color: #2A7A4A; font-size: 15px; flex-shrink:0;">✓</span>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">Defer profiling — collect interests after auth, shown once, skippable</p>
+          </div>
+          <div style="display:flex; gap: 10px; align-items: flex-start;">
+            <span style="color: #7A4A2A; font-size: 15px; flex-shrink:0;">△</span>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">Magic link as fallback (not default) — reduces email-switching friction on mobile while keeping it available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-note">
+      <strong>What to skip:</strong> OTP/SMS (adds cost + latency), separate login/register pages (doubles surface area), confirm-password field (kills conversion).
+    </div>
+  </div>
+
+</div>
+
+<div style="max-width: 900px; margin: 48px auto 0; padding: 20px 0; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-subtle);">
+  Mockup only — interactions not wired. Design tokens match landing-page-v5 production system.
+  <br>Sources: <a href="https://www.authgear.com/post/login-signup-ux-guide" style="color:inherit">Authgear 2025 guide</a> · <a href="https://www.eleken.co/blog-posts/sign-up-flow" style="color:inherit">Eleken sign-up flows</a> · <a href="https://blog.logrocket.com/ux-design/how-to-use-magic-links/" style="color:inherit">LogRocket magic links</a>
+</div>
+
+</body>
+</html>
