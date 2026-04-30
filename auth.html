@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Viluma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #FCF9F4;
+    --bg-2:         #F6F3EE;
+    --bg-3:         #EBE8E3;
+    --surface:      #FFFFFF;
+    --text:         #1C1C19;
+    --text-muted:   #5C5C5C;
+    --text-subtle:  #8A8A8A;
+    --border:       #C2C8C3;
+    --border-strong:#182C24;
+    --green:        #182C24;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 24px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100svh;
+  }
+
+  /* ── Logo header ── */
+  .auth-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 24px 0;
+    flex-shrink: 0;
+  }
+  .auth-logo {
+    font-family: 'Noto Serif', serif;
+    font-style: italic; font-weight: 400;
+    font-size: 26px; letter-spacing: -0.025em;
+    color: var(--green);
+    text-decoration: none;
+  }
+  .auth-back {
+    position: absolute; left: 24px;
+    background: none; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    font: 500 14px/1 'Inter', sans-serif;
+    color: var(--text-muted);
+    padding: 8px 0;
+  }
+  .auth-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .auth-back:hover { color: var(--text); }
+
+  /* ── Page layout ── */
+  .auth-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 32px 20px 48px;
+  }
+
+  /* ── Card ── */
+  .auth-card {
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+  }
+  .auth-card-body { padding: 32px 28px 28px; }
+
+  /* ── Steps ── */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* ── Step header ── */
+  .step-head { margin-bottom: 24px; }
+  .step-head h1 {
+    font-family: 'Lora', serif;
+    font-size: 22px; font-weight: 400; line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .step-head p { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── Dots ── */
+  .dots { display: flex; gap: 5px; justify-content: center; margin-bottom: 20px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all .2s; }
+  .dot.active { background: var(--green); width: 18px; border-radius: 3px; }
+  .dot.done { background: var(--green); opacity: .35; }
+
+  /* ── Social ── */
+  .social-btn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 11px 14px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    font: 500 13.5px/1 'Inter', sans-serif; color: var(--text);
+    margin-bottom: 8px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .social-btn:last-of-type { margin-bottom: 0; }
+  .social-btn:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+  .social-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 18px 0;
+    font: 400 11px/1 'Inter', sans-serif; color: var(--text-subtle);
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── Fields ── */
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font: 500 11px/1 'Inter', sans-serif; color: var(--text-muted); margin-bottom: 5px; letter-spacing: .02em; }
+  .field input {
+    width: 100%; padding: 11px 13px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font: 400 14.5px/1 'Inter', sans-serif; color: var(--text);
+    background: var(--bg); outline: none;
+    transition: border-color .15s, background .15s;
+    -webkit-appearance: none;
+  }
+  .field input:focus { border-color: var(--border-strong); background: var(--surface); }
+  .field input.error { border-color: #c04040; }
+  .field input::placeholder { color: var(--text-subtle); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field-hint { font-size: 11.5px; color: var(--text-subtle); margin-top: 5px; }
+  .field-hint.err { color: #c04040; }
+
+  /* ── Password field ── */
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 52px; }
+  .pw-toggle {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    font: 500 11.5px/1 'Inter', sans-serif; color: var(--text-subtle);
+    padding: 4px 2px;
+  }
+  .pw-toggle:hover { color: var(--text); }
+
+  /* ── Primary button ── */
+  .btn-primary {
+    width: 100%; padding: 13px;
+    background: var(--green); color: #fff;
+    border: none; border-radius: 10px; cursor: pointer;
+    font: 600 14px/1 'Inter', sans-serif;
+    transition: opacity .15s;
+    margin-top: 6px;
+  }
+  .btn-primary:hover { opacity: .88; }
+  .btn-primary:disabled { opacity: .45; cursor: default; }
+
+  /* ── Micro copy ── */
+  .micro {
+    font-size: 11.5px; color: var(--text-subtle);
+    text-align: center; line-height: 1.55;
+    margin-top: 14px;
+  }
+  .micro a { color: var(--text-muted); text-decoration: underline; cursor: pointer; }
+
+  /* ── Email recap chip ── */
+  .email-recap {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 5px 10px 5px 8px;
+    font: 500 12px/1 'Inter', sans-serif; color: var(--text);
+    margin-bottom: 18px; cursor: pointer;
+  }
+  .email-recap svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .email-recap:hover { border-color: var(--border-strong); }
+
+  /* ── Profiling: category groups ── */
+  .prof-group { margin-bottom: 20px; }
+  .prof-group-label {
+    font: 600 10px/1 'Inter', sans-serif;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text-subtle);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .prof-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    padding: 7px 13px;
+    border: 1.5px solid var(--border); border-radius: 20px;
+    font: 500 12.5px/1 'Inter', sans-serif; color: var(--text-muted);
+    cursor: pointer; background: var(--surface);
+    transition: border-color .15s, color .15s, background .15s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--border-strong); color: var(--text); }
+  .chip.on { border-color: var(--green); color: var(--green); background: #EEF3EF; }
+
+  /* ── Success / done ── */
+  .done-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: #EEF3EF; display: grid; place-items: center;
+    margin: 0 auto 16px; font-size: 24px;
+  }
+  #step4 .auth-card-body { text-align: center; padding-top: 36px; padding-bottom: 36px; }
+
+  /* ── Mobile: bottom-sheet feel ── */
+  @media (max-width: 540px) {
+    body { justify-content: flex-start; }
+    .auth-header { padding: 36px 24px 0; }
+    .auth-stage {
+      align-items: flex-end;
+      padding: 0;
+      position: fixed; inset: 0;
+      background: rgba(28, 28, 25, 0.18);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      /* logo still visible above */
+      padding-top: 100px;
+    }
+    .auth-card {
+      max-width: 100%;
+      border-radius: 24px 24px 0 0;
+      max-height: 92svh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 -4px 28px rgba(0,0,0,.14);
+    }
+    .auth-card::before {
+      content: '';
+      display: block;
+      width: 36px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 10px auto 0;
+    }
+    .auth-card-body { padding: 20px 24px 40px; }
+    .auth-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1;
+      background: var(--bg);
+    }
+  }
+
+  /* ── Profiling scroll on small cards ── */
+  .prof-scroll { max-height: 280px; overflow-y: auto; padding-right: 2px; }
+  @media (max-width: 540px) { .prof-scroll { max-height: none; } }
+</style>
+</head>
+<body>
+
+<header class="auth-header" style="position:relative;">
+  <button class="auth-back" id="backBtn" style="display:none;" aria-label="Go back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </button>
+  <a href="index.html" class="auth-logo">Viluma</a>
+</header>
+
+<div class="auth-stage">
+  <div class="auth-card">
+    <div class="auth-card-body">
+
+      <!-- ═══════════════ STEP 1: EMAIL ═══════════════ -->
+      <div class="step active" id="step1">
+        <div class="step-head">
+          <h1>Welcome to Viluma</h1>
+          <p>Sign in or create a free account.</p>
+        </div>
+
+        <button class="social-btn" onclick="socialLogin()">
+          <svg class="social-icon" viewBox="0 0 18 18">
+            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/>
+            <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"/>
+            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button class="social-btn" onclick="socialLogin()">
+          <svg class="social-icon" viewBox="0 0 18 18">
+            <path d="M15.769 6.304c-.118.087-2.19 1.257-2.19 3.85 0 3.001 2.634 4.063 2.714 4.091-.012.075-.418 1.443-1.38 2.836-.858 1.233-1.756 2.464-3.115 2.464s-1.703-.79-3.264-.79c-1.518 0-2.06.817-3.303.817-1.243 0-2.118-1.148-3.122-2.556C.994 15.4.25 13.27.25 11.248c0-3.344 2.178-5.115 4.323-5.115 1.14 0 2.09.75 2.806.75.678 0 1.737-.795 3.06-.795.493 0 2.266.042 3.428 1.216Zm-4.048-2.23c.536-.636.916-1.52.916-2.404 0-.123-.01-.248-.032-.35-.875.033-1.916.583-2.545 1.311-.49.555-.948 1.44-.948 2.336 0 .136.022.272.032.316.054.01.141.022.23.022.785 0 1.774-.523 2.347-1.231Z" fill="currentColor"/>
+          </svg>
+          Continue with Apple
+        </button>
+
+        <div class="divider">or continue with email</div>
+
+        <div class="field">
+          <label for="emailInput">Email address</label>
+          <input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email" autocapitalize="off">
+          <div class="field-hint err" id="emailError" style="display:none;">
+            This is a prototype. Try <strong>known@web.de</strong> or <strong>new@web.de</strong>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="step1Btn">Continue</button>
+
+        <p class="micro">By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+      </div>
+
+      <!-- ═══════════════ STEP 2a: SIGN IN (known user) ═══════════════ -->
+      <div class="step" id="step2a">
+        <div class="dots">
+          <div class="dot done"></div>
+          <div class="dot active"></div>
+        </div>
+        <div class="step-head">
+          <h1>Welcome back</h1>
+          <p>Enter your password to sign in.</p>
+        </div>
+
+        <button class="email-recap" id="emailRecap2a" onclick="goBack()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          <span id="recapEmail2a"></span>
+        </button>
+
+        <div class="field">
+          <label for="pwInput">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password">
+            <button class="pw-toggle" type="button" onclick="togglePw('pwInput',this)">Show</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="step2aBtn">Sign in</button>
+
+        <p class="micro"><a href="#">Forgot password?</a></p>
+      </div>
+
+      <!-- ═══════════════ STEP 2b: CREATE ACCOUNT (new user) ═══════════════ -->
+      <div class="step" id="step2b">
+        <div class="dots">
+          <div class="dot done"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="step-head">
+          <h1>Create your account</h1>
+          <p>Just a couple of details and you're in.</p>
+        </div>
+
+        <button class="email-recap" id="emailRecap2b" onclick="goBack()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          <span id="recapEmail2b"></span>
+        </button>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="firstNameInput">First name</label>
+            <input type="text" id="firstNameInput" placeholder="Sofia" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="lastNameInput">Last name</label>
+            <input type="text" id="lastNameInput" placeholder="Müller" autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="newPwInput">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="newPwInput" placeholder="At least 8 characters" autocomplete="new-password">
+            <button class="pw-toggle" type="button" onclick="togglePw('newPwInput',this)">Show</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="step2bBtn">Create account →</button>
+
+        <p class="micro">We'll never post or share without your permission.</p>
+      </div>
+
+      <!-- ═══════════════ STEP 3: PROFILING ═══════════════ -->
+      <div class="step" id="step3">
+        <div class="dots">
+          <div class="dot done"></div>
+          <div class="dot done"></div>
+          <div class="dot active"></div>
+        </div>
+        <div class="step-head">
+          <h1>What calls to you?</h1>
+          <p>Select anything that fits — we'll personalise your feed.</p>
+        </div>
+
+        <div class="prof-scroll">
+          <div class="prof-group">
+            <div class="prof-group-label">Events</div>
+            <div class="chip-row">
+              <span class="chip" onclick="toggleChip(this)">Yoga class</span>
+              <span class="chip" onclick="toggleChip(this)">Meditation</span>
+              <span class="chip" onclick="toggleChip(this)">Sound healing</span>
+              <span class="chip" onclick="toggleChip(this)">Breathwork</span>
+              <span class="chip" onclick="toggleChip(this)">Dance & movement</span>
+              <span class="chip" onclick="toggleChip(this)">Cacao ceremony</span>
+              <span class="chip" onclick="toggleChip(this)">Workshops</span>
+            </div>
+          </div>
+
+          <div class="prof-group">
+            <div class="prof-group-label">Retreats</div>
+            <div class="chip-row">
+              <span class="chip" onclick="toggleChip(this)">Yoga retreat</span>
+              <span class="chip" onclick="toggleChip(this)">Silent retreat</span>
+              <span class="chip" onclick="toggleChip(this)">Surf & yoga</span>
+              <span class="chip" onclick="toggleChip(this)">Nature & hiking</span>
+              <span class="chip" onclick="toggleChip(this)">Healing retreat</span>
+              <span class="chip" onclick="toggleChip(this)">Digital detox</span>
+              <span class="chip" onclick="toggleChip(this)">Conscious travel</span>
+            </div>
+          </div>
+
+          <div class="prof-group">
+            <div class="prof-group-label">Trainings</div>
+            <div class="chip-row">
+              <span class="chip" onclick="toggleChip(this)">Yoga teacher 200h</span>
+              <span class="chip" onclick="toggleChip(this)">Yoga teacher 300h</span>
+              <span class="chip" onclick="toggleChip(this)">Breathwork facilitator</span>
+              <span class="chip" onclick="toggleChip(this)">Sound healer cert.</span>
+              <span class="chip" onclick="toggleChip(this)">Mindfulness coach</span>
+              <span class="chip" onclick="toggleChip(this)">Meditation teacher</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="step3Btn" style="margin-top:20px;">Start exploring →</button>
+        <p class="micro"><a id="profSkip" href="#">Skip for now</a></p>
+      </div>
+
+      <!-- ═══════════════ STEP 4: DONE ═══════════════ -->
+      <div class="step" id="step4">
+        <div class="done-icon">✓</div>
+        <h1 style="font-family:'Lora',serif;font-size:22px;font-weight:400;margin-bottom:8px;">You're in!</h1>
+        <p style="font-size:13.5px;color:var(--text-muted);line-height:1.5;margin-bottom:24px;">Redirecting you to Viluma…</p>
+        <button class="btn-primary" onclick="window.location.href='index.html'">Go to Viluma →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const KNOWN = 'known@web.de';
+  const NEW   = 'new@web.de';
+  let currentEmail = '';
+
+  /* ── Helpers ── */
+  function showStep(id) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const backBtn = document.getElementById('backBtn');
+    backBtn.style.display = id === 'step1' ? 'none' : 'flex';
+  }
+
+  function goBack() {
+    const active = document.querySelector('.step.active');
+    if (active && active.id !== 'step1') showStep('step1');
+  }
+
+  function togglePw(inputId, btn) {
+    const inp = document.getElementById(inputId);
+    if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Hide'; }
+    else { inp.type = 'password'; btn.textContent = 'Show'; }
+  }
+
+  function toggleChip(el) {
+    el.classList.toggle('on');
+  }
+
+  function socialLogin() {
+    showStep('step4');
+    setTimeout(() => window.location.href = 'index.html', 1400);
+  }
+
+  /* ── Step 1: Continue ── */
+  document.getElementById('step1Btn').addEventListener('click', () => {
+    const email = document.getElementById('emailInput').value.trim().toLowerCase();
+    const errEl = document.getElementById('emailError');
+    const inp   = document.getElementById('emailInput');
+    if (!email) { inp.focus(); return; }
+    if (email === KNOWN) {
+      currentEmail = email;
+      errEl.style.display = 'none';
+      inp.classList.remove('error');
+      document.getElementById('recapEmail2a').textContent = email;
+      showStep('step2a');
+    } else if (email === NEW) {
+      currentEmail = email;
+      errEl.style.display = 'none';
+      inp.classList.remove('error');
+      document.getElementById('recapEmail2b').textContent = email;
+      showStep('step2b');
+    } else {
+      errEl.style.display = 'block';
+      inp.classList.add('error');
+      inp.focus();
+    }
+  });
+
+  /* Enter key on email field */
+  document.getElementById('emailInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('step1Btn').click();
+  });
+
+  /* ── Step 2a: Sign in ── */
+  document.getElementById('step2aBtn').addEventListener('click', () => {
+    showStep('step4');
+    setTimeout(() => window.location.href = 'index.html', 1200);
+  });
+  document.getElementById('pwInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('step2aBtn').click();
+  });
+
+  /* ── Step 2b: Create account ── */
+  document.getElementById('step2bBtn').addEventListener('click', () => {
+    showStep('step3');
+  });
+  document.getElementById('newPwInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('step2bBtn').click();
+  });
+
+  /* ── Step 3: Profiling ── */
+  document.getElementById('step3Btn').addEventListener('click', () => {
+    showStep('step4');
+    setTimeout(() => window.location.href = 'index.html', 1200);
+  });
+  document.getElementById('profSkip').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'index.html';
+  });
+
+  /* ── Back button ── */
+  document.getElementById('backBtn').addEventListener('click', goBack);
+</script>
+</body>
+</html>
