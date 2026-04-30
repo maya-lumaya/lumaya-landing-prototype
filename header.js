@@ -103,13 +103,14 @@
   /* Right side */
   header.site .nav-actions {
     display: flex; gap: 8px; align-items: center;
-    justify-self: end;
+    justify-self: end; align-self: center;
   }
   header.site .btn-ghost {
     height: 40px; padding: 0 14px; border-radius: var(--radius-pill);
     font-size: 14px; font-weight: 500; color: var(--text);
     transition: background .2s var(--ease); white-space: nowrap;
     background: transparent; border: none; cursor: pointer;
+    display: inline-flex; align-items: center;
   }
   header.site .btn-ghost:hover { background: var(--bg-2); }
   header.site .btn-primary {
@@ -118,6 +119,7 @@
     background: var(--text); color: #fff;
     border: none; cursor: pointer; white-space: nowrap;
     transition: opacity .15s;
+    display: inline-flex; align-items: center;
   }
   header.site .btn-primary:hover { opacity: .88; }
 
