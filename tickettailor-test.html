@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TicketTailor Embed Test — Lumaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FCF9F4;
+  --surface: #FFFFFF;
+  --text: #1C1C19;
+  --text-muted: #5C5C5C;
+  --border: #C2C8C3;
+  --primary: #182c24;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-lg: 0 20px 60px rgba(29,29,33,0.18);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Card */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 40px 48px;
+  max-width: 480px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(29,29,33,0.07);
+}
+.card-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.card h1 {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+.card-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.btn-buy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-buy:hover { opacity: 0.88; }
+.btn-buy svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Modal overlay */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(28, 28, 25, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: modal-in 0.25s var(--ease) both;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.modal-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+.modal-close {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none; background: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  transition: background 0.15s;
+}
+.modal-close:hover { background: #f0ede8; }
+.modal-close svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+.modal-body {
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+iframe {
+  display: block;
+  width: 100%;
+  height: 700px;
+  border: none;
+}
+
+/* Note bar */
+.note {
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: #f0ede8;
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: left;
+  line-height: 1.5;
+}
+.note strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <p class="card-label">TicketTailor embed test</p>
+  <h1>Yoga Island</h1>
+  <p class="card-meta">So, 7. Juni 2026 · 08:30–16:00 · Heilbronn</p>
+
+  <button class="btn-buy" onclick="openModal()">
+    <svg viewBox="0 0 24 24"><path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+    Buy now
+  </button>
+
+  <div class="note">
+    <strong>What this tests:</strong> Does TicketTailor allow iframing from a third-party origin? If the form loads below, the embed is viable for Lumaya. If it shows a blank or error, X-Frame-Options is blocking it.
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Get your ticket</span>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <iframe
+        id="tt-iframe"
+        src=""
+        data-src="https://www.tickettailor.com/events/yogaisland/2073728?widget=true&minimal=true"
+        title="Buy tickets — Yoga Island"
+        allow="payment">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+const TT_URL = 'https://www.tickettailor.com/events/yogaisland/2073728?widget=true&minimal=true';
+
+function openModal() {
+  const iframe = document.getElementById('tt-iframe');
+  if (!iframe.src || iframe.src === window.location.href) {
+    iframe.src = TT_URL;
+  }
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+
+</body>
+</html>
