@@ -484,91 +484,7 @@
     body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
   }
 
-  /* ---------- Header ---------- */
-  header.site {
-    position: sticky; top: 0; z-index: 60;
-    background: rgba(249, 246, 239, 0.92);
-    backdrop-filter: saturate(120%) blur(14px);
-    -webkit-backdrop-filter: saturate(120%) blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 24px; }
-  .logo {
-    font-family: 'Noto Serif', serif;
-    font-style: italic; font-weight: 400;
-    font-size: 24px; letter-spacing: -0.025em;
-    color: #182c24; flex-shrink: 0;
-  }
-  .logo-dot { display: none; }
-  .nav-links { display: flex; gap: 32px; align-items: center; }
-  .nav-links a {
-    font-size: 15px; color: var(--text); padding: 10px 4px;
-    position: relative; transition: color .2s var(--ease);
-  }
-  .nav-links a::after {
-    content: ""; position: absolute; left: 4px; right: 4px; bottom: 4px;
-    height: 1px; background: var(--orange-600);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform .25s var(--ease);
-  }
-  .nav-links a:hover { color: var(--orange-600); }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  .nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-  .btn-ghost {
-    height: 40px; padding: 0 14px; border-radius: var(--radius-pill);
-    font-size: 14px; font-weight: 500; color: var(--text);
-    transition: background .2s var(--ease); white-space: nowrap;
-  }
-  .btn-ghost:hover { background: var(--bg-2); }
-  @media (max-width: 1100px) { .btn-ghost { display: none; } }
-
-  .icon-btn {
-    width: 44px; height: 44px;
-    display: inline-flex; align-items: center; justify-content: center;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--border); background: var(--surface);
-    transition: background .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
-    flex-shrink: 0;
-  }
-  .icon-btn:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
-
-  /* ── User account dropdown ── */
-  .user-menu-wrap { position: relative; }
-  .user-dropdown {
-    display: none;
-    position: absolute; top: calc(100% + 8px); right: 0;
-    min-width: 186px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: 0 8px 28px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.06);
-    z-index: 300; padding: 5px 0; overflow: hidden;
-  }
-  .user-dropdown.open { display: block; }
-  .user-dd-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 16px;
-    font: 500 14px/1 'Inter', system-ui, sans-serif; color: var(--text);
-    text-decoration: none; background: none; border: none;
-    width: 100%; text-align: left; cursor: pointer;
-    transition: background .12s;
-  }
-  .user-dd-item:hover { background: var(--bg-2); }
-  .user-dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
-
-  .menu-toggle { display: none; }
-  @media (max-width: 860px) {
-    .nav-links { display: none; }
-    .menu-toggle { display: inline-flex; }
-    .nav-links.open {
-      display: flex; flex-direction: column;
-      position: absolute; top: 76px; left: 0; right: 0;
-      padding: 16px 24px 24px;
-      background: var(--bg); border-bottom: 1px solid var(--border);
-      gap: 4px;
-    }
-    .nav-links.open a { padding: 14px 6px; border-bottom: 1px solid var(--border); }
-  }
+  /* Header / footer / bottom-nav: see header.js, footer.js, bottom-nav.js */
 
   /* ---------- Hero ---------- */
   .hero {
@@ -609,7 +525,7 @@
   .tab {
     position: relative; padding: 10px 20px 14px;
     display: inline-flex; align-items: center; gap: 10px;
-    color: var(--text-muted); border-radius: 12px;
+    color: var(--text-muted); border-radius: var(--radius-pill);
     transition: color .2s var(--ease), background .2s var(--ease);
   }
   .tab:hover { color: var(--text); background: rgba(255, 246, 233, 0.6); }
@@ -1096,76 +1012,7 @@
   .editorial-item h4 { font-family: 'Lora', serif; font-size: 17px; margin: 0 0 4px; line-height: 1.25; }
   .editorial-item p { font-size: 13px; margin: 0; color: var(--text-muted); }
 
-  /* ---------- Footer ---------- */
-  footer.site {
-    width: 100%;
-    padding: 64px 32px;
-    background: #f0ede8;
-    border-top: 1px solid rgba(194, 200, 195, 0.1);
-  }
-  .footer-inner {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 48px;
-    max-width: 1280px;
-    margin: 0 auto;
-  }
-  .footer-brand-col { display: flex; flex-direction: column; gap: 24px; }
-  .footer-brand-name {
-    font-family: 'Noto Serif', serif;
-    font-size: 20px; font-weight: 400; color: #182c24; margin: 0;
-  }
-  .footer-brand-tagline {
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px; letter-spacing: 0.025em;
-    color: rgba(24, 44, 36, 0.7); line-height: 1.625; margin: 0;
-  }
-  .footer-link-col { display: flex; flex-direction: column; gap: 16px; }
-  .footer-col-heading {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700; font-size: 12px;
-    text-transform: uppercase; letter-spacing: 0.1em;
-    color: rgba(24, 44, 36, 0.4); margin: 0;
-  }
-  .footer-link-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-  .footer-link-col a {
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px; letter-spacing: 0.025em;
-    color: rgba(24, 44, 36, 0.7); transition: color 0.2s ease;
-  }
-  .footer-link-col a:hover { color: #182c24; }
-  .footer-connect-icons { display: flex; gap: 16px; }
-  .footer-icon-btn {
-    width: 40px; height: 40px; border-radius: 50%;
-    border: 1px solid rgba(194, 200, 195, 0.3);
-    display: flex; align-items: center; justify-content: center;
-    color: rgba(24, 44, 36, 0.7); transition: background 0.2s ease;
-  }
-  .footer-icon-btn:hover { background: rgba(24, 44, 36, 0.05); }
-  .footer-icon-btn .material-symbols-outlined { font-size: 18px; }
-  .footer-bottom {
-    max-width: 1280px; margin: 64px auto 0;
-    padding-top: 32px;
-    border-top: 1px solid rgba(194, 200, 195, 0.2);
-    display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  }
-  .footer-copyright {
-    font-family: 'Manrope', sans-serif;
-    font-size: 12px; letter-spacing: 0.025em;
-    color: rgba(24, 44, 36, 0.5); margin: 0;
-  }
-  .footer-legal-links { display: flex; gap: 32px; }
-  .footer-legal-links a {
-    font-family: 'Manrope', sans-serif;
-    font-size: 12px; letter-spacing: 0.025em;
-    color: rgba(24, 44, 36, 0.5); transition: color 0.2s ease;
-  }
-  .footer-legal-links a:hover { color: #182c24; }
-  @media (max-width: 768px) {
-    footer.site { padding: 48px 24px; }
-    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; }
-  }
+  /* Footer: see footer.js (shared partial) */
 
   /* ---------- Toast ---------- */
   .toast {
@@ -1186,52 +1033,7 @@
     padding: 3px 8px; border-radius: 4px; margin-left: 6px;
   }
 
-  /* ======================================================
-   * MOBILE BOTTOM NAV (v3) — 3 elements: Home / Add / Account
-   * Replaces the burger menu on small viewports.
-   * ====================================================== */
-  .m-bottom-nav { display: none; }
-  @media (max-width: 720px) {
-    .m-bottom-nav {
-      display: flex;
-      position: fixed; left: 0; right: 0; bottom: 0;
-      z-index: 70;
-      background: rgba(249, 246, 239, 0.96);
-      backdrop-filter: saturate(120%) blur(14px);
-      -webkit-backdrop-filter: saturate(120%) blur(14px);
-      border-top: 1px solid var(--border);
-      padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
-    }
-  }
-  .m-bn-btn {
-    flex: 1; display: flex; flex-direction: column; align-items: center;
-    gap: 4px; background: transparent; border: 0;
-    padding: 8px 6px; cursor: pointer;
-    color: var(--muted);
-    font: 500 11px/1 "Inter", system-ui, sans-serif;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .m-bn-btn[aria-current="page"] { color: var(--text); }
-  .m-bn-btn:active { color: var(--text); }
-  .m-bn-btn svg {
-    width: 24px; height: 24px;
-    stroke: currentColor; fill: none;
-    stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
-  }
-  .m-bn-btn--cta { color: var(--orange-700); }
-  .m-bn-btn--cta svg { stroke-width: 1.8; }
-  /* Direction-aware auto-hide: slide down + fade after the user scrolls deep */
-  .m-bottom-nav {
-    transition: transform 320ms var(--ease, cubic-bezier(.4, 0, .2, 1)),
-                opacity 240ms ease;
-    will-change: transform, opacity;
-  }
-  .m-bottom-nav.is-hidden {
-    transform: translateY(110%);
-    opacity: 0;
-    pointer-events: none;
-  }
+  /* Mobile bottom nav: see bottom-nav.js (shared partial) */
 
   /* ============================================================
    * HAPTIC + MICRO-INTERACTION FEEDBACK
@@ -1312,48 +1114,7 @@
     .m-modal.open, .m-modal.closing { animation: none !important; }
   }
 
-  /* ============= Mobile account menu (fullscreen) ============= */
-  .m-account-menu {
-    position: fixed; inset: 0; z-index: 210;
-    background: var(--bg-2);
-    display: none;
-    flex-direction: column;
-  }
-  .m-account-menu.open { display: flex; }
-  .m-account-head {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 16px 12px;
-    background: var(--bg-2);
-    border-bottom: 1px solid var(--line);
-  }
-  .m-account-title {
-    margin: 0; font: 500 16px/1.2 "Inter", system-ui, sans-serif;
-    color: var(--text);
-  }
-  .m-account-body {
-    flex: 1; overflow-y: auto;
-    padding: 12px 16px 24px;
-    display: flex; flex-direction: column; gap: 8px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .m-account-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 18px 18px;
-    border-radius: 14px;
-    background: var(--bg);
-    border: 1px solid var(--line);
-    color: var(--text); text-decoration: none;
-    font: 500 15px/1.2 "Inter", system-ui, sans-serif;
-    cursor: pointer; text-align: left;
-    width: 100%;
-  }
-  .m-account-item:active { background: #FBF8F0; }
-  .m-account-item svg {
-    width: 22px; height: 22px;
-    stroke: currentColor; fill: none;
-    stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
-    flex: 0 0 auto;
-  }
+  /* Mobile account menu: see bottom-nav.js (shared partial) */
 
   /* ============================================================
    * LIVE PULSE
@@ -1599,39 +1360,8 @@
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
-<header class="site">
-  <div class="container nav">
-    <a href="#" class="logo" aria-label="Viluma home">Viluma</a>
-    <nav class="nav-links" id="navLinks" aria-label="Primary">
-      <a href="#" data-hub="events">Events</a>
-      <a href="#" data-hub="retreats">Retreats</a>
-      <a href="#" data-hub="trainings">Trainings</a>
-    </nav>
-    <div class="nav-actions">
-
-      <button class="btn-ghost">For organisers</button>
-      <button class="icon-btn" aria-label="Saved">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-      </button>
-      <div class="user-menu-wrap">
-        <button class="icon-btn" id="userMenuBtn" aria-label="Account" aria-expanded="false">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-        </button>
-        <div class="user-dropdown" id="userDropdown" role="menu">
-          <a href="auth.html" class="user-dd-item" role="menuitem">Sign in</a>
-          <a href="auth.html?mode=signup" class="user-dd-item" role="menuitem">Create account</a>
-          <div class="user-dd-sep"></div>
-          <a href="#" class="user-dd-item" role="menuitem">Saved events</a>
-          <a href="host.html" class="user-dd-item" role="menuitem">For organisers</a>
-        </div>
-      </div>
-      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
-      </button>
-    </div>
-  </div>
-</header>
+<!-- ============ HEADER (shared partial — see header.js) ============ -->
+<div data-component="header" data-mode="hero"></div>
 
 <!-- ============ MOBILE SEARCH (v3) — top of page on small screens ============ -->
 <section class="m-search">
@@ -1755,7 +1485,7 @@
               </div>
             </li>
           </ul>
-          <a class="card-cta" href="#" data-link="/berlin/events/">See all events in Berlin →</a>
+          <a class="card-cta" href="events-hub.html">See all events in Berlin →</a>
         </div>
       </article>
 
@@ -1805,7 +1535,7 @@
         <h2>Browse by category.</h2>
         <p>Events stay flat — events are local and modality-driven. Retreats and trainings open into a pillar taxonomy with sub-categories, so you can go as deep as you want.</p>
       </div>
-      <a href="#" class="all" data-link="/categories/">All categories →</a>
+      <a href="search-results.html" class="all">All categories →</a>
     </div>
     <div class="cats-pillars" id="catsPillars"></div>
   </div>
@@ -2041,49 +1771,8 @@
   </div>
 </section>
 
-<!-- ============ FOOTER ============ -->
-<footer class="site">
-  <div class="footer-inner">
-    <div class="footer-brand-col">
-      <h2 class="footer-brand-name">Viluma</h2>
-      <p class="footer-brand-tagline">Elevating the human experience through intentional spaces and curated presence.</p>
-    </div>
-    <div class="footer-link-col">
-      <h4 class="footer-col-heading">Explore</h4>
-      <ul>
-        <li><a href="#">Events</a></li>
-        <li><a href="#">Retreats</a></li>
-        <li><a href="#">Trainings</a></li>
-      </ul>
-    </div>
-    <div class="footer-link-col">
-      <h4 class="footer-col-heading">Company</h4>
-      <ul>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Journal</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-    <div class="footer-link-col">
-      <h4 class="footer-col-heading">Connect</h4>
-      <div class="footer-connect-icons">
-        <a href="#" class="footer-icon-btn" aria-label="Website">
-          <span class="material-symbols-outlined">public</span>
-        </a>
-        <a href="#" class="footer-icon-btn" aria-label="Email">
-          <span class="material-symbols-outlined">mail</span>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p class="footer-copyright">© 2026 Viluma. All rights reserved.</p>
-    <div class="footer-legal-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-    </div>
-  </div>
-</footer>
+<!-- ============ FOOTER (shared partial) ============ -->
+<div data-component="footer"></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -2104,50 +1793,12 @@
   </div>
 </div>
 
-<!-- ============ MOBILE BOTTOM NAV (v3) ============ -->
-<nav class="m-bottom-nav" aria-label="Primary mobile">
-  <a href="#" class="m-bn-btn" aria-current="page" aria-label="Home">
-    <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V11z"/></svg>
-    Home
-  </a>
-  <button type="button" class="m-bn-btn m-bn-btn--cta" aria-label="Add an event">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-    Add
-  </button>
-  <button type="button" class="m-bn-btn" id="mBnAccount" aria-label="Open account menu">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-    Account
-  </button>
-</nav>
+<!-- ============ MOBILE BOTTOM NAV + ACCOUNT SHEET (shared partial) ============ -->
+<div data-component="bottom-nav" data-active="home"></div>
 
-<!-- ============ MOBILE ACCOUNT MENU (fullscreen) ============ -->
-<div class="m-account-menu" id="mAccountMenu" role="dialog" aria-modal="true" aria-label="Account menu">
-  <div class="m-account-head">
-    <button class="m-modal-close" id="mAccountClose" aria-label="Close menu">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    </button>
-    <h2 class="m-account-title">Account</h2>
-  </div>
-  <div class="m-account-body">
-    <a href="auth.html" class="m-account-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      Sign in
-    </a>
-    <a href="auth.html?mode=signup" class="m-account-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-      Create account
-    </a>
-    <div style="height:1px;background:var(--border);margin:6px 16px;"></div>
-    <a href="#" class="m-account-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M9 3v4M15 3v4"/></svg>
-      Saved events
-    </a>
-    <a href="host.html" class="m-account-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      For organisers
-    </a>
-  </div>
-</div>
+<script src="header.js" defer></script>
+<script src="footer.js" defer></script>
+<script src="bottom-nav.js" defer></script>
 
 <script>
   /* ==========================================================
@@ -3275,17 +2926,15 @@
       </div>
       <div class="cat-list"></div>
       <div class="cat-footer">
-        <a class="card-cta" href="#" data-link="${p.baseUrl}">All ${p.title.toLowerCase()} →</a>
+        <a class="card-cta" href="search-results.html">All ${p.title.toLowerCase()} →</a>
       </div>
     `;
     const list = group.querySelector(".cat-list");
     p.cats.forEach(c => {
       const a = document.createElement("a");
-      a.href = "#";
+      a.href = "search-results.html";
       a.className = "cat-link" + (c.trending ? " trending" : "");
       a.textContent = c.name;
-      a.dataset.link = `${p.baseUrl}${c.slug}/`;
-      a.addEventListener("click", (e) => { e.preventDefault(); toast(`Open <code>${a.dataset.link}</code>`); });
       list.appendChild(a);
     });
     return group;
@@ -3302,7 +2951,7 @@
       </div>
       <div class="cat-pillars-list"></div>
       <div class="cat-footer">
-        <a class="card-cta" href="#" data-link="${p.baseUrl}">All ${p.title.toLowerCase()} →</a>
+        <a class="card-cta" href="search-results.html">All ${p.title.toLowerCase()} →</a>
       </div>
     `;
     const list = group.querySelector(".cat-pillars-list");
@@ -3319,7 +2968,7 @@
           <span class="pi-cnt">${fmt(pillar.count)}</span>
         </a>
       `);
-      a.addEventListener("click", (e) => { e.preventDefault(); toast(`Open <code>${a.dataset.link}</code>`); });
+      a.addEventListener("click", (e) => { e.preventDefault(); location.href = "search-results.html"; });
       list.appendChild(a);
     });
     return group;
@@ -3346,20 +2995,11 @@
   function submitSearch(e) {
     e.preventDefault();
     if (window.Haptics) window.Haptics.fire("success");
-
-    // For the Events tab, route to the live events.html search-results page
-    // using the production query params (q, areaId, categoryId).
-    if (state.tab === "events") {
-      const p = new URLSearchParams();
-      if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
-      if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
-      const target = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
-      location.href = target;
-      return false;
-    }
-
-    // Retreats / trainings remain on the prototype path-style preview.
-    toast(`Submit search · routes to <code>${buildUrl()}</code>`);
+    const p = new URLSearchParams();
+    if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
+    if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+    if (state.tab !== "events") p.set("type", state.tab);
+    location.href = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
     return false;
   }
 
@@ -3375,15 +3015,7 @@
     toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
   }
 
-  /* ==========================================================
-   * Mobile menu
-   * ========================================================== */
-  document.getElementById("menuToggle").addEventListener("click", () => {
-    const nav = document.getElementById("navLinks");
-    const btn = document.getElementById("menuToggle");
-    const open = nav.classList.toggle("open");
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
-  });
+  /* Mobile burger menu was removed — bottom-nav replaces it. See bottom-nav.js */
 
   /* ==========================================================
    * MOBILE STEP-FLOW MODAL (v3)
@@ -4078,15 +3710,11 @@
   function mSubmit() {
     closeMobileModal();
     if (window.Haptics) window.Haptics.fire("success");
-
-    if (state.tab === "events") {
-      const p = new URLSearchParams();
-      if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
-      if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
-      location.href = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
-      return;
-    }
-    toast(`Submit search · routes to <code>${buildUrl()}</code>`);
+    const p = new URLSearchParams();
+    if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
+    if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+    if (state.tab !== "events") p.set("type", state.tab);
+    location.href = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
   }
 
   // Wire up triggers
@@ -4145,51 +3773,15 @@
   renderFields();
   renderCatsPillars();
 
-  /* ==========================================================
-   * Desktop user account dropdown
-   * ========================================================== */
-  (function() {
-    const btn = document.getElementById("userMenuBtn");
-    const dd  = document.getElementById("userDropdown");
-    if (!btn || !dd) return;
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const open = dd.classList.toggle("open");
-      btn.setAttribute("aria-expanded", String(open));
-    });
-    document.addEventListener("click", () => {
-      dd.classList.remove("open");
-      btn.setAttribute("aria-expanded", "false");
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); }
-    });
-  })();
-
-  /* ==========================================================
-   * Mobile bottom-nav account menu
-   * ========================================================== */
-  (function() {
-    const menu = document.getElementById("mAccountMenu");
-    const openBtn = document.getElementById("mBnAccount");
-    const closeBtn = document.getElementById("mAccountClose");
-    if (!menu || !openBtn || !closeBtn) return;
-    const open = () => { menu.classList.add("open"); document.body.classList.add("m-locked"); };
-    const close = () => { menu.classList.remove("open"); document.body.classList.remove("m-locked"); };
-    openBtn.addEventListener("click", open);
-    closeBtn.addEventListener("click", close);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && menu.classList.contains("open")) close();
-    });
-  })();
+  /* Desktop account dropdown + mobile account sheet are wired by header.js / bottom-nav.js */
 
   /* ==========================================================
    * Bottom-nav direction-aware auto-hide
    *   Hide when scrolled past 1.5 viewports (going down).
    *   Reappear after 0.5 viewport of accumulated upward scroll.
    * ========================================================== */
-  (function() {
-    const nav = document.querySelector(".m-bottom-nav");
+  function wireBottomNavAutoHide() {
+    const nav = document.querySelector(".vb-bottom-nav");
     if (!nav) return;
     let lastY = window.scrollY || 0;
     let upAccum = 0;
@@ -4213,7 +3805,6 @@
           nav.classList.remove("is-hidden");
         }
       }
-      // Always show near the top so the nav is reachable on landing
       if (y < vh * 1.5 && hidden) {
         hidden = false;
         nav.classList.remove("is-hidden");
@@ -4224,7 +3815,13 @@
       if (raf) return;
       raf = requestAnimationFrame(apply);
     }, { passive: true });
-  })();
+  }
+  // bottom-nav.js mounts on DOMContentLoaded — wait a tick then attach.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => setTimeout(wireBottomNavAutoHide, 0));
+  } else {
+    setTimeout(wireBottomNavAutoHide, 0);
+  }
 
   // Live Pulse scroll buttons
   (function() {

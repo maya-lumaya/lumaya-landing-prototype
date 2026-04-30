@@ -58,92 +58,7 @@ img { display: block; }
 .container { width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 28px; }
 @media (max-width: 640px) { .container { padding: 0 16px; } }
 
-/* ── Header (reused) ───────────────────────────── */
-header.site {
-  position: sticky; top: 0; z-index: 50;
-  background: rgba(252, 249, 244, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(194, 200, 195, 0.18);
-}
-.nav {
-  display: flex; align-items: center; gap: 16px;
-  height: 72px;
-}
-.logo {
-  font-family: 'Noto Serif', serif;
-  font-style: italic; font-weight: 400;
-  font-size: 24px; letter-spacing: -0.025em;
-  color: #182c24; flex-shrink: 0;
-}
-.header-search {
-  flex: 1; max-width: 460px; margin: 0 auto;
-  display: flex; align-items: center; gap: 0;
-  background: var(--surface);
-  border: 1px solid rgba(194, 200, 195, 0.4);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
-  height: 44px; padding: 0 6px 0 0;
-  transition: box-shadow 0.2s, border-color 0.2s;
-  cursor: pointer;
-}
-.header-search:hover {
-  box-shadow: 0 4px 16px rgba(28,28,25,0.08);
-  border-color: rgba(194,200,195,0.65);
-}
-.header-search .hs-segment {
-  padding: 0 16px; font-size: 13px; font-weight: 500;
-  color: var(--text); white-space: nowrap;
-}
-.header-search .hs-segment + .hs-segment {
-  border-left: 1px solid rgba(194,200,195,0.35);
-}
-.header-search .hs-segment.muted { color: var(--text-muted); font-weight: 400; }
-.header-search .hs-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--orange-500); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  margin-left: auto; flex-shrink: 0;
-  transition: opacity 0.15s;
-}
-.header-search .hs-btn:hover { opacity: 0.88; }
-.header-search .hs-btn .material-symbols-outlined { font-size: 16px; }
-
-.nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-.icon-btn {
-  width: 36px; height: 36px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted); transition: background 0.15s, color 0.15s;
-}
-.icon-btn:hover { background: var(--bg-3); color: var(--orange-600); }
-.user-menu-wrap { position: relative; }
-.user-dropdown {
-  display: none;
-  position: absolute; top: calc(100% + 8px); right: 0;
-  min-width: 186px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 14px;
-  box-shadow: 0 8px 28px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.06);
-  z-index: 300; padding: 5px 0; overflow: hidden;
-}
-.user-dropdown.open { display: block; }
-.user-dd-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px; font: 500 14px/1 'Inter', system-ui, sans-serif;
-  color: var(--text); text-decoration: none; background: none; border: none;
-  width: 100%; text-align: left; cursor: pointer; transition: background .12s;
-}
-.user-dd-item:hover { background: var(--bg-2); }
-.user-dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
-.icon-btn .material-symbols-outlined { font-size: 18px; }
-
-@media (max-width: 760px) {
-  .header-search .hs-segment:nth-child(2),
-  .header-search .hs-segment:nth-child(3) { display: none; }
-  .header-search { max-width: none; }
-}
-@media (max-width: 480px) {
-  .nav-actions .icon-btn:first-child { display: none; }
-}
+/* Header / footer / bottom-nav: see header.js, footer.js, bottom-nav.js */
 
 /* ── Page wrap ─────────────────────────────────── */
 .page { padding: 28px 0 0; }
@@ -646,11 +561,12 @@ h1.page-title {
   opacity: 1; pointer-events: auto;
 }
 
-/* ── Mobile map FAB ────────────────────────────── */
+/* ── Mobile map FAB (floats above bottom-nav) ──── */
 .mobile-map-fab {
   display: none;
   position: fixed;
-  bottom: 24px; left: 50%; transform: translateX(-50%);
+  bottom: calc(24px + 64px + env(safe-area-inset-bottom, 0px));
+  left: 50%; transform: translateX(-50%);
   z-index: 95;
   background: var(--primary); color: #fff;
   border-radius: var(--radius-pill);
@@ -663,58 +579,6 @@ h1.page-title {
 }
 .mobile-map-fab:hover { opacity: 0.92; }
 .mobile-map-fab .material-symbols-outlined { font-size: 18px; }
-
-/* ── Footer (reused) ───────────────────────────── */
-footer.site {
-  width: 100%; padding: 64px 32px;
-  background: #f0ede8;
-  border-top: 1px solid rgba(194, 200, 195, 0.15);
-}
-.footer-inner {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 48px; max-width: 1240px; margin: 0 auto;
-}
-.footer-brand-col { display: flex; flex-direction: column; gap: 20px; }
-.footer-brand-name {
-  font-family: 'Noto Serif', serif;
-  font-size: 20px; font-weight: 400; color: #182c24; margin: 0;
-}
-.footer-brand-tagline {
-  font-family: 'Manrope', sans-serif;
-  font-size: 14px; letter-spacing: 0.025em;
-  color: rgba(24,44,36,0.7); line-height: 1.65; margin: 0;
-}
-.footer-link-col { display: flex; flex-direction: column; gap: 16px; }
-.footer-col-heading {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700; font-size: 12px;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: rgba(24,44,36,0.4); margin: 0;
-}
-.footer-link-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-.footer-link-col a {
-  font-family: 'Manrope', sans-serif;
-  font-size: 14px; letter-spacing: 0.025em;
-  color: rgba(24,44,36,0.7); transition: color 0.2s;
-}
-.footer-link-col a:hover { color: #182c24; }
-.footer-bottom {
-  max-width: 1240px; margin: 56px auto 0;
-  padding-top: 28px; border-top: 1px solid rgba(194,200,195,0.2);
-  display: flex; justify-content: space-between; align-items: center; gap: 16px;
-}
-.footer-copyright {
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px; letter-spacing: 0.025em;
-  color: rgba(24,44,36,0.5); margin: 0;
-}
-.footer-legal-links { display: flex; gap: 28px; }
-.footer-legal-links a {
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px; letter-spacing: 0.025em;
-  color: rgba(24,44,36,0.5); transition: color 0.2s;
-}
-.footer-legal-links a:hover { color: #182c24; }
 
 /* ── Responsive ────────────────────────────────── */
 @media (max-width: 1080px) {
@@ -790,9 +654,6 @@ footer.site {
   .results-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   h1.page-title { font-size: 26px; }
   .filterbar-search { flex-basis: 100%; order: -1; }
-  footer.site { padding: 48px 18px; }
-  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
 
 @media (max-width: 420px) {
@@ -802,35 +663,8 @@ footer.site {
 </head>
 <body>
 
-<!-- ── Header ── -->
-<header class="site">
-  <div class="container nav">
-    <a href="index.html" class="logo" aria-label="Viluma home">Viluma</a>
-    <a class="header-search" id="headerSearch" href="index.html" aria-label="Open search">
-      <span class="hs-segment">Anywhere</span>
-      <span class="hs-segment muted">Any time</span>
-      <span class="hs-segment muted">Any practice</span>
-      <span class="hs-btn"><span class="material-symbols-outlined">search</span></span>
-    </a>
-    <div class="nav-actions">
-      <button class="icon-btn" aria-label="Saved">
-        <span class="material-symbols-outlined">bookmark</span>
-      </button>
-      <div class="user-menu-wrap">
-        <button class="icon-btn" id="userMenuBtn" aria-label="Account" aria-expanded="false">
-          <span class="material-symbols-outlined">account_circle</span>
-        </button>
-        <div class="user-dropdown" id="userDropdown" role="menu">
-          <a href="auth.html" class="user-dd-item" role="menuitem">Sign in</a>
-          <a href="auth.html?mode=signup" class="user-dd-item" role="menuitem">Create account</a>
-          <div class="user-dd-sep"></div>
-          <a href="#" class="user-dd-item" role="menuitem">Saved events</a>
-          <a href="host.html" class="user-dd-item" role="menuitem">For organisers</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
+<!-- ── Header (shared partial — see header.js) ── -->
+<div data-component="header" data-mode="search" data-active="events"></div>
 
 <!-- ── Page ── -->
 <div class="page">
@@ -929,44 +763,12 @@ footer.site {
 
 <div class="sheet-backdrop" id="sheetBackdrop"></div>
 
-<!-- ── Footer ── -->
-<footer class="site">
-  <div class="footer-inner">
-    <div class="footer-brand-col">
-      <h2 class="footer-brand-name">Viluma</h2>
-      <p class="footer-brand-tagline">Elevating the human experience through intentional spaces and curated presence.</p>
-    </div>
-    <div class="footer-link-col">
-      <h4 class="footer-col-heading">Explore</h4>
-      <ul>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="index.html">Retreats</a></li>
-        <li><a href="index.html">Trainings</a></li>
-      </ul>
-    </div>
-    <div class="footer-link-col">
-      <h4 class="footer-col-heading">Cities</h4>
-      <ul>
-        <li><a href="events-hub.html">Berlin</a></li>
-      </ul>
-    </div>
-    <div class="footer-link-col">
-      <h4 class="footer-col-heading">Company</h4>
-      <ul>
-        <li><a href="#">About</a></li>
-        <li><a href="#">For Organisers</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p class="footer-copyright">© 2026 Lumaya. All rights reserved.</p>
-    <div class="footer-legal-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-    </div>
-  </div>
-</footer>
+<!-- ── Footer + Mobile bottom nav (shared partials) ── -->
+<div data-component="footer"></div>
+<div data-component="bottom-nav" data-active="search"></div>
+<script src="header.js" defer></script>
+<script src="footer.js" defer></script>
+<script src="bottom-nav.js" defer></script>
 
 <script>
   /* ── Constants ─────────────────────────────────────────── */
@@ -1903,17 +1705,6 @@ footer.site {
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDczbg9VHL3msQ5e_JN-yd3CY9obrYBw14&v=weekly&loading=async&callback=onMapsReady">
 </script>
-<script>
-  (function() {
-    const btn = document.getElementById("userMenuBtn");
-    const dd  = document.getElementById("userDropdown");
-    if (!btn || !dd) return;
-    btn.addEventListener("click", (e) => { e.stopPropagation(); const o = dd.classList.toggle("open"); btn.setAttribute("aria-expanded", String(o)); });
-    document.addEventListener("click", () => { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { dd.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); } });
-  })();
-</script>
-
 <script src="auth-overlay.js"></script>
 </body>
 </html>
