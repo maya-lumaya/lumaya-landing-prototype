@@ -188,16 +188,16 @@ body {
   <!-- Eventbrite #1 -->
   <div class="card">
     <p class="card-provider eb">Eventbrite</p>
-    <h2>Sinnliche Kakao Tempelnacht</h2>
-    <p class="card-meta">Sa, 10. Jan 2026 · 16:00–21:00<br>Hasenheide 9, Berlin</p>
+    <h2>52. Mantrakonzert der Stiftung Lebenskultur</h2>
+    <p class="card-meta">Sa, 30. Mai 2026 · 20:00–22:00<br>Wartburgstraße 52, Berlin</p>
     <button class="btn-buy eb" id="eb-btn-1">Buy now</button>
   </div>
 
   <!-- Eventbrite #2 -->
   <div class="card">
     <p class="card-provider eb">Eventbrite</p>
-    <h2>Authentic Relating Game Night</h2>
-    <p class="card-meta">Sa, 14. Feb 2026 · 19:00–21:30<br>Gutenbergstraße 30, Potsdam</p>
+    <h2>Tantra Retreat: From Skin to Soul</h2>
+    <p class="card-meta">23–28. Nov 2026<br>Teneriffa, Chayofa</p>
     <button class="btn-buy eb" id="eb-btn-2">Buy now</button>
   </div>
 
@@ -241,18 +241,18 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTTModal
 window.addEventListener('load', function() {
   window.EBWidgets.createWidget({
     widgetType: 'checkout',
-    eventId: '1978775190863',
+    eventId: '1985230083621',
     modal: true,
     modalTriggerElementId: 'eb-btn-1',
-    onOrderComplete: function() { console.log('[EB] Order complete: Kakao Tempelnacht'); },
+    onOrderComplete: function() { console.log('[EB] Order complete: Mantrakonzert'); },
   });
 
   window.EBWidgets.createWidget({
     widgetType: 'checkout',
-    eventId: '1982432310406',
+    eventId: '1981167147269',
     modal: true,
     modalTriggerElementId: 'eb-btn-2',
-    onOrderComplete: function() { console.log('[EB] Order complete: Authentic Relating'); },
+    onOrderComplete: function() { console.log('[EB] Order complete: Tantra Retreat'); },
   });
 });
 </script>
