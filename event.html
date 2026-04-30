@@ -268,10 +268,14 @@ h1.page-title {
 .desc-toggle {
   margin-top: 14px;
   font: 600 13px/1 'Inter', sans-serif;
-  color: var(--text); text-decoration: underline;
-  text-underline-offset: 4px;
+  color: var(--text);
   display: inline-flex; align-items: center; gap: 4px;
+  white-space: nowrap;
   transition: color 0.15s;
+}
+.desc-toggle .toggle-label {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 .desc-toggle:hover { color: var(--orange-600); }
 
@@ -730,7 +734,7 @@ h1.page-title {
             </div>
           </div>
           <button class="desc-toggle" id="descToggle" hidden>
-            Show more <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
+            <span class="toggle-label">Show more</span><span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
           </button>
         </section>
 
@@ -1052,8 +1056,8 @@ h1.page-title {
       toggle.addEventListener('click', () => {
         wrap.classList.toggle('collapsed');
         toggle.innerHTML = wrap.classList.contains('collapsed')
-          ? 'Show more <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>'
-          : 'Show less <span class="material-symbols-outlined" style="font-size:16px">expand_less</span>';
+          ? '<span class="toggle-label">Show more</span><span class="material-symbols-outlined" style="font-size:16px">expand_more</span>'
+          : '<span class="toggle-label">Show less</span><span class="material-symbols-outlined" style="font-size:16px">expand_less</span>';
       });
     } else {
       wrap.classList.remove('collapsed');
