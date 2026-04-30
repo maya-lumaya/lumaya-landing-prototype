@@ -365,6 +365,75 @@ h1.profile-title {
 }
 .empty-state .material-symbols-outlined { font-size: 32px; color: var(--text-subtle); margin-bottom: 12px; display: block; }
 
+/* ── Education timeline ─────────────────────── */
+.education-section {
+  margin-top: 56px;
+  padding-top: 48px;
+  border-top: 1px solid var(--outline-variant);
+}
+.education-title {
+  font-size: 22px; line-height: 1.25;
+  margin-bottom: 36px; color: var(--text);
+}
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 7px; top: 8px; bottom: 0;
+  width: 1px; background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 36px;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -28px; top: 6px;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--orange-300);
+  z-index: 1;
+}
+.timeline-item.featured .timeline-dot {
+  border-color: var(--orange-500);
+  background: var(--orange-300);
+}
+.timeline-year {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.timeline-type-badge {
+  display: inline-block;
+  font: 600 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: var(--radius-pill);
+  margin-left: 8px;
+  vertical-align: 1px;
+}
+.timeline-type-badge.CERTIFICATION { background: #E8F0EB; color: #2D5A3A; }
+.timeline-type-badge.TRAINING       { background: #EEE8DC; color: #6B4A1A; }
+.timeline-type-badge.WORKSHOP       { background: #E9EAF5; color: #3A3870; }
+.timeline-type-badge.RETREAT        { background: #F2EBF0; color: #5A2D4C; }
+.timeline-item-title {
+  font: 600 16px/1.3 'Inter', sans-serif;
+  color: var(--text); margin-bottom: 4px;
+}
+.timeline-institution {
+  font-size: 14px; color: var(--text-muted); margin-bottom: 4px;
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.timeline-institution .material-symbols-outlined { font-size: 14px; color: var(--text-subtle); }
+.timeline-desc {
+  font-size: 14px; color: var(--text-muted); line-height: 1.6;
+  margin-top: 8px;
+}
+
 /* ── Mobile ─────────────────────────────────── */
 @media (max-width: 720px) {
   .banner-section { height: 220px; margin-top: 0; }
@@ -460,6 +529,12 @@ h1.profile-title {
             <div id="side-rows"></div>
           </div>
         </aside>
+      </div>
+
+      <!-- Education timeline (within About tab) -->
+      <div class="education-section" id="education-section" hidden>
+        <h2 class="education-title section-title">Training &amp; Education</h2>
+        <div class="timeline" id="education-timeline"></div>
       </div>
     </section>
 
@@ -810,6 +885,119 @@ h1.profile-title {
     document.getElementById('events-empty').hidden = upcoming.length || previous.length;
   }
 
+  /* ── Education stub ──────────────────────────────────────
+     Temporary hardcoded data — will be part of the /profiles/:slug
+     API response once the backend exposes host.education[].
+  ──────────────────────────────────────────────────────── */
+  const EDUCATION_STUB = [
+    {
+      id: "edu_1",
+      title: "500hr Advanced Yoga Teacher Training",
+      institution: "Krishnamacharya Yoga Mandiram",
+      location: "Chennai, India",
+      yearStart: 2022,
+      yearEnd: null,
+      type: "CERTIFICATION",
+      featured: true,
+      description: "Advanced study in Viniyoga therapeutics, yoga for special populations, and Patañjali's Yoga Sutras. Mentored directly under senior KYM faculty."
+    },
+    {
+      id: "edu_2",
+      title: "Somatic Experiencing® Practitioner (SEP)",
+      institution: "Somatic Experiencing International",
+      location: "Berlin, Germany",
+      yearStart: 2020,
+      yearEnd: 2023,
+      type: "CERTIFICATION",
+      featured: false,
+      description: "Three-year body-oriented trauma resolution training grounded in Peter Levine's SE model."
+    },
+    {
+      id: "edu_3",
+      title: "Yin Yoga Immersion",
+      institution: "Insight Yoga Institute",
+      location: "Bali, Indonesia",
+      yearStart: 2021,
+      yearEnd: null,
+      type: "TRAINING",
+      featured: false,
+      description: "Deep study of yin meridian theory, Taoist philosophy, and long-hold passive practice with Sarah Powers."
+    },
+    {
+      id: "edu_4",
+      title: "Vipassana — 10-Day Silent Retreat",
+      institution: "Dhamma Dvara (S.N. Goenka tradition)",
+      location: "Brandenburg, Germany",
+      yearStart: 2019,
+      yearEnd: null,
+      type: "RETREAT",
+      featured: false,
+      description: null
+    },
+    {
+      id: "edu_5",
+      title: "200hr Hatha Yoga Teacher Training",
+      institution: "Sivananda Ashram Neyyar Dam",
+      location: "Kerala, India",
+      yearStart: 2018,
+      yearEnd: null,
+      type: "CERTIFICATION",
+      featured: false,
+      description: "Classical Hatha Yoga, pranayama, Vedantic philosophy, Sanskrit chanting, and traditional ashram life."
+    },
+    {
+      id: "edu_6",
+      title: "Holotropic Breathwork Facilitator Training",
+      institution: "Grof Transpersonal Training",
+      location: "Online / Germany",
+      yearStart: 2020,
+      yearEnd: null,
+      type: "TRAINING",
+      featured: false,
+      description: null
+    }
+  ];
+
+  const EDUCATION_TYPE_LABELS = {
+    CERTIFICATION: 'Certification',
+    TRAINING: 'Training',
+    WORKSHOP: 'Workshop',
+    RETREAT: 'Retreat'
+  };
+
+  /* ── Education render ─────────────────────────────────── */
+  function renderEducation(educationItems) {
+    if (!educationItems || !educationItems.length) return;
+    const section = document.getElementById('education-section');
+    const timeline = document.getElementById('education-timeline');
+    timeline.innerHTML = '';
+
+    educationItems.forEach(item => {
+      const yearLabel = item.yearEnd
+        ? `${item.yearStart}–${item.yearEnd}`
+        : `${item.yearStart}`;
+      const typeBadge = item.type
+        ? `<span class="timeline-type-badge ${item.type}">${EDUCATION_TYPE_LABELS[item.type] || item.type}</span>`
+        : '';
+
+      const div = document.createElement('div');
+      div.className = 'timeline-item' + (item.featured ? ' featured' : '');
+      div.innerHTML = `
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">${escapeHtml(yearLabel)}${typeBadge}</div>
+        <div class="timeline-item-title">${escapeHtml(item.title)}</div>
+        <div class="timeline-institution">
+          <span>${escapeHtml(item.institution)}</span>
+          ${item.location ? `<span class="material-symbols-outlined">·</span><span>${escapeHtml(item.location)}</span>` : ''}
+        </div>
+        ${item.description ? `<div class="timeline-desc">${escapeHtml(item.description)}</div>` : ''}
+      `;
+      timeline.appendChild(div);
+    });
+
+    section.hidden = false;
+  }
+
   /* ── Tabs ─────────────────────────────────────────────── */
   function setActiveTab(tab) {
     document.querySelectorAll('.tab').forEach(b => {
@@ -858,6 +1046,7 @@ h1.profile-title {
     renderBanner(profile);
     renderProfileHead(profile);
     renderAbout(profile);
+    renderEducation(profile.education || EDUCATION_STUB);
     if (profile.ownerId) loadEvents(profile.ownerId);
     else {
       document.getElementById('events-loader').hidden = true;
