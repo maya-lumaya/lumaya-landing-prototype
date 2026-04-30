@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TicketTailor Embed Test — Lumaya</title>
+<title>Ticketing Embed Test — Lumaya</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   --text-muted: #5C5C5C;
   --border: #C2C8C3;
   --primary: #182c24;
-  --radius-md: 14px;
+  --eb-orange: #f05537;
   --radius-lg: 20px;
   --shadow-lg: 0 20px 60px rgba(29,29,33,0.18);
   --ease: cubic-bezier(.2,.7,.2,1);
@@ -28,57 +28,90 @@ body {
   background: var(--bg); color: var(--text);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
-  display: flex; align-items: center; justify-content: center;
+  padding: 60px 24px;
 }
 
-/* Card */
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.page-header h1 {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+}
+.page-header p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
 .card {
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 40px 48px;
-  max-width: 480px;
-  width: 90%;
+  padding: 32px 36px;
+  width: 320px;
   text-align: center;
   box-shadow: 0 4px 24px rgba(29,29,33,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
-.card-label {
-  font-size: 11px;
-  letter-spacing: 0.08em;
+.card-provider {
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
 }
-.card h1 {
+.card-provider.tt { color: #1a6b5a; }
+.card-provider.eb { color: var(--eb-orange); }
+
+.card h2 {
   font-family: 'Lora', Georgia, serif;
+  font-size: 18px;
   font-weight: 500;
-  font-size: 24px;
   letter-spacing: -0.01em;
   margin: 0 0 6px;
+  line-height: 1.3;
 }
 .card-meta {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+  line-height: 1.5;
 }
 
 .btn-buy {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  background: var(--primary);
-  color: #fff;
-  font-size: 15px;
+  width: 100%;
+  font-size: 14px;
   font-weight: 600;
-  padding: 14px 32px;
+  padding: 13px 24px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
   transition: opacity 0.15s;
 }
-.btn-buy:hover { opacity: 0.88; }
-.btn-buy svg { width: 16px; height: 16px; fill: currentColor; }
+.btn-buy:hover { opacity: 0.85; }
+.btn-buy.tt { background: var(--primary); color: #fff; }
+.btn-buy.eb { background: var(--eb-orange); color: #fff; }
 
-/* Modal overlay */
+/* TT modal */
 .modal-overlay {
   display: none;
   position: fixed; inset: 0;
@@ -104,10 +137,9 @@ body {
   animation: modal-in 0.25s var(--ease) both;
 }
 @keyframes modal-in {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 .modal-header {
   display: flex;
   align-items: center;
@@ -132,95 +164,96 @@ body {
 }
 .modal-close:hover { background: #f0ede8; }
 .modal-close svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
-
-.modal-body {
-  flex: 1;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-iframe {
-  display: block;
-  width: 100%;
-  height: 700px;
-  border: none;
-}
-
-/* Note bar */
-.note {
-  margin-top: 24px;
-  font-size: 12px;
-  color: var(--text-muted);
-  background: #f0ede8;
-  border-radius: 8px;
-  padding: 10px 14px;
-  text-align: left;
-  line-height: 1.5;
-}
-.note strong { color: var(--text); }
+.modal-body { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; }
+.modal-body iframe { display: block; width: 100%; height: 680px; border: none; }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <p class="card-label">TicketTailor embed test</p>
-  <h1>Yoga Island</h1>
-  <p class="card-meta">So, 7. Juni 2026 · 08:30–16:00 · Heilbronn</p>
-
-  <button class="btn-buy" onclick="openModal()">
-    <svg viewBox="0 0 24 24"><path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-    Buy now
-  </button>
-
-  <div class="note">
-    <strong>What this tests:</strong> Does TicketTailor allow iframing from a third-party origin? If the form loads below, the embed is viable for Lumaya. If it shows a blank or error, X-Frame-Options is blocking it.
-  </div>
+<div class="page-header">
+  <h1>Ticketing embed test</h1>
+  <p>Testing TicketTailor (iframe) and Eventbrite (JS widget) embeds from a third-party origin.</p>
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+<div class="cards">
+
+  <!-- TicketTailor -->
+  <div class="card">
+    <p class="card-provider tt">TicketTailor</p>
+    <h2>Yoga Island</h2>
+    <p class="card-meta">So, 7. Juni 2026 · 08:30–16:00<br>Hip Island, Heilbronn</p>
+    <button class="btn-buy tt" onclick="openTTModal()">Buy now</button>
+  </div>
+
+  <!-- Eventbrite #1 -->
+  <div class="card">
+    <p class="card-provider eb">Eventbrite</p>
+    <h2>Sinnliche Kakao Tempelnacht</h2>
+    <p class="card-meta">Sa, 10. Jan 2026 · 16:00–21:00<br>Hasenheide 9, Berlin</p>
+    <button class="btn-buy eb" id="eb-btn-1">Buy now</button>
+  </div>
+
+  <!-- Eventbrite #2 -->
+  <div class="card">
+    <p class="card-provider eb">Eventbrite</p>
+    <h2>Authentic Relating Game Night</h2>
+    <p class="card-meta">Sa, 14. Feb 2026 · 19:00–21:30<br>Gutenbergstraße 30, Potsdam</p>
+    <button class="btn-buy eb" id="eb-btn-2">Buy now</button>
+  </div>
+
+</div>
+
+<!-- TT modal -->
+<div class="modal-overlay" id="tt-modal" onclick="handleOverlayClick(event)">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">Get your ticket</span>
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">
+      <span class="modal-title">Yoga Island — Get your ticket</span>
+      <button class="modal-close" onclick="closeTTModal()" aria-label="Close">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal-body">
-      <iframe
-        id="tt-iframe"
-        src=""
-        data-src="https://www.tickettailor.com/events/yogaisland/2073728?widget=true&minimal=true"
-        title="Buy tickets — Yoga Island"
-        allow="payment">
-      </iframe>
+      <iframe id="tt-iframe" src="" title="Buy tickets — Yoga Island" allow="payment"></iframe>
     </div>
   </div>
 </div>
 
+<!-- Eventbrite SDK -->
+<script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script>
 <script>
 const TT_URL = 'https://www.tickettailor.com/events/yogaisland/2073728?widget=true&minimal=true';
 
-function openModal() {
+function openTTModal() {
   const iframe = document.getElementById('tt-iframe');
-  if (!iframe.src || iframe.src === window.location.href) {
-    iframe.src = TT_URL;
-  }
-  document.getElementById('modal').classList.add('open');
+  if (!iframe.src) iframe.src = TT_URL;
+  document.getElementById('tt-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
+function closeTTModal() {
+  document.getElementById('tt-modal').classList.remove('open');
   document.body.style.overflow = '';
 }
-
 function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modal')) closeModal();
+  if (e.target === document.getElementById('tt-modal')) closeTTModal();
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTTModal(); });
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
+window.addEventListener('load', function() {
+  window.EBWidgets.createWidget({
+    widgetType: 'checkout',
+    eventId: '1978775190863',
+    modal: true,
+    modalTriggerElementId: 'eb-btn-1',
+    onOrderComplete: function() { console.log('[EB] Order complete: Kakao Tempelnacht'); },
+  });
+
+  window.EBWidgets.createWidget({
+    widgetType: 'checkout',
+    eventId: '1982432310406',
+    modal: true,
+    modalTriggerElementId: 'eb-btn-2',
+    onOrderComplete: function() { console.log('[EB] Order complete: Authentic Relating'); },
+  });
 });
 </script>
 
