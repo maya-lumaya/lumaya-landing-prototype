@@ -1,0 +1,263 @@
+/* ============================================================
+ * search-pill.css — Viluma unified search pill
+ * Used by: index.html (with tabs), retreats.html, events.html,
+ *          trainings.html (locked to a single mode).
+ *
+ * Depends on CSS custom properties from the host page:
+ *   --surface, --bg, --bg-2, --bg-3, --border, --border-strong,
+ *   --text, --text-muted, --text-subtle, --olive-*, --orange-*,
+ *   --radius-pill, --radius-md, --radius-sm, --shadow-*, --ease
+ * ============================================================ */
+
+/* ── Wrapper (pillar pages — no .search-stage) ── */
+.search-pill-wrap {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 720px; margin: 0 auto;
+}
+
+/* ── Pill ── */
+.search-pill {
+  display: flex; align-items: stretch;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-pill); padding: 8px;
+  box-shadow: var(--shadow-pill); position: relative;
+  transition: box-shadow .25s var(--ease);
+}
+.search-pill:hover { box-shadow: var(--shadow-pill-hover); }
+.search-pill:has(.field:hover), .search-pill:has(.field.active) { background: #F7F4EC; }
+
+/* ── Fields ── */
+.field {
+  position: relative; flex: 1 1 0; min-width: 0;
+  padding: 8px 22px; border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: flex; flex-direction: column; justify-content: center;
+  transition: background .2s var(--ease), box-shadow .2s var(--ease);
+}
+.search-pill > .field:first-of-type { padding-left: 28px; }
+.field:hover { background: var(--surface); }
+.field.active { background: var(--surface); box-shadow: var(--shadow-field-active); z-index: 2; }
+.field + .field::before {
+  content: ""; position: absolute;
+  left: 0; top: 50%; transform: translateY(-50%);
+  height: 32px; width: 1px; background: rgba(29, 29, 33, 0.12);
+  transition: opacity .2s var(--ease);
+}
+.field:hover::before, .field:hover + .field::before,
+.field.active::before, .field.active + .field::before { opacity: 0; }
+.field label { font-size: 12px; font-weight: 600; color: var(--text); margin: 0 0 2px; display: block; pointer-events: none; }
+.field .value { font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.field .value.placeholder { color: var(--text-subtle); font-weight: 400; }
+
+/* ── Submit button ── */
+.submit-wrap { display: flex; align-items: center; padding-left: 6px; }
+.submit {
+  height: 46px; padding: 0; width: 46px; border-radius: 50%;
+  background: var(--orange-500); color: #FFFFFF;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .25s var(--ease), width .3s var(--ease), padding .3s var(--ease), transform .15s var(--ease);
+  font-weight: 500; font-size: 15px; overflow: hidden;
+}
+.submit:hover { background: var(--orange-600); }
+.submit:active { transform: scale(0.97); }
+.submit svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.submit .submit-label {
+  font-size: 0; max-width: 0; opacity: 0;
+  transition: font-size .2s var(--ease), max-width .3s var(--ease), opacity .2s var(--ease), margin .3s var(--ease);
+}
+.search-pill:has(.field.active) .submit { width: auto; padding: 0 22px 0 18px; border-radius: var(--radius-pill); }
+.search-pill:has(.field.active) .submit .submit-label { font-size: 15px; max-width: 120px; opacity: 1; margin-left: 8px; }
+
+/* ── Dropdown base ── */
+.dropdown {
+  position: absolute; top: calc(100% + 10px); left: -10px;
+  min-width: 360px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+  padding: 8px; display: none; z-index: 110;
+  max-height: 520px; overflow-y: auto;
+}
+.field.active .dropdown { display: block; animation: spDdIn .18s var(--ease); }
+@keyframes spDdIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.field:last-of-type .dropdown { left: auto; right: -10px; }
+
+.dd-title {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-subtle); font-weight: 600; padding: 10px 14px 6px;
+}
+.dd-item {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding: 10px 12px;
+  border-radius: var(--radius-sm); font-size: 14px; cursor: pointer;
+  transition: background .15s var(--ease);
+}
+.dd-item:hover { background: var(--bg-2); }
+.dd-item .meta { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
+.dd-item .name { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.dd-item .name .kind { color: var(--text-subtle); font-size: 12px; }
+.dd-item .marker {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--olive-50); display: grid; place-items: center;
+  color: var(--olive-700); flex: 0 0 auto;
+}
+.dd-item .marker svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.dd-item .trending {
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+  color: var(--orange-700); background: var(--orange-50);
+  border: 1px solid var(--orange-100); padding: 2px 7px; border-radius: var(--radius-pill);
+}
+.dd-item .dd-remove {
+  flex: 0 0 auto; width: 28px; height: 28px;
+  border: 0; background: transparent; border-radius: 6px; cursor: pointer;
+  color: var(--text-subtle); display: grid; place-items: center;
+}
+.dd-item .dd-remove:hover { background: var(--bg-3); color: var(--text); }
+.dd-item .dd-remove svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.dd-footer {
+  padding: 10px 14px; margin-top: 4px;
+  border-top: 1px dashed var(--border);
+  font-size: 12px; color: var(--text-subtle); line-height: 1.5;
+}
+.dd-footer strong { color: var(--text-muted); font-weight: 600; }
+.dd-addr-wrap {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; margin-bottom: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.dd-addr-wrap svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--text-subtle); stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.dd-addr-input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font: 14px/1 "Inter", system-ui, sans-serif; color: var(--text);
+}
+.dd-addr-input::placeholder { color: var(--text-subtle); }
+
+/* Wide flat dropdown (Events) */
+.dropdown.wide { min-width: 520px; max-width: 560px; }
+.dropdown.wide .dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 4px; }
+
+/* ── Taxonomy dropdown (Retreats + Trainings) ── */
+.dropdown.taxonomy {
+  min-width: 780px; max-width: 860px;
+  padding: 0; display: none;
+  max-height: 560px; overflow: hidden;
+}
+.field.active .dropdown.taxonomy { display: grid; grid-template-columns: 300px 1fr; }
+
+.tax-pillars {
+  overflow-y: auto; padding: 8px;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+}
+.tax-item { border-radius: 10px; }
+.tax-head {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  padding: 12px; border-radius: 10px;
+  text-align: left; cursor: pointer;
+  transition: background .15s var(--ease);
+}
+.tax-head:hover { background: var(--bg-2); }
+.tax-item.active .tax-head { background: var(--surface); box-shadow: var(--shadow-sm); }
+.tax-item.active .tax-name { color: var(--olive-900); font-weight: 600; }
+.tax-icon {
+  width: 40px; height: 40px; flex: 0 0 40px;
+  background: var(--surface); border-radius: 10px;
+  display: grid; place-items: center;
+  color: var(--olive-700); border: 1px solid var(--border);
+}
+.tax-item.active .tax-icon { background: var(--olive-50); border-color: var(--olive-100); color: var(--olive-900); }
+.tax-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.tax-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tax-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.tax-count { font-size: 12px; color: var(--text-muted); }
+.tax-chev { width: 14px; height: 14px; flex: 0 0 14px; color: var(--text-subtle); transition: transform .25s var(--ease); }
+.tax-chev svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tax-item.open .tax-chev { transform: rotate(90deg); }
+
+/* Mobile accordion inline subs */
+.tax-subs-inline { max-height: 0; overflow: hidden; transition: max-height .3s var(--ease); padding: 0 8px; }
+.tax-item.open .tax-subs-inline { max-height: 1200px; padding: 4px 8px 10px; }
+.tax-subs-inline .tax-sub { padding: 9px 10px; font-size: 13px; }
+
+/* Desktop right panel */
+.tax-panel { padding: 18px 20px; overflow-y: auto; }
+.tax-panel-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 12px;
+}
+.tax-panel-head h4 { font-family: 'Lora', serif; font-size: 18px; font-weight: 500; margin: 0; line-height: 1.2; }
+.tax-panel-head .tax-panel-hint { font-size: 12px; color: var(--text-muted); }
+.tax-panel-head .sensitive-note {
+  display: inline-block; margin-left: 10px;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  font-weight: 700; color: var(--orange-700);
+  background: var(--orange-50); border: 1px solid var(--orange-100);
+  padding: 3px 8px; border-radius: var(--radius-pill);
+}
+.tax-subs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.tax-sub {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; border-radius: 6px; cursor: pointer;
+  font-size: 13px; transition: background .15s var(--ease); gap: 10px;
+}
+.tax-sub:hover { background: var(--bg-2); }
+.tax-sub .sub-name { color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.tax-sub .sub-count { color: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.tax-sub.sensitive .sub-name::after {
+  content: "review"; display: inline-block; margin-left: 8px;
+  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 700; color: var(--orange-700);
+  background: var(--orange-50); border: 1px solid var(--orange-100);
+  padding: 2px 6px; border-radius: 4px; vertical-align: middle;
+}
+
+@media (max-width: 860px) {
+  .dropdown.taxonomy { min-width: 0; max-width: none; max-height: none; overflow: visible; }
+  .field.active .dropdown.taxonomy { display: block; grid-template-columns: none; }
+  .tax-pillars { border-right: 0; background: transparent; padding: 4px; overflow: visible; }
+  .tax-panel { display: none; }
+  .tax-chev { display: block; }
+  .tax-item.active:not(.open) .tax-head { background: transparent; box-shadow: none; }
+  .tax-item.active:not(.open) .tax-icon { background: var(--surface); border-color: var(--border); color: var(--olive-700); }
+  .tax-item.active:not(.open) .tax-name { color: var(--text); font-weight: 500; }
+}
+@media (max-width: 1100px) { .tax-subs-grid { grid-template-columns: 1fr; } }
+
+/* ── Search foot (chips + url preview) ── */
+.search-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 8px 0; flex-wrap: wrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chips-label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); font-weight: 600; margin-right: 2px; }
+.chip {
+  font-size: 13px; color: var(--olive-700);
+  padding: 7px 14px; border-radius: var(--radius-pill);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.chip:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.chip[aria-pressed="true"] { background: var(--olive-800); color: var(--bg-2); border-color: var(--olive-800); }
+.url-preview { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-subtle); }
+.url-preview code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px; color: var(--orange-900);
+  background: var(--orange-50); padding: 4px 10px;
+  border-radius: 6px; border: 1px solid var(--orange-100);
+}
+
+/* ── Pillar-page pill: stack on mobile ── */
+@media (max-width: 720px) {
+  .search-pill-wrap .search-pill { flex-direction: column; }
+  .search-pill-wrap .search-pill .field + .field::before { display: none; }
+  .search-pill-wrap .search-pill > .field:first-of-type { padding-left: 22px; }
+  .search-pill-wrap .submit-wrap { padding: 4px 0 0; }
+  .search-pill-wrap .submit {
+    width: 100%; border-radius: var(--radius-pill); justify-content: center;
+    padding: 0 22px 0 18px;
+  }
+  .search-pill-wrap .submit .submit-label {
+    font-size: 15px !important; max-width: 120px !important;
+    opacity: 1 !important; margin-left: 8px !important;
+  }
+}

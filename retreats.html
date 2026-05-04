@@ -68,6 +68,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="search-pill.css">
 <style>
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
 
@@ -157,62 +158,6 @@ h1.hero-title em { font-style: italic; }
 .hero-subtitle {
   font-size: 17px; color: var(--text-muted); line-height: 1.65;
   max-width: 560px; margin: 0 auto;
-}
-
-/* ── Hero search (modality + destination) ──── */
-.hero-search {
-  position: relative; z-index: 10;
-  width: 100%; max-width: 720px; margin: 0 auto;
-}
-.hs-wrap {
-  display: flex; align-items: center;
-  background: var(--surface);
-  border-radius: var(--radius-pill);
-  box-shadow: 0 4px 28px rgba(28,28,25,0.10), 0 1px 4px rgba(28,28,25,0.06);
-  border: 1px solid rgba(194, 200, 195, 0.28);
-  padding: 6px;
-  gap: 4px;
-}
-.hs-segment {
-  flex: 1 1 0; min-width: 0;
-  padding: 12px 18px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: background 0.15s var(--ease);
-}
-.hs-segment:hover { background: var(--bg-2); }
-.hs-label {
-  display: block;
-  font: 600 11px/1 'Inter', sans-serif;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--text); margin-bottom: 4px;
-}
-.hs-value {
-  display: block;
-  font: 400 14px/1.3 'Inter', sans-serif;
-  color: var(--text-muted); white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
-}
-.hs-divider { width: 1px; height: 28px; background: var(--bg-3); flex: 0 0 auto; }
-.hs-submit {
-  flex: 0 0 auto;
-  height: 48px; padding: 0 22px;
-  border-radius: var(--radius-pill);
-  background: var(--orange-500); color: #fff;
-  font: 600 14px/1 'Inter', sans-serif;
-  white-space: nowrap;
-  display: flex; align-items: center; gap: 8px;
-  transition: background 0.2s var(--ease), transform 0.15s;
-  margin-left: 4px;
-}
-.hs-submit:hover { background: var(--orange-600); }
-.hs-submit:active { transform: scale(0.97); }
-.hs-submit .material-symbols-outlined { font-size: 18px; }
-@media (max-width: 720px) {
-  .hs-wrap { flex-direction: column; align-items: stretch; padding: 8px; }
-  .hs-segment { width: 100%; }
-  .hs-divider { display: none; }
-  .hs-submit { width: 100%; justify-content: center; margin: 4px 0 0 0; }
 }
 
 /* ── Chips section (destinations + modalities) ── */
@@ -516,28 +461,10 @@ h1.hero-title em { font-style: italic; }
     <p class="hero-subtitle">Curated <strong>yoga retreats</strong>, <strong>meditation retreats</strong>, healing weeks, women's circles and silent intensives — held by senior teachers in Bali, Rishikesh, Portugal, Costa Rica and beyond. Book direct, no platform middlemen.</p>
   </div>
 
-  <!-- Hero search: practice → destination (matches retreats user journey) -->
-  <form class="hero-search" id="heroSearch" action="retreats-search-results.html" method="get">
-    <div class="hs-wrap">
-      <button class="hs-segment" type="button" id="hsPracticeBtn" aria-label="Choose practice">
-        <span class="hs-label">Practice</span>
-        <span class="hs-value" id="hsPracticeVal">Any practice</span>
-      </button>
-      <span class="hs-divider"></span>
-      <button class="hs-segment" type="button" id="hsDestBtn" aria-label="Choose destination">
-        <span class="hs-label">Destination</span>
-        <span class="hs-value" id="hsDestVal">Anywhere</span>
-      </button>
-      <span class="hs-divider"></span>
-      <button class="hs-segment" type="button" id="hsSeasonBtn" aria-label="Choose season">
-        <span class="hs-label">When</span>
-        <span class="hs-value" id="hsSeasonVal">Flexible</span>
-      </button>
-      <button class="hs-submit" type="submit" aria-label="Search retreats">
-        <span class="material-symbols-outlined">search</span> Find retreats
-      </button>
-    </div>
-  </form>
+  <!-- Hero search — unified pill locked to Retreats -->
+  <div class="search-pill-wrap">
+    <form class="search-pill" id="searchPill" autocomplete="off"></form>
+  </div>
 </section>
 
 <!-- ── Browse by destination (P1: bali yoga retreat 1.6k, rishikesh 880, etc.) ── -->
@@ -803,7 +730,7 @@ h1.hero-title em { font-style: italic; }
 <script src="header.js" defer></script>
 <script src="footer.js" defer></script>
 <script src="bottom-nav.js" defer></script>
-<script src="pillpicker.js"></script>
+<script src="search-pill.js"></script>
 
 <script>
   /* ── Featured retreats (mock — same dataset shape as retreats-search-results.html) ── */
@@ -860,61 +787,7 @@ h1.hero-title em { font-style: italic; }
   document.getElementById('pop-prev').addEventListener('click', () => track.scrollBy({ left: -300, behavior: 'smooth' }));
   document.getElementById('pop-next').addEventListener('click', () => track.scrollBy({ left: 300, behavior: 'smooth' }));
 
-  /* ── Hero search: PillPicker for each segment, submit to retreats-search-results.html ── */
-  const PRACTICES = [
-    { value: '',           label: 'Any practice' },
-    { value: 'yoga',       label: 'Yoga' },
-    { value: 'meditation', label: 'Meditation' },
-    { value: 'wellness',   label: 'Wellness' },
-    { value: 'healing',    label: 'Healing' },
-    { value: 'groups',     label: 'Groups' }
-  ];
-  const DESTS = [
-    { value: '',           label: 'Anywhere' },
-    { value: 'bali',       label: 'Bali' },
-    { value: 'rishikesh',  label: 'Rishikesh' },
-    { value: 'portugal',   label: 'Portugal' },
-    { value: 'spain',      label: 'Mallorca' },
-    { value: 'greece',     label: 'Greece' },
-    { value: 'italy',      label: 'Italy' },
-    { value: 'india',      label: 'India' },
-    { value: 'thailand',   label: 'Thailand' },
-    { value: 'costa-rica', label: 'Costa Rica' }
-  ];
-  const SEASONS = [
-    { value: '',       label: 'Flexible' },
-    { value: 'spring', label: 'Spring 2026' },
-    { value: 'summer', label: 'Summer 2026' },
-    { value: 'autumn', label: 'Autumn 2026' },
-    { value: 'winter', label: 'Winter 2026/27' }
-  ];
-
-  const heroState = { practice: '', dest: '', season: '' };
-
-  function findLabel(arr, value) {
-    return (arr.find(x => x.value === value) || {}).label || '';
-  }
-  function wireHeroSegment(btnId, valId, items, key) {
-    const btn = document.getElementById(btnId);
-    const valEl = document.getElementById(valId);
-    btn.addEventListener('click', e => {
-      PillPicker.open(btn, items, heroState[key], (val) => {
-        heroState[key] = val;
-        valEl.textContent = findLabel(items, val);
-      });
-    });
-  }
-  wireHeroSegment('hsPracticeBtn', 'hsPracticeVal', PRACTICES, 'practice');
-  wireHeroSegment('hsDestBtn',     'hsDestVal',     DESTS,     'dest');
-  wireHeroSegment('hsSeasonBtn',   'hsSeasonVal',   SEASONS,   'season');
-  document.getElementById('heroSearch').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const p = new URLSearchParams();
-    if (heroState.practice) p.set('practice', heroState.practice);
-    if (heroState.dest)     p.set('dest', heroState.dest);
-    if (heroState.season)   p.set('season', heroState.season);
-    location.href = 'retreats-search-results.html' + (p.toString() ? `?${p.toString()}` : '');
-  });
+  SearchPill.init({ mode: 'retreats', formEl: document.getElementById('searchPill') });
 </script>
 <script src="auth-overlay.js"></script>
 </body>
