@@ -158,7 +158,7 @@
   function bottomNavHTML(active) {
     const items = [
       { key: 'home',   label: 'Home',   icon: 'home',           href: 'index.html' },
-      { key: 'search', label: 'Search', icon: 'search',         href: 'search-results.html' },
+      { key: 'search', label: 'Search', icon: 'search',         href: 'events-search-results.html' },
       { key: 'saved',  label: 'Saved',  icon: 'favorite',       href: '#' },
       { key: 'you',    label: 'You',    icon: 'person',         href: '#', sheet: true },
     ];

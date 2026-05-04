@@ -5,14 +5,21 @@
  *   <div data-component="header"
  *        data-mode="hero|search"
  *        data-active="events|retreats|trainings|"
+ *        data-context="landing|search"
  *        data-auth="in|out"></div>
  *   <script src="header.js" defer></script>
  *
  * Modes:
  *   hero   — shows the three hub nav-links (Events / Retreats / Trainings).
- *            Used on landing where the page itself contains the search bar.
+ *            Used on landing and on search-results pages where the centre
+ *            should be navigational, not a collapsed search pill.
  *   search — shows the Airbnb-style collapsed search pill in the centre.
- *            Used on every other page (events list, results, detail, host).
+ *            Used on detail / hub / host pages.
+ *
+ * Context (only meaningful when mode = hero):
+ *   landing (default) — nav links go to hub pages (events.html etc.).
+ *   search            — nav links go to the corresponding *-search-results.html.
+ *                       Lets the header act as a pillar switcher inside search.
  *
  * Auth:
  *   out (default) — "Log in"  +  "Sign up" buttons in nav-actions.
@@ -196,11 +203,25 @@
   // --------------------------------------------------------
   // Templates
   // --------------------------------------------------------
-  function navLinks(active) {
+  const NAV_HREFS = {
+    landing: {
+      events:    'events.html',
+      retreats:  'retreats.html',
+      trainings: 'trainings.html',
+    },
+    search: {
+      events:    'events-search-results.html',
+      retreats:  'retreats-search-results.html',
+      trainings: 'trainings-search-results.html',
+    },
+  };
+
+  function navLinks(active, context) {
+    const hrefs = NAV_HREFS[context] || NAV_HREFS.landing;
     const items = [
-      { key: 'events',    label: 'Events',    href: 'events.html' },
-      { key: 'retreats',  label: 'Retreats',  href: 'index.html#retreats' },
-      { key: 'trainings', label: 'Trainings', href: 'index.html#trainings' },
+      { key: 'events',    label: 'Events',    href: hrefs.events },
+      { key: 'retreats',  label: 'Retreats',  href: hrefs.retreats },
+      { key: 'trainings', label: 'Trainings', href: hrefs.trainings },
     ];
     return `
       <nav class="nav-links" aria-label="Primary">
@@ -263,12 +284,13 @@
   }
 
   function template(opts) {
-    const mode   = opts.mode   || 'search';   // 'hero' | 'search'
-    const active = opts.active || '';
-    const auth   = opts.auth   || 'out';      // 'in' | 'out'
-    const user   = opts.user   || {};
+    const mode    = opts.mode    || 'search';   // 'hero' | 'search'
+    const active  = opts.active  || '';
+    const auth    = opts.auth    || 'out';      // 'in' | 'out'
+    const user    = opts.user    || {};
+    const context = opts.context || 'landing';  // 'landing' | 'search'
 
-    const centre = mode === 'hero' ? navLinks(active) : searchPill();
+    const centre = mode === 'hero' ? navLinks(active, context) : searchPill();
     const actions = auth === 'in' ? actionsLoggedIn(user) : actionsLoggedOut();
 
     return `
@@ -313,9 +335,10 @@
   // --------------------------------------------------------
   function mount(slot) {
     const opts = {
-      mode:   slot.dataset.mode,
-      active: slot.dataset.active,
-      auth:   slot.dataset.auth,
+      mode:    slot.dataset.mode,
+      active:  slot.dataset.active,
+      auth:    slot.dataset.auth,
+      context: slot.dataset.context,
       user: {
         name:     slot.dataset.userName,
         email:    slot.dataset.userEmail,

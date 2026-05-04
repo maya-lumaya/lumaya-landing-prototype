@@ -1538,7 +1538,7 @@
         <h2>Browse by category.</h2>
         <p>Events stay flat — events are local and modality-driven. Retreats and trainings open into a pillar taxonomy with sub-categories, so you can go as deep as you want.</p>
       </div>
-      <a href="search-results.html" class="all">All categories →</a>
+      <a href="events-search-results.html" class="all">All categories →</a>
     </div>
     <div class="cats-pillars" id="catsPillars"></div>
   </div>
@@ -2929,13 +2929,13 @@
       </div>
       <div class="cat-list"></div>
       <div class="cat-footer">
-        <a class="card-cta" href="search-results.html">All ${p.title.toLowerCase()} →</a>
+        <a class="card-cta" href="events-search-results.html">All ${p.title.toLowerCase()} →</a>
       </div>
     `;
     const list = group.querySelector(".cat-list");
     p.cats.forEach(c => {
       const a = document.createElement("a");
-      a.href = "search-results.html";
+      a.href = "events-search-results.html";
       a.className = "cat-link" + (c.trending ? " trending" : "");
       a.textContent = c.name;
       list.appendChild(a);
@@ -2945,6 +2945,7 @@
 
   function buildTaxonomyPillarCard(p) {
     const totalSubs = p.taxonomy.reduce((sum, pillar) => sum + pillar.subs.length, 0);
+    const resultsUrl = `${p.kind}-search-results.html`;
     const group = document.createElement("div");
     group.className = "cat-group";
     group.innerHTML = `
@@ -2954,7 +2955,7 @@
       </div>
       <div class="cat-pillars-list"></div>
       <div class="cat-footer">
-        <a class="card-cta" href="search-results.html">All ${p.title.toLowerCase()} →</a>
+        <a class="card-cta" href="${resultsUrl}">All ${p.title.toLowerCase()} →</a>
       </div>
     `;
     const list = group.querySelector(".cat-pillars-list");
@@ -2971,10 +2972,17 @@
           <span class="pi-cnt">${fmt(pillar.count)}</span>
         </a>
       `);
-      a.addEventListener("click", (e) => { e.preventDefault(); location.href = "search-results.html"; });
+      a.addEventListener("click", (e) => { e.preventDefault(); location.href = resultsUrl; });
       list.appendChild(a);
     });
     return group;
+  }
+
+  /* Pillar-aware search-results URL — used by both submit handlers below. */
+  function searchResultsUrlFor(tab) {
+    if (tab === "retreats")  return "retreats-search-results.html";
+    if (tab === "trainings") return "trainings-search-results.html";
+    return "events-search-results.html";
   }
 
   /* ==========================================================
@@ -3001,8 +3009,7 @@
     const p = new URLSearchParams();
     if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
     if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
-    if (state.tab !== "events") p.set("type", state.tab);
-    location.href = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
+    location.href = searchResultsUrlFor(state.tab) + (p.toString() ? `?${p.toString()}` : "");
     return false;
   }
 
@@ -3716,8 +3723,7 @@
     const p = new URLSearchParams();
     if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
     if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
-    if (state.tab !== "events") p.set("type", state.tab);
-    location.href = "search-results.html" + (p.toString() ? `?${p.toString()}` : "");
+    location.href = searchResultsUrlFor(mState.tab) + (p.toString() ? `?${p.toString()}` : "");
   }
 
   // Wire up triggers

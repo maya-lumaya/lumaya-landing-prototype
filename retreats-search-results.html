@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retreats — Lumaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+:root {
+  --bg: #FCF9F4;
+  --bg-2: #F6F3EE;
+  --bg-3: #EBE8E3;
+  --surface: #FFFFFF;
+  --text: #1C1C19;
+  --text-muted: #5C5C5C;
+  --text-subtle: #8A8A8A;
+  --border: #C2C8C3;
+  --primary: #182c24;
+  --surface-low: #F6F3EE;
+  --outline-variant: rgba(194, 200, 195, 0.35);
+  --olive-100: #E4E6DB;
+  --olive-500: #41452F;
+  --olive-900: #1C1D13;
+  --orange-300: #E4BB86;
+  --orange-500: #D69543;
+  --orange-600: #C4812B;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(29,29,33,0.04), 0 2px 6px rgba(29,29,33,0.04);
+  --shadow-md: 0 4px 14px rgba(29,29,33,0.06), 0 10px 30px rgba(29,29,33,0.05);
+  --shadow-lg: 0 20px 60px rgba(29,29,33,0.10);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; line-height: 1.55;
+}
+h1, h2, h3, h4 {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 500; letter-spacing: -0.012em; margin: 0;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+img { display: block; }
+
+.container { width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 28px; }
+@media (max-width: 640px) { .container { padding: 0 16px; } }
+
+/* ── Page wrap ─────────────────────────────────── */
+.page { padding: 28px 0 0; }
+
+/* ── Title row ─────────────────────────────────── */
+.title-row { margin-bottom: 22px; }
+.eyebrow {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--orange-600); margin-bottom: 12px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--orange-300); }
+h1.page-title {
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.08; font-weight: 500;
+  color: var(--text); margin-bottom: 8px;
+}
+.title-sub { font-size: 14px; color: var(--text-muted); max-width: 580px; }
+
+/* ── Filter bar ────────────────────────────────── */
+.filterbar {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 10px; padding: 14px 0 18px;
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: 18px;
+}
+.filterbar-search {
+  flex: 1 1 260px; min-width: 220px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  height: 40px; padding: 0 14px 0 16px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.filterbar-search:focus-within {
+  border-color: var(--orange-300);
+  box-shadow: 0 0 0 3px rgba(228, 187, 134, 0.18);
+}
+.filterbar-search .material-symbols-outlined { font-size: 17px; color: var(--text-muted); }
+.filterbar-search input {
+  flex: 1; border: 0; background: transparent;
+  outline: 0; font: 500 14px/1 'Inter', sans-serif;
+  color: var(--text); min-width: 0;
+}
+.filterbar-search input::placeholder { color: var(--text-subtle); font-weight: 400; }
+.filterbar-search .clear-btn {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg-3); color: var(--text-muted);
+  display: none; align-items: center; justify-content: center;
+}
+.filterbar-search .clear-btn .material-symbols-outlined { font-size: 14px; }
+.filterbar-search.has-text .clear-btn { display: flex; }
+
+.fb-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 16px;
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  font: 500 13px/1 'Inter', sans-serif;
+  color: var(--text); background: var(--surface);
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.fb-pill:hover { background: var(--bg-2); border-color: rgba(194,200,195,0.7); }
+.fb-pill .material-symbols-outlined { font-size: 16px; color: var(--text-muted); }
+.fb-pill .pill-clear {
+  margin-left: 4px; color: var(--text-subtle);
+  font-size: 16px; line-height: 1;
+}
+.fb-pill .pill-clear:hover { color: var(--text); }
+.fb-pill.is-active {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary);
+}
+.fb-pill.is-active .material-symbols-outlined,
+.fb-pill.is-active .pill-clear { color: rgba(255,255,255,0.75); }
+
+.fb-spacer { flex: 1; }
+
+/* ── Category chip row ─────────────────────────── */
+.chip-row {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 14px; margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.chip-row::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
+  border: 1px solid rgba(194, 200, 195, 0.4);
+  border-radius: var(--radius-pill);
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-muted); background: var(--surface);
+  transition: all 0.15s;
+}
+.chip:hover { background: var(--bg-2); color: var(--text); }
+.chip.is-active {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary);
+}
+.chip .chip-count {
+  font: 500 11px/1 'Inter', sans-serif;
+  color: var(--text-subtle); margin-left: 2px;
+}
+.chip.is-active .chip-count { color: rgba(255,255,255,0.6); }
+
+/* ── Result meta ───────────────────────────────── */
+.result-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.result-meta .count {
+  font: 600 14px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.result-meta .count .muted { color: var(--text-muted); font-weight: 400; }
+.sort-select {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 500 13px/1 'Inter', sans-serif; color: var(--text-muted);
+}
+.sort-select select {
+  border: 0; background: transparent;
+  font: 500 13px/1 'Inter', sans-serif; color: var(--text);
+  cursor: pointer; outline: 0;
+}
+
+/* ── Layout ─────────────────────────────────────── */
+/* Default: results full-width (no detail). Click a card → split opens. */
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding-bottom: 80px;
+}
+.split.detail-open {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+.results-pane { min-width: 0; }
+
+/* ── Detail pane — hidden until a card is clicked ─ */
+.detail-pane {
+  display: none;
+  position: sticky; top: 90px;
+  align-self: start;
+  height: calc(100vh - 110px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  box-shadow: var(--shadow-md);
+  flex-direction: column;
+}
+.split.detail-open .detail-pane { display: flex; }
+
+.dp-img { position: relative; flex-shrink: 0; height: 240px; background: var(--bg-3); }
+.dp-img img { width: 100%; height: 100%; object-fit: cover; }
+.dp-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(28,28,25,0.5) 0%, rgba(28,28,25,0) 50%);
+}
+.dp-badge {
+  position: absolute; top: 14px; left: 14px;
+  background: rgba(252,249,244,0.95); backdrop-filter: blur(8px);
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  font: 600 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.05em; color: var(--primary);
+  text-transform: capitalize;
+}
+.dp-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(252,249,244,0.95); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text); box-shadow: var(--shadow-sm);
+  transition: background 0.15s;
+  z-index: 2; cursor: pointer; border: 0;
+}
+.dp-close:hover { background: #fff; }
+.dp-close .material-symbols-outlined { font-size: 20px; }
+.dp-body { flex: 1; overflow-y: auto; padding: 22px 24px 0; }
+.dp-title {
+  font: 500 22px/1.2 'Lora', Georgia, serif;
+  color: var(--text); margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.dp-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  font-size: 13px; color: var(--text-muted); margin-bottom: 18px;
+}
+.dp-meta .meta-item { display: inline-flex; align-items: center; gap: 5px; }
+.dp-meta .material-symbols-outlined { font-size: 15px; color: var(--text-subtle); }
+.dp-section {
+  padding: 16px 0; border-top: 1px solid var(--outline-variant);
+}
+.dp-section:first-of-type { border-top: 0; padding-top: 0; }
+.dp-section-label {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-subtle); margin-bottom: 10px;
+}
+.dp-description {
+  font-size: 14px; line-height: 1.65;
+  color: var(--text); margin: 0;
+  white-space: pre-wrap;
+}
+.dp-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px;
+}
+.dp-stat .label {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.04em; color: var(--text-subtle);
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.dp-stat .value { font-size: 14px; color: var(--text); font-weight: 500; }
+.dp-foot {
+  flex-shrink: 0;
+  border-top: 1px solid var(--outline-variant);
+  padding: 16px 24px;
+  background: var(--surface);
+  display: flex; align-items: center; gap: 12px;
+}
+.dp-foot .price {
+  flex: 1; font: 700 18px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.dp-foot .price .per {
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-muted); margin-left: 4px;
+}
+.dp-foot .view-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 22px;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-pill);
+  font: 600 13px/1 'Inter', sans-serif;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.dp-foot .view-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+.dp-foot .view-btn .material-symbols-outlined { font-size: 17px; }
+
+/* Selected card — orange ring (matches events) */
+.row-card.is-selected {
+  border-color: var(--orange-300);
+  box-shadow: 0 0 0 2px rgba(228,187,134,0.35), var(--shadow-md);
+}
+
+/* ── Result list — events-style 2-col, narrows when detail opens ── */
+.results-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.split.detail-open .results-list {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+/* ── Card (matches events-search-results.html .row-card exactly) ── */
+.row-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s, border-color 0.15s;
+  display: flex; flex-direction: column;
+  text-align: left;
+}
+.row-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(194,200,195,0.7);
+}
+.row-card .rc-img {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--bg-3);
+  flex-shrink: 0;
+}
+.row-card .rc-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.row-card:hover .rc-img img { transform: scale(1.04); }
+.row-card .rc-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(252,249,244,0.92);
+  backdrop-filter: blur(6px);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font: 600 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.05em; color: var(--primary);
+  text-transform: capitalize; white-space: nowrap;
+}
+.row-card .rc-content {
+  padding: 10px 12px 14px;
+  display: flex; flex-direction: column;
+  flex: 1;
+}
+.row-card .rc-title {
+  font: 500 14px/1.3 'Inter', sans-serif;
+  color: var(--text); margin-bottom: 4px;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.row-card .rc-address {
+  font-size: 12px; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: auto; padding-bottom: 8px;
+}
+.row-card .rc-price {
+  font: 700 14px/1 'Inter', sans-serif; color: var(--text);
+  padding-top: 8px;
+}
+.row-card .rc-price.free { color: var(--orange-600); }
+
+/* ── Skeleton ──────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #EBE8E3 25%, #F0EDE8 50%, #EBE8E3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skel-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.skel-card .skel-img { aspect-ratio: 3/4; border-radius: 0; }
+.skel-card .skel-body { padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.skel-card .skel-line { height: 13px; border-radius: 4px; }
+.skel-card .skel-line.w80 { width: 80%; }
+.skel-card .skel-line.w55 { width: 55%; }
+.skel-card .skel-line.w40 { width: 40%; }
+
+/* ── Empty / state block ──────────────────────── */
+.state-block {
+  text-align: center; padding: 64px 24px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  grid-column: 1 / -1;
+}
+.state-block .material-symbols-outlined {
+  font-size: 42px; color: var(--text-subtle); margin-bottom: 14px;
+}
+.state-block h3 { font-size: 22px; color: var(--text); margin-bottom: 8px; }
+.state-block p { font-size: 14px; max-width: 360px; margin: 0 auto; }
+.state-block .reset-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 18px; padding: 10px 18px;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-pill);
+  font: 600 13px/1 'Inter', sans-serif;
+}
+
+/* ── Sheet backdrop ────────────────────────────── */
+.sheet-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(28,28,25,0.45);
+  z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s var(--ease);
+}
+.sheet-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+/* ── Grabber ────────────────────────────────────── */
+.dp-grabber {
+  display: none;
+  position: absolute;
+  top: 9px; left: 50%;
+  transform: translateX(-50%);
+  width: 36px; height: 4px;
+  background: rgba(252,249,244,0.7);
+  border-radius: 999px;
+  z-index: 10;
+}
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 1080px) {
+  .split.detail-open { grid-template-columns: 1fr; }
+  /* Bottom sheet — always present, off-screen until sheet-open */
+  .detail-pane {
+    display: flex;
+    position: fixed;
+    inset: auto 0 0 0; top: auto;
+    height: 88vh; min-height: 0;
+    border: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -8px 40px rgba(28,28,25,0.18);
+    transform: translateY(100%);
+    transition: transform 0.32s var(--ease);
+    z-index: 101;
+  }
+  .detail-pane.sheet-open { transform: translateY(0); }
+  .dp-grabber { display: block; }
+}
+@media (max-width: 720px) {
+  .results-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  h1.page-title { font-size: 26px; }
+  .filterbar-search { flex-basis: 100%; order: -1; }
+}
+@media (max-width: 420px) {
+  .results-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header (shared partial — see header.js) ── -->
+<div data-component="header" data-mode="hero" data-active="retreats" data-context="search"></div>
+
+<!-- ── Page ── -->
+<div class="page">
+  <div class="container">
+
+    <!-- Title row -->
+    <div class="title-row">
+      <p class="eyebrow" id="ev-eyebrow">Browse</p>
+      <h1 class="page-title" id="ev-page-title">Retreats</h1>
+      <p class="title-sub" id="ev-page-sub">Yoga, meditation, healing — week-plus getaways with intention. Pick a practice first, then a destination.</p>
+    </div>
+
+    <!-- Filter bar — pillar-specific order: practice → destination → dates → length -->
+    <div class="filterbar" id="filterbar">
+      <label class="filterbar-search" id="searchWrap">
+        <span class="material-symbols-outlined">search</span>
+        <input id="searchInput" type="search" placeholder="Search retreats by title, host, or place…" autocomplete="off">
+        <button class="clear-btn" id="searchClear" type="button" aria-label="Clear search">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </label>
+
+      <button class="fb-pill" id="practicePill" type="button">
+        <span class="material-symbols-outlined">spa</span>
+        <span class="label">Any practice</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="practice" hidden>close</span>
+      </button>
+
+      <button class="fb-pill" id="destPill" type="button">
+        <span class="material-symbols-outlined">explore</span>
+        <span class="label">Anywhere</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="dest" hidden>close</span>
+      </button>
+
+      <button class="fb-pill" id="seasonPill" type="button">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="label">Flexible</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="season" hidden>close</span>
+      </button>
+
+      <button class="fb-pill" id="lengthPill" type="button">
+        <span class="material-symbols-outlined">schedule</span>
+        <span class="label">Any length</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="length" hidden>close</span>
+      </button>
+
+      <span class="fb-spacer"></span>
+    </div>
+
+    <!-- Category chips (popular sub-categories from RETREAT_TAXONOMY) -->
+    <div class="chip-row" id="chipRow"></div>
+
+    <!-- Result meta -->
+    <div class="result-meta">
+      <div class="count" id="resultCount"><span class="muted">Loading…</span></div>
+      <label class="sort-select">
+        <span>Sort:</span>
+        <select id="sortSelect">
+          <option value="POPULAR">Most popular</option>
+          <option value="DATE_ASC">Soonest start</option>
+          <option value="PRICE_ASC">Price low → high</option>
+          <option value="DURATION_ASC">Duration short → long</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Split layout: results-only by default; click a card to open the detail pane -->
+    <div class="split" id="split">
+      <div class="results-pane">
+        <div class="results-list" id="resultsList">
+          <!-- skeletons -->
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+          <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line w80"></div><div class="skeleton skel-line w55"></div><div class="skeleton skel-line w40"></div></div></div>
+        </div>
+      </div>
+
+      <aside class="detail-pane" id="detailPane" aria-label="Retreat details" aria-hidden="true"></aside>
+    </div>
+
+  </div>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+
+<!-- ── Footer + Mobile bottom nav (shared partials) ── -->
+<div data-component="footer"></div>
+<div data-component="bottom-nav" data-active="search"></div>
+<script src="header.js" defer></script>
+<script src="footer.js" defer></script>
+<script src="bottom-nav.js" defer></script>
+<script src="pillpicker.js" defer></script>
+
+<script>
+  /* ── Mock retreat dataset ──────────────────────────────────
+     Self-contained: no /api/v3/retreats/search endpoint exists yet.
+     Fields modeled on the RETREAT_TAXONOMY pillar in index.html.
+   */
+  const RETREATS = [
+    { slug: 'bali-vinyasa-7n', title: 'Vinyasa & Meditation Week in Ubud', cat: 'yoga', sub: 'Vinyasa Yoga', destination: 'Ubud, Bali', country: 'ID', flag: '🇮🇩', nights: 7, season: 'spring', startDate: '2026-04-12', priceFrom: 840, popularity: 96, image: 'https://img.freepik.com/free-photo/beautiful-woman-doing-yoga-bali_72229-1514.jpg' },
+    { slug: 'rishikesh-ytt-200', title: '200hr Yoga Teacher Training on the Ganges', cat: 'yoga', sub: 'Yoga Teacher Training', destination: 'Rishikesh', country: 'IN', flag: '🇮🇳', nights: 24, season: 'autumn', startDate: '2026-09-04', priceFrom: 1480, popularity: 92, image: 'https://img.freepik.com/premium-photo/cityscape-rishikesh-sunset-holy-town-travel-destination-india-colorful-sky-clouds-reflecting-ganges-river_107467-985.jpg' },
+    { slug: 'mallorca-silent-5n', title: '5 Days of Silence — Mallorca Hills', cat: 'meditation', sub: 'Silent', destination: 'Mallorca', country: 'ES', flag: '🇪🇸', nights: 5, season: 'spring', startDate: '2026-05-08', priceFrom: 720, popularity: 81, image: 'https://img.freepik.com/free-photo/aerial-view-mallorca-coast_181624-30538.jpg' },
+    { slug: 'costa-rica-detox-10n', title: 'Jungle Detox & Cacao Ceremony', cat: 'wellness', sub: 'Detox', destination: 'Nosara, Costa Rica', country: 'CR', flag: '🇨🇷', nights: 10, season: 'winter', startDate: '2027-01-15', priceFrom: 2100, popularity: 88, image: 'https://img.freepik.com/premium-photo/beautiful-woman-doing-yoga-old-footbridge-forest_1599898-1831.jpg' },
+    { slug: 'portugal-womens-circle', title: "Women's Circle on the Atlantic", cat: 'groups', sub: "Women's", destination: 'Comporta, Portugal', country: 'PT', flag: '🇵🇹', nights: 6, season: 'summer', startDate: '2026-06-20', priceFrom: 980, popularity: 74, image: 'https://img.freepik.com/free-photo/empty-rocky-shore_1417-1411.jpg' },
+    { slug: 'greece-yin-restorative', title: 'Yin & Restorative on Santorini', cat: 'yoga', sub: 'Yin & Restorative Yoga', destination: 'Santorini', country: 'GR', flag: '🇬🇷', nights: 6, season: 'spring', startDate: '2026-05-22', priceFrom: 1150, popularity: 79, image: 'https://img.freepik.com/premium-photo/white-architecture-santorini-island-greece-beautiful-terrace-with-pink-flowers-sea-view_545689-1668.jpg' },
+    { slug: 'india-ayurveda-14n', title: 'Authentic Panchakarma Ayurveda', cat: 'wellness', sub: 'Ayurveda', destination: 'Kerala, India', country: 'IN', flag: '🇮🇳', nights: 14, season: 'winter', startDate: '2026-11-03', priceFrom: 1880, popularity: 84, image: 'https://img.freepik.com/free-photo/young-female-getting-ayurvedic-treatment_23-2148945817.jpg' },
+    { slug: 'bali-tantra-couples', title: 'Conscious Couples Tantra Retreat', cat: 'groups', sub: 'Marriage & Couples', destination: 'Canggu, Bali', country: 'ID', flag: '🇮🇩', nights: 5, season: 'autumn', startDate: '2026-10-12', priceFrom: 1690, popularity: 70, image: 'https://img.freepik.com/free-photo/cute-couple-meditating-together_23-2147892783.jpg' },
+    { slug: 'algarve-breathwork-3n', title: 'Breathwork Long Weekend on the Cliffs', cat: 'wellness', sub: 'Breathwork', destination: 'Algarve, Portugal', country: 'PT', flag: '🇵🇹', nights: 3, season: 'spring', startDate: '2026-04-04', priceFrom: 480, popularity: 86, image: 'https://img.freepik.com/free-photo/portugal-coast_1417-1454.jpg' },
+    { slug: 'tuscany-trauma-10n', title: 'Somatic Trauma Healing Container', cat: 'healing', sub: 'Trauma Healing', destination: 'Tuscany, Italy', country: 'IT', flag: '🇮🇹', nights: 10, season: 'autumn', startDate: '2026-09-18', priceFrom: 2350, popularity: 77, image: 'https://img.freepik.com/free-photo/tuscany-landscape_1417-1389.jpg' },
+    { slug: 'koh-phangan-kundalini-7n', title: 'Kundalini Activation Week', cat: 'yoga', sub: 'Kundalini Yoga', destination: 'Koh Phangan', country: 'TH', flag: '🇹🇭', nights: 7, season: 'winter', startDate: '2027-01-22', priceFrom: 920, popularity: 68, image: 'https://img.freepik.com/free-photo/koh-phangan-thailand_1417-1419.jpg' },
+    { slug: 'bali-hatha-immersion', title: 'Hatha Yoga Immersion in Sidemen', cat: 'yoga', sub: 'Hatha Yoga', destination: 'Sidemen, Bali', country: 'ID', flag: '🇮🇩', nights: 8, season: 'spring', startDate: '2026-03-29', priceFrom: 1050, popularity: 72, image: 'https://img.freepik.com/free-photo/woman-yoga-pose-rice-field_1417-1450.jpg' },
+    { slug: 'sweden-vipassana-10n', title: '10-Day Vipassana — Forest Edition', cat: 'meditation', sub: 'Vipassana', destination: 'Småland, Sweden', country: 'SE', flag: '🇸🇪', nights: 10, season: 'summer', startDate: '2026-07-04', priceFrom: 0, popularity: 90, image: 'https://img.freepik.com/free-photo/sweden-forest_1417-1492.jpg' },
+    { slug: 'crete-yoga-mens', title: "Men's Embodiment Retreat — Crete", cat: 'groups', sub: "Men's", destination: 'Crete, Greece', country: 'GR', flag: '🇬🇷', nights: 5, season: 'spring', startDate: '2026-05-01', priceFrom: 870, popularity: 66, image: 'https://img.freepik.com/free-photo/group-men-mountains_1417-1410.jpg' },
+    { slug: 'morocco-desert-silent', title: 'Sahara Silent Retreat', cat: 'meditation', sub: 'Silent', destination: 'Merzouga, Morocco', country: 'MA', flag: '🇲🇦', nights: 7, season: 'autumn', startDate: '2026-10-25', priceFrom: 1320, popularity: 75, image: 'https://img.freepik.com/free-photo/sahara-desert-morocco_1417-1400.jpg' },
+    { slug: 'azores-nature-burnout', title: 'Burnout Recovery in the Azores', cat: 'healing', sub: 'Burnout Recovery', destination: 'São Miguel, Azores', country: 'PT', flag: '🇵🇹', nights: 8, season: 'summer', startDate: '2026-08-10', priceFrom: 1640, popularity: 71, image: 'https://img.freepik.com/free-photo/azores-landscape_1417-1503.jpg' }
+  ];
+
+  /* ── Practice taxonomy (lightweight, sub-set of RETREAT_TAXONOMY) ─ */
+  const PRACTICES = [
+    { slug: '',           label: 'Any practice' },
+    { slug: 'yoga',       label: 'Yoga' },
+    { slug: 'meditation', label: 'Meditation' },
+    { slug: 'healing',    label: 'Healing & Recovery' },
+    { slug: 'wellness',   label: 'Health & Wellness' },
+    { slug: 'groups',     label: 'Groups & Lifestyle' }
+  ];
+
+  const DESTINATIONS = [
+    { slug: '',          label: 'Anywhere' },
+    { slug: 'bali',      label: 'Bali' },
+    { slug: 'rishikesh', label: 'Rishikesh' },
+    { slug: 'portugal',  label: 'Portugal' },
+    { slug: 'spain',     label: 'Spain (Mallorca)' },
+    { slug: 'greece',    label: 'Greece' },
+    { slug: 'italy',     label: 'Italy' },
+    { slug: 'india',     label: 'India' },
+    { slug: 'thailand',  label: 'Thailand' },
+    { slug: 'costa-rica',label: 'Costa Rica' },
+    { slug: 'morocco',   label: 'Morocco' },
+    { slug: 'sweden',    label: 'Sweden' }
+  ];
+  const DEST_MATCH = {
+    bali: ['Bali'], rishikesh: ['Rishikesh'], portugal: ['Portugal', 'Azores'],
+    spain: ['Mallorca', 'Spain'], greece: ['Greece', 'Santorini', 'Crete'],
+    italy: ['Italy'], india: ['India', 'Kerala', 'Rishikesh'],
+    thailand: ['Thailand', 'Koh Phangan'], 'costa-rica': ['Costa Rica'],
+    morocco: ['Morocco'], sweden: ['Sweden']
+  };
+
+  const SEASONS = [
+    { slug: '',       label: 'Flexible' },
+    { slug: 'spring', label: 'Spring 2026' },
+    { slug: 'summer', label: 'Summer 2026' },
+    { slug: 'autumn', label: 'Autumn 2026' },
+    { slug: 'winter', label: 'Winter 2026/27' }
+  ];
+
+  const LENGTHS = [
+    { slug: '',         label: 'Any length',         min: 0,  max: 999 },
+    { slug: 'weekend',  label: 'Weekend (2–3 nts)',  min: 2,  max: 3 },
+    { slug: 'short',    label: 'Short (4–7 nts)',    min: 4,  max: 7 },
+    { slug: 'week-plus',label: 'Week+ (8–14 nts)',   min: 8,  max: 14 },
+    { slug: 'deep',     label: 'Deep (2+ weeks)',    min: 15, max: 999 }
+  ];
+
+  const POPULAR_SUBS = ['Yoga Teacher Training', 'Silent', 'Vinyasa Yoga', 'Ayurveda', "Women's", 'Trauma Healing', 'Kundalini Yoga', 'Yin & Restorative Yoga', 'Vipassana', 'Breathwork'];
+
+  /* ── State ─────────────────────────────────────────────── */
+  const state = {
+    q: '', practice: '', dest: '', season: '', length: '',
+    sub: '',
+    sort: 'POPULAR',
+    selectedSlug: null,
+    loading: true,
+    items: []
+  };
+
+  /* ── URL <-> state ─────────────────────────────────────── */
+  function readUrl() {
+    const p = new URLSearchParams(location.search);
+    state.q        = p.get('q') || '';
+    state.practice = p.get('practice') || '';
+    state.dest     = p.get('dest') || '';
+    state.season   = p.get('season') || '';
+    state.length   = p.get('length') || '';
+    state.sub      = p.get('sub') || '';
+    state.sort     = p.get('sort') || 'POPULAR';
+  }
+  function writeUrl(replace = true) {
+    const p = new URLSearchParams();
+    if (state.q)        p.set('q', state.q);
+    if (state.practice) p.set('practice', state.practice);
+    if (state.dest)     p.set('dest', state.dest);
+    if (state.season)   p.set('season', state.season);
+    if (state.length)   p.set('length', state.length);
+    if (state.sub)      p.set('sub', state.sub);
+    if (state.sort && state.sort !== 'POPULAR') p.set('sort', state.sort);
+    const url = location.pathname + (p.toString() ? `?${p.toString()}` : '');
+    history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+
+  /* ── Helpers ──────────────────────────────────────────── */
+  function htmlEscape(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function fmtPrice(p) {
+    if (p === 0) return 'By donation';
+    return `€${p.toLocaleString('en-US')}`;
+  }
+  function fmtNights(n) {
+    return n === 1 ? '1 night' : `${n} nights`;
+  }
+  function fmtSeason(slug, isoStart) {
+    const s = SEASONS.find(x => x.slug === slug);
+    if (!s || !s.slug) {
+      if (isoStart) {
+        return new Date(isoStart).toLocaleString('en-GB', { month: 'short', year: 'numeric' });
+      }
+      return 'Flexible';
+    }
+    return s.label;
+  }
+  function findLabel(arr, slug) {
+    return (arr.find(x => x.slug === slug) || {}).label || '';
+  }
+
+  /* ── Filter + sort ────────────────────────────────────── */
+  function applyFilters() {
+    let list = RETREATS.slice();
+
+    if (state.q) {
+      const q = state.q.toLowerCase();
+      list = list.filter(r =>
+        r.title.toLowerCase().includes(q) ||
+        r.destination.toLowerCase().includes(q) ||
+        r.sub.toLowerCase().includes(q)
+      );
+    }
+    if (state.practice) list = list.filter(r => r.cat === state.practice);
+    if (state.dest && DEST_MATCH[state.dest]) {
+      const tokens = DEST_MATCH[state.dest];
+      list = list.filter(r => tokens.some(t => r.destination.includes(t)));
+    }
+    if (state.season) list = list.filter(r => r.season === state.season);
+    if (state.length) {
+      const L = LENGTHS.find(x => x.slug === state.length);
+      if (L) list = list.filter(r => r.nights >= L.min && r.nights <= L.max);
+    }
+    if (state.sub) list = list.filter(r => r.sub === state.sub);
+
+    const dir = (k) => k === 'PRICE_ASC' ? 1 : k === 'DURATION_ASC' ? 1 : k === 'DATE_ASC' ? 1 : -1;
+    list.sort((a, b) => {
+      switch (state.sort) {
+        case 'PRICE_ASC':    return (a.priceFrom - b.priceFrom);
+        case 'DURATION_ASC': return (a.nights - b.nights);
+        case 'DATE_ASC':     return new Date(a.startDate) - new Date(b.startDate);
+        case 'POPULAR':
+        default:             return b.popularity - a.popularity;
+      }
+    });
+    state.items = list;
+  }
+
+  /* ── Render: title row ────────────────────────────────── */
+  function renderTitle() {
+    const title = document.getElementById('ev-page-title');
+    const eyebrow = document.getElementById('ev-eyebrow');
+    const sub = document.getElementById('ev-page-sub');
+    const practice = findLabel(PRACTICES, state.practice);
+    const dest = findLabel(DESTINATIONS, state.dest);
+    let t = 'Retreats', e = 'Browse', s = 'Yoga, meditation, healing — week-plus getaways with intention. Pick a practice first, then a destination.';
+    if (state.q) { t = `"${state.q}" retreats`; e = 'Search'; }
+    else if (state.practice && state.dest) { t = `${practice} retreats in ${dest}`; e = 'Filtered'; }
+    else if (state.practice) { t = `${practice} retreats`; e = 'Practice'; }
+    else if (state.dest) { t = `Retreats in ${dest}`; e = 'Destination'; }
+    if (state.sub) s = `Filtered by ${state.sub}`;
+    else if (state.season) s = findLabel(SEASONS, state.season);
+    title.textContent = t;
+    eyebrow.textContent = e;
+    sub.textContent = s;
+    document.title = `${t} — Lumaya`;
+  }
+
+  /* ── Render: filterbar ───────────────────────────────── */
+  function setPill(id, text, isActive) {
+    const el = document.getElementById(id);
+    el.querySelector('.label').textContent = text;
+    el.classList.toggle('is-active', isActive);
+    const clear = el.querySelector('.pill-clear');
+    if (clear) clear.hidden = !isActive;
+  }
+  function renderFilterBar() {
+    const wrap = document.getElementById('searchWrap');
+    document.getElementById('searchInput').value = state.q;
+    wrap.classList.toggle('has-text', !!state.q);
+    setPill('practicePill', findLabel(PRACTICES, state.practice) || 'Any practice', !!state.practice);
+    setPill('destPill', findLabel(DESTINATIONS, state.dest) || 'Anywhere', !!state.dest);
+    setPill('seasonPill', findLabel(SEASONS, state.season) || 'Flexible', !!state.season);
+    setPill('lengthPill', findLabel(LENGTHS, state.length) || 'Any length', !!state.length);
+    document.getElementById('sortSelect').value = state.sort;
+  }
+
+  /* ── Render: chip row (popular sub-categories with counts) ─ */
+  function renderChips() {
+    const row = document.getElementById('chipRow');
+    const counts = new Map();
+    for (const r of RETREATS) counts.set(r.sub, (counts.get(r.sub) || 0) + 1);
+    const subs = POPULAR_SUBS.filter(s => counts.has(s));
+    const html = [
+      `<button class="chip${!state.sub ? ' is-active' : ''}" type="button" data-sub="">All practices</button>`,
+      ...subs.map(s => {
+        const isActive = state.sub === s;
+        const c = counts.get(s) || 0;
+        return `<button class="chip${isActive ? ' is-active' : ''}" type="button" data-sub="${htmlEscape(s)}">${htmlEscape(s)} <span class="chip-count">· ${c}</span></button>`;
+      })
+    ].join('');
+    row.innerHTML = html;
+  }
+
+  /* ── Render: result list — events-style row-card ─────── */
+  function rowCard(r) {
+    const addr = `${r.flag} ${r.destination} · ${fmtNights(r.nights)}`;
+    const isFree = r.priceFrom === 0;
+    const price = isFree ? 'By donation' : fmtPrice(r.priceFrom);
+    const isSelected = state.selectedSlug === r.slug;
+    return `
+      <article class="row-card${isSelected ? ' is-selected' : ''}" data-slug="${htmlEscape(r.slug)}">
+        <div class="rc-img">
+          <img src="${htmlEscape(r.image)}" alt="${htmlEscape(r.title)}" loading="lazy"
+               onerror="this.style.display='none'">
+          <span class="rc-badge">${htmlEscape(r.sub)}</span>
+        </div>
+        <div class="rc-content">
+          <div class="rc-title">${htmlEscape(r.title)}</div>
+          <div class="rc-address">${htmlEscape(addr)}</div>
+          <div class="rc-price${isFree ? ' free' : ''}">${htmlEscape(price)}</div>
+        </div>
+      </article>
+    `;
+  }
+  function renderList() {
+    const list = document.getElementById('resultsList');
+    const count = document.getElementById('resultCount');
+    const items = state.items;
+    count.innerHTML = items.length
+      ? `<strong>${items.length}</strong> ${items.length === 1 ? 'retreat' : 'retreats'}`
+      : `<span class="muted">No retreats match your filters</span>`;
+    if (!items.length) {
+      list.innerHTML = `
+        <div class="state-block">
+          <span class="material-symbols-outlined">travel_explore</span>
+          <h3>No retreats match</h3>
+          <p>Try a different practice, expand the season, or clear a filter.</p>
+          <button class="reset-btn" type="button" id="resetBtn">
+            <span class="material-symbols-outlined">restart_alt</span> Reset filters
+          </button>
+        </div>`;
+      return;
+    }
+    list.innerHTML = items.map(rowCard).join('');
+  }
+
+  /* ── Mock description ──────────────────────────────────── */
+  const MOCK_PARAGRAPHS = [
+    'A carefully held container where breath, body and stillness become the practice. You are invited to slow down, listen inward, and reconnect with the part of yourself that already knows how to be at peace.',
+    'Whether you arrive curious or seasoned, you are welcome exactly as you are. The space is shaped to meet beginners and long-time practitioners alike, with gentle guidance, small group attention, and time to integrate what arises.',
+    'Expect a thoughtful blend of grounding practice, embodied movement, and reflective silence. You\'ll leave with something concrete: a felt sense, a small ritual, or simply a clearer breath you can carry into the rest of your week.'
+  ];
+  function generateRetreatDescription(r) {
+    const opener = `A ${r.sub.toLowerCase()} retreat held with care in ${r.destination}.`;
+    return `${opener}\n\n${MOCK_PARAGRAPHS.join('\n\n')}`;
+  }
+
+  /* ── Render: detail pane (replaces side pane) ─────── */
+  function renderDetail() {
+    const pane = document.getElementById('detailPane');
+    const split = document.getElementById('split');
+    if (!state.selectedSlug) {
+      split.classList.remove('detail-open');
+      pane.setAttribute('aria-hidden', 'true');
+      pane.innerHTML = '';
+      return;
+    }
+    const r = state.items.find(x => x.slug === state.selectedSlug)
+           || RETREATS.find(x => x.slug === state.selectedSlug);
+    if (!r) {
+      split.classList.remove('detail-open');
+      pane.setAttribute('aria-hidden', 'true');
+      pane.innerHTML = '';
+      return;
+    }
+    const isFree = r.priceFrom === 0;
+    const price = isFree ? 'By donation' : fmtPrice(r.priceFrom);
+    const description = generateRetreatDescription(r);
+    pane.innerHTML = `
+      <div class="dp-img">
+        <div class="dp-grabber"></div>
+        <img src="${htmlEscape(r.image)}" alt="${htmlEscape(r.title)}"
+             onerror="this.style.display='none'">
+        <div class="dp-img-overlay"></div>
+        <span class="dp-badge">${htmlEscape(r.sub)}</span>
+        <button class="dp-close" id="dpClose" type="button" aria-label="Close details">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="dp-body">
+        <div class="dp-title">${htmlEscape(r.title)}</div>
+        <div class="dp-meta">
+          <span class="meta-item"><span class="material-symbols-outlined">place</span>${r.flag} ${htmlEscape(r.destination)}</span>
+          <span class="meta-item"><span class="material-symbols-outlined">schedule</span>${htmlEscape(fmtNights(r.nights))}</span>
+          <span class="meta-item"><span class="material-symbols-outlined">calendar_month</span>${htmlEscape(fmtSeason(r.season, r.startDate))}</span>
+        </div>
+        <div class="dp-section">
+          <div class="dp-stats">
+            <div class="dp-stat"><div class="label">Practice</div><div class="value">${htmlEscape(r.sub)}</div></div>
+            <div class="dp-stat"><div class="label">Duration</div><div class="value">${htmlEscape(fmtNights(r.nights))}</div></div>
+            <div class="dp-stat"><div class="label">Season</div><div class="value">${htmlEscape(fmtSeason(r.season, r.startDate))}</div></div>
+            <div class="dp-stat"><div class="label">Starts</div><div class="value">${r.startDate ? new Date(r.startDate).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</div></div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-section-label">About this retreat</div>
+          <p class="dp-description">${htmlEscape(description)}</p>
+        </div>
+      </div>
+      <div class="dp-foot">
+        <div class="price">${htmlEscape(price)}${isFree ? '' : '<span class="per"> / person</span>'}</div>
+        <a class="view-btn" href="#" data-slug="${htmlEscape(r.slug)}">
+          View retreat <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+    `;
+    split.classList.add('detail-open');
+    pane.setAttribute('aria-hidden', 'false');
+  }
+
+  function openDetail(slug) {
+    state.selectedSlug = slug;
+    renderList();    // re-mark selected card
+    renderDetail();
+  }
+  function closeDetail() {
+    state.selectedSlug = null;
+    renderList();
+    renderDetail();
+  }
+
+  /* ── Sheet (mobile bottom sheet) ──────────────────── */
+  function openSheet() {
+    document.getElementById('detailPane').classList.add('sheet-open');
+    document.getElementById('sheetBackdrop').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheet() {
+    document.getElementById('detailPane').classList.remove('sheet-open');
+    document.getElementById('sheetBackdrop').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Render entry-point ──────────────────────────── */
+  function render() {
+    applyFilters();
+    renderTitle();
+    renderFilterBar();
+    renderChips();
+    renderList();
+    renderDetail();
+  }
+
+
+  /* ── Wiring ─────────────────────────────────────── */
+  let searchDebounce;
+  document.getElementById('searchInput').addEventListener('input', e => {
+    clearTimeout(searchDebounce);
+    const v = e.target.value;
+    searchDebounce = setTimeout(() => {
+      state.q = v.trim();
+      writeUrl(); render();
+    }, 220);
+  });
+  document.getElementById('searchClear').addEventListener('click', () => {
+    state.q = ''; document.getElementById('searchInput').value = '';
+    writeUrl(); render();
+  });
+
+  /* Each pill: click on body opens PillPicker; click on the X clears. */
+  function wirePill(pillId, items, stateKey) {
+    document.getElementById(pillId).addEventListener('click', e => {
+      if (e.target.closest(`[data-clear="${stateKey}"]`)) {
+        state[stateKey] = '';
+        writeUrl(); render();
+        return;
+      }
+      const opts = items.map(it => ({ value: it.slug, label: it.label }));
+      PillPicker.open(e.currentTarget, opts, state[stateKey], (val) => {
+        state[stateKey] = val;
+        writeUrl(); render();
+      });
+    });
+  }
+  wirePill('practicePill', PRACTICES,    'practice');
+  wirePill('destPill',     DESTINATIONS, 'dest');
+  wirePill('seasonPill',   SEASONS,      'season');
+  wirePill('lengthPill',   LENGTHS,      'length');
+
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    state.sort = e.target.value; writeUrl(); render();
+  });
+
+  document.getElementById('chipRow').addEventListener('click', e => {
+    const btn = e.target.closest('[data-sub]');
+    if (!btn) return;
+    const sub = btn.dataset.sub;
+    state.sub = (state.sub === sub) ? '' : sub;
+    writeUrl(); render();
+  });
+
+  /* Card click → open detail. Reset button → clear filters. */
+  document.getElementById('resultsList').addEventListener('click', e => {
+    if (e.target.closest('#resetBtn')) {
+      state.q = state.practice = state.dest = state.season = state.length = state.sub = '';
+      closeDetail();
+      writeUrl(); render();
+      return;
+    }
+    const card = e.target.closest('.row-card[data-slug]');
+    if (card) {
+      openDetail(card.dataset.slug);
+      if (window.matchMedia('(max-width: 1080px)').matches) openSheet();
+    }
+  });
+
+  /* X close in detail pane */
+  document.getElementById('detailPane').addEventListener('click', e => {
+    if (e.target.closest('#dpClose')) {
+      if (window.matchMedia('(max-width: 1080px)').matches) {
+        closeSheet();
+        setTimeout(() => closeDetail(), 320);
+      } else {
+        closeDetail();
+      }
+    }
+  });
+
+  /* Backdrop tap — close sheet */
+  document.getElementById('sheetBackdrop').addEventListener('click', () => {
+    closeSheet();
+    setTimeout(() => closeDetail(), 320);
+  });
+
+  /* Esc closes detail */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && state.selectedSlug) {
+      if (window.matchMedia('(max-width: 1080px)').matches) {
+        closeSheet();
+        setTimeout(() => closeDetail(), 320);
+      } else {
+        closeDetail();
+      }
+    }
+  });
+
+  window.addEventListener('popstate', () => { readUrl(); render(); });
+
+  /* ── Bootstrap ────────────────────────────────── */
+  function init() {
+    readUrl();
+    state.loading = false;
+    render();
+  }
+  init();
+</script>
+
+<script src="auth-overlay.js"></script>
+</body>
+</html>
