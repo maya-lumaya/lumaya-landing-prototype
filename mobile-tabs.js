@@ -114,10 +114,18 @@
     .m-tab-bar {
       display: block;
       position: sticky; top: 60px; z-index: 55;
-      background: rgba(252, 249, 244, 0.96);
+      /* Match landing page: gradient fading to transparent so content bleeds through */
+      background: linear-gradient(to bottom,
+        rgba(249, 246, 239, 0.97) 42%,
+        rgba(249, 246, 239, 0.0) 100%);
       backdrop-filter: saturate(120%) blur(14px);
       -webkit-backdrop-filter: saturate(120%) blur(14px);
-      border-bottom: 1px solid rgba(194,200,195,0.22);
+    }
+    .m-tab-bar::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+      height: 1px; background: var(--border, rgba(194,200,195,0.22));
+      opacity: var(--shrink, 0);
+      pointer-events: none;
     }
     .m-tab-bar .m-tab-row { margin-top: 0; }
   }
