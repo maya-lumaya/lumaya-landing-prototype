@@ -180,11 +180,11 @@
   /* ── Mobile (≤760) ───────────────────────────────────── */
   @media (max-width: 760px) {
     header.site {
-      /* Match landing page: gradient from opaque → semi-transparent
-         so it flows seamlessly into the tab-bar gradient below */
-      background: linear-gradient(to bottom,
-        rgba(249, 246, 239, 0.97) 0%,
-        rgba(249, 246, 239, 0.80) 100%);
+      /* Fully transparent on mobile — the .m-tab-bar behind it provides
+         the unified gradient + backdrop-filter (like .m-search on landing page) */
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
       border-bottom: none;
     }
     header.site .container.nav {

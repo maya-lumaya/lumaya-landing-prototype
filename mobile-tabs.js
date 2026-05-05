@@ -110,14 +110,18 @@
     /* Selection flash hook (used elsewhere by Haptics) */
     .m-tab-btn.is-tap-flash .m-tab-icon { animation: hapticSettle .2s cubic-bezier(0,0,.2,1); }
 
-    /* Standalone sticky bar — used on hub / search-results pages */
+    /* Standalone sticky bar — used on hub / search-results pages.
+       margin-top:-60px pulls it up behind the transparent header;
+       padding-top:60px pushes tab content below the header line.
+       Result: ONE unified gradient + backdrop-filter zone from viewport
+       top to below the tabs — identical to .m-search on the landing page. */
     .m-tab-bar {
       display: block;
-      position: sticky; top: 60px; z-index: 55;
-      /* Continue the header gradient: header ends at 0.80, tab-bar fades to fully transparent.
-         This creates one seamless gradient zone matching the landing page aesthetic. */
+      position: sticky; top: 0; z-index: 55;
+      margin-top: -60px;
+      padding-top: 60px;
       background: linear-gradient(to bottom,
-        rgba(249, 246, 239, 0.80) 0%,
+        rgba(249, 246, 239, 0.97) 42%,
         rgba(249, 246, 239, 0.0) 100%);
       backdrop-filter: saturate(120%) blur(14px);
       -webkit-backdrop-filter: saturate(120%) blur(14px);
@@ -130,8 +134,7 @@
     }
     .m-tab-bar .m-tab-row { margin-top: 0; }
 
-    /* Pull hero up so its image extends behind the transparent header + tab-bar zone.
-       Increased from -40px to -80px to bleed behind the header gradient too. */
+    /* Pull hero up so its image extends behind the full gradient zone (header + tabs) */
     .m-tab-bar + .hero,
     .m-tab-bar + section.hero {
       margin-top: -80px;
