@@ -128,6 +128,13 @@
       pointer-events: none;
     }
     .m-tab-bar .m-tab-row { margin-top: 0; }
+
+    /* Pull hero up so its image extends behind the transparent tab row gradient */
+    .m-tab-bar + .hero,
+    .m-tab-bar + section.hero {
+      margin-top: -40px;
+      padding-top: calc(40px + 44px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
