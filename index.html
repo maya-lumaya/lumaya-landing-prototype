@@ -101,56 +101,7 @@
   .m-search-pill svg { width: 17px; height: 17px; stroke: var(--text); flex: 0 0 auto; }
   .m-search-pill .m-search-label { flex: 1; text-align: left; }
   .m-search-pill .m-search-sub { color: var(--muted); font-size: 12px; }
-  .m-tab-row {
-    display: flex; gap: 0;
-    justify-content: space-around; align-items: stretch;
-    /* gap between pill and tab text shrinks from 14px → 0 as user scrolls */
-    margin-top: calc(14px - 14px * var(--shrink));
-    padding: 0;
-  }
-  .m-tab-btn {
-    flex: 1 1 0; max-width: none;
-    background: transparent; border: 0;
-    /* vertical padding tightens slightly when collapsed */
-    padding: calc(10px - 4px * var(--shrink)) 6px calc(10px - 2px * var(--shrink));
-    display: flex; flex-direction: column; align-items: center;
-    /* gap between icon and label collapses to 0 when shrink → 1 */
-    gap: calc(6px - 6px * var(--shrink));
-    color: var(--muted); cursor: pointer; position: relative;
-    border-bottom: 2px solid transparent;
-    font: 500 13px/1.2 "Inter", system-ui, sans-serif;
-  }
-  .m-tab-btn .m-tab-icon {
-    /* container height collapses with --shrink */
-    width: 32px;
-    height: calc(32px - 32px * var(--shrink));
-    display: grid; place-items: center;
-    color: var(--text);
-    /* fade out a touch ahead of the scale so they "dissolve" before reaching 0 */
-    opacity: clamp(0, calc(1.1 - var(--shrink) * 1.3), 1);
-  }
-  /* SVG shrinks proportionally with the container — prevents clipping */
-  .m-tab-btn .m-tab-icon svg {
-    width: calc(28px - 28px * var(--shrink));
-    height: calc(28px - 28px * var(--shrink));
-    stroke: currentColor; fill: none; stroke-width: 1.4;
-    stroke-linecap: round; stroke-linejoin: round;
-  }
-  .m-tab-btn .m-tab-badge {
-    position: absolute; top: 4px; right: 2px;
-    background: #2D5BFF; color: #fff;
-    font: 700 9px/1 "Inter", system-ui, sans-serif;
-    letter-spacing: 0.06em;
-    padding: 3px 5px 3px;
-    border-radius: 6px;
-    /* badges fade out together with icons */
-    opacity: clamp(0, calc(1 - var(--shrink) * 1.6), 1);
-    pointer-events: none;
-  }
-  .m-tab-btn[aria-selected="true"] {
-    color: var(--text);
-    border-bottom-color: var(--text);
-  }
+  /* .m-tab-row / .m-tab-btn styles live in mobile-tabs.js (shared partial) */
 
   /* ============= Fullscreen modal ============= */
   body.m-locked { overflow: hidden; }
@@ -1111,22 +1062,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <span class="m-search-label">Search anything</span>
       </button>
-      <div class="m-tab-row" role="tablist">
-        <button class="m-tab-btn" role="tab" data-mtab="events" aria-selected="false">
-          <span class="m-tab-icon"><svg viewBox="0 0 28 28"><rect x="4" y="6" width="20" height="18" rx="2.5"/><path d="M4 11h20M10 3v5M18 3v5"/><circle cx="14" cy="17" r="1.2" fill="currentColor"/></svg></span>
-          <span>Events</span>
-        </button>
-        <button class="m-tab-btn" role="tab" data-mtab="retreats" aria-selected="true">
-          <span class="m-tab-icon"><svg viewBox="0 0 28 28"><circle cx="20" cy="9" r="3"/><path d="M3 21l7-9 5 6 3-3 7 8"/><path d="M3 24h22"/></svg></span>
-          <span>Retreats</span>
-          <span class="m-tab-badge">NEW</span>
-        </button>
-        <button class="m-tab-btn" role="tab" data-mtab="trainings" aria-selected="false">
-          <span class="m-tab-icon"><svg viewBox="0 0 28 28"><path d="M14 5l11 5-11 5L3 10l11-5z"/><path d="M7 13v5s2.5 3 7 3 7-3 7-3v-5"/><path d="M23 11v7"/></svg></span>
-          <span>Trainings</span>
-          <span class="m-tab-badge">NEW</span>
-        </button>
-      </div>
+      <!-- Mobile pillar tabs (shared partial — see mobile-tabs.js) -->
+      <div data-component="mobile-tabs" data-active=""></div>
     </div>
   </div>
 </section>
@@ -1539,6 +1476,7 @@
 <script src="header.js" defer></script>
 <script src="footer.js" defer></script>
 <script src="bottom-nav.js" defer></script>
+<script src="mobile-tabs.js" defer></script>
 <script src="taxonomy.js"></script>
 <script src="search-pill.js"></script>
 
@@ -1985,7 +1923,6 @@
     document.body.classList.add("m-locked");
     mModal.classList.add("open");
     mRender();
-    syncTopMobileTabs();
   }
   function closeMobileModal() {
     mModal.classList.add("closing");
@@ -1993,11 +1930,6 @@
       mModal.classList.remove("open", "closing");
       document.body.classList.remove("m-locked");
     }, { once: true });
-  }
-  function syncTopMobileTabs() {
-    document.querySelectorAll(".m-tab-btn").forEach(b => {
-      b.setAttribute("aria-selected", b.dataset.mtab === mState.tab ? "true" : "false");
-    });
   }
 
   function mRender() {
@@ -2024,7 +1956,6 @@
         mState.pickedAddress = null;
         mState.addrQuery = ""; mState.addrResults = []; mState.addrLoading = false;
         mRender();
-        syncTopMobileTabs();
         renderFields(); // keep desktop in sync
       });
       mTabs.appendChild(b);
@@ -2541,9 +2472,6 @@
 
   // Wire up triggers
   document.getElementById("mSearchPill").addEventListener("click", () => openMobileModal());
-  document.querySelectorAll(".m-tab-btn").forEach(b => {
-    b.addEventListener("click", () => openMobileModal(b.dataset.mtab));
-  });
   document.getElementById("mModalClose").addEventListener("click", closeMobileModal);
   mNext.addEventListener("click", mAdvance);
   document.getElementById("mClear").addEventListener("click", () => {
