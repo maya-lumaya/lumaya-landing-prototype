@@ -1,15 +1,29 @@
 /* ============================================================
  * PillPicker — shared dropdown popover for filter pills
  *
- * Use:
+ * Use (flat):
  *   PillPicker.open(triggerEl, items, currentValue, onSelect);
- *
  *   items: [{ value: 'bali', label: 'Bali', count: 12 }, ...]
- *   onSelect: (newValue) => { state.dest = newValue; render(); }
  *
- * Closes on outside click, Escape, scroll, resize. Repositions if
- * the popover would render off-screen. Toggles closed if open() is
- * called with the same trigger.
+ * Use (tree — pillars + sub-categories):
+ *   Items may have a `children` array. Parents are clickable (select
+ *   the pillar slug); children are indented and clickable (select the
+ *   child's value, e.g. "yoga/vinyasa-yoga"). A `sensitive: true`
+ *   flag adds a small "review" badge.
+ *
+ *   items: [
+ *     { value: '', label: 'Any practice' },
+ *     { value: 'yoga', label: 'Yoga', count: 1116, children: [
+ *       { value: 'yoga/vinyasa-yoga', label: 'Vinyasa Yoga', count: 19 }
+ *     ]},
+ *     ...
+ *   ]
+ *
+ *   onSelect: (newValue) => { ... }
+ *
+ * Closes on outside click, Escape, scroll, resize. Repositions if the
+ * popover would render off-screen. Toggles closed if open() is called
+ * with the same trigger.
  * ============================================================ */
 (function () {
   'use strict';
@@ -43,12 +57,33 @@
     pop.className = 'pill-popover';
     pop.setAttribute('role', 'listbox');
 
-    pop.innerHTML = items.map(it => {
+    const hasTree = items.some(it => Array.isArray(it.children) && it.children.length);
+    if (hasTree) pop.classList.add('pill-popover--tree');
+
+    function renderItem(it, isChild) {
       const sel = (it.value || '') === (currentValue || '');
-      return `<button class="pill-popover-item${sel ? ' is-selected' : ''}" type="button" role="option" aria-selected="${sel}" data-value="${escape(it.value || '')}">
-        <span class="pill-popover-label">${escape(it.label)}</span>
+      const cls = [
+        'pill-popover-item',
+        isChild ? 'pill-popover-item--child' : '',
+        it.children && it.children.length ? 'pill-popover-item--parent' : '',
+        sel ? 'is-selected' : '',
+        it.sensitive ? 'is-sensitive' : ''
+      ].filter(Boolean).join(' ');
+      const badge = it.sensitive ? '<span class="pill-popover-badge">review</span>' : '';
+      return `<button class="${cls}" type="button" role="option" aria-selected="${sel}" data-value="${escape(it.value || '')}">
+        <span class="pill-popover-label">${escape(it.label)}${badge}</span>
         ${it.count != null ? `<span class="pill-popover-count">${escape(it.count)}</span>` : ''}
       </button>`;
+    }
+
+    pop.innerHTML = items.map(it => {
+      let html = renderItem(it, false);
+      if (Array.isArray(it.children) && it.children.length) {
+        html += '<div class="pill-popover-children">' +
+          it.children.map(child => renderItem(child, true)).join('') +
+          '</div>';
+      }
+      return html;
     }).join('');
 
     pop.addEventListener('click', e => {
@@ -65,7 +100,8 @@
     pop.style.position = 'fixed';
     pop.style.top = (r.bottom + 6) + 'px';
     pop.style.left = r.left + 'px';
-    pop.style.minWidth = Math.max(r.width, 220) + 'px';
+    pop.style.minWidth = Math.max(r.width, hasTree ? 320 : 220) + 'px';
+    pop.style.maxWidth = hasTree ? '420px' : '';
     pop.style.zIndex = '1000';
 
     // Reflow then adjust if off-screen
@@ -135,6 +171,50 @@
       font: 500 12px/1 'Inter', sans-serif;
       color: var(--text-subtle, #8A8A8A);
       flex-shrink: 0;
+    }
+
+    /* Tree mode (pillars + sub-categories) */
+    .pill-popover--tree { padding: 8px 6px; max-height: 440px; }
+    .pill-popover--tree .pill-popover-item--parent {
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-top: 2px;
+    }
+    .pill-popover--tree .pill-popover-item--parent:not(.is-selected):hover {
+      background: var(--bg-2, #F6F3EE);
+    }
+    .pill-popover-children {
+      display: flex; flex-direction: column;
+      padding: 0 0 6px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      margin-bottom: 4px;
+    }
+    .pill-popover-item--child {
+      font-weight: 500;
+      font-size: 13px;
+      padding: 7px 14px 7px 30px;
+      color: var(--text-muted, #5b5b56);
+    }
+    .pill-popover-item--child .pill-popover-count {
+      font-size: 11.5px;
+    }
+    .pill-popover-badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 5px;
+      font: 700 9.5px/1.4 'Inter', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange-700, #b25411);
+      background: var(--orange-50, #fef3e7);
+      border: 1px solid var(--orange-100, #fadcb6);
+      border-radius: 4px;
+      vertical-align: 1px;
+    }
+    .pill-popover-item.is-selected .pill-popover-badge {
+      color: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.18);
     }
   `;
   const style = document.createElement('style');

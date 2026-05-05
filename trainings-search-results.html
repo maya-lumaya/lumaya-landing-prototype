@@ -565,6 +565,7 @@ h1.page-title {
 <script src="header.js" defer></script>
 <script src="footer.js" defer></script>
 <script src="bottom-nav.js" defer></script>
+<script src="taxonomy.js"></script>
 <script src="pillpicker.js" defer></script>
 
 <script>
@@ -590,74 +591,69 @@ h1.page-title {
     { slug: 'shamanic-tt-peru', title: 'Foundations of Shamanic Practice (sensitive)', school: 'Q’ero Lineage School', accred: '—', discipline: 'ceremony', hours: 100, country: 'PE', countryName: 'Peru', location: 'Sacred Valley', startDate: '2026-10-03', durationDays: 14, format: 'intensive', online: false, priceFrom: 2480, popularity: 60, image: 'https://img.freepik.com/free-photo/sacred-valley-peru_1417-1497.jpg' }
   ];
 
-  /* ── Discipline taxonomy (lightweight subset of TRAINING_TAXONOMY) ─ */
-  const DISCIPLINES = [
-    { slug: '',           label: 'Any discipline' },
-    { slug: 'yoga',       label: 'Yoga' },
-    { slug: 'meditation', label: 'Meditation' },
-    { slug: 'healing',    label: 'Healing & Somatic' },
-    { slug: 'bodywork',   label: 'Bodywork & Wellness' },
-    { slug: 'ceremony',   label: 'Ceremony & Facilitation' },
-    { slug: 'coaching',   label: 'Coaching & Leadership' }
-  ];
+  /* ── Filter dimensions sourced from canonical Taxonomy ─── */
+  const T = window.Taxonomy;
 
-  const HOURS = [
-    { slug: '',     label: 'Any hours',      min: 0,   max: 9999 },
-    { slug: '50',   label: '50 hour',        min: 1,   max: 99 },
-    { slug: '100',  label: '100 hour',       min: 100, max: 199 },
-    { slug: '200',  label: '200 hour',       min: 200, max: 299 },
-    { slug: '300',  label: '300 hour',       min: 300, max: 499 },
-    { slug: '500',  label: '500 hour +',     min: 500, max: 9999 }
-  ];
+  const DISCIPLINES = [{ slug: '', label: 'Any discipline' }].concat(
+    T.TRAINING_TAXONOMY.map(p => ({ slug: p.slug, label: p.name, sensitive: !!p.sensitive }))
+  );
 
-  const PLACES = [
-    { slug: '',         label: 'Anywhere' },
-    { slug: 'online',   label: 'Online' },
-    { slug: 'india',    label: 'India' },
-    { slug: 'indonesia',label: 'Indonesia (Bali)' },
-    { slug: 'germany',  label: 'Germany' },
-    { slug: 'portugal', label: 'Portugal' },
-    { slug: 'spain',    label: 'Spain' },
-    { slug: 'thailand', label: 'Thailand' },
-    { slug: 'austria',  label: 'Austria' },
-    { slug: 'uk',       label: 'United Kingdom' },
-    { slug: 'netherlands', label: 'Netherlands' },
-    { slug: 'peru',     label: 'Peru' }
-  ];
-  const PLACE_MATCH = {
-    online: r => r.online,
-    india: r => r.country === 'IN',
-    indonesia: r => r.country === 'ID',
-    germany: r => r.country === 'DE',
-    portugal: r => r.country === 'PT',
-    spain: r => r.country === 'ES',
-    thailand: r => r.country === 'TH',
-    austria: r => r.country === 'AT',
-    uk: r => r.country === 'GB',
-    netherlands: r => r.country === 'NL',
-    peru: r => r.country === 'PE'
-  };
+  // Tree items for the discipline picker.
+  const DISCIPLINE_TREE = [{ value: '', label: 'Any discipline' }].concat(
+    T.TRAINING_TAXONOMY.map(p => ({
+      value: p.slug,
+      label: p.name,
+      count: p.count,
+      sensitive: !!p.sensitive,
+      children: p.subs.map(s => ({
+        value: `${p.slug}/${s.slug}`,
+        label: s.name,
+        count: s.count,
+        sensitive: !!s.sensitive
+      }))
+    }))
+  );
 
-  const STARTS = [
-    { slug: '',     label: 'Any time',         monthsAhead: null },
-    { slug: '3m',   label: 'Next 3 months',    monthsAhead: 3 },
-    { slug: '6m',   label: 'Next 6 months',    monthsAhead: 6 },
-    { slug: 'autumn26', label: 'Autumn 2026',  range: ['2026-09-01', '2026-12-01'] },
-    { slug: '2027', label: '2027',             range: ['2027-01-01', '2028-01-01'] }
-  ];
+  const HOURS   = T.TRAINING_HOURS.slice();
+  const STARTS  = T.TRAINING_STARTS.slice();
+  const FORMATS = T.TRAINING_FORMATS.slice();
 
-  const FORMATS = [
-    { slug: '',          label: 'Any format' },
-    { slug: 'intensive', label: 'Intensive' },
-    { slug: 'modular',   label: 'Modular' },
-    { slug: 'online',    label: 'Online' }
-  ];
+  const PLACES = [{ slug: '', label: 'Anywhere' }].concat(
+    T.TRAINING_PLACES.filter(p => p.slug).map(p => ({ slug: p.slug, label: p.label }))
+  );
+  const PLACE_MATCH = T.TRAINING_PLACES.reduce((m, p) => {
+    if (!p.slug) return m;
+    if (p.online) m[p.slug] = r => r.online;
+    else if (p.country) m[p.slug] = r => r.country === p.country;
+    return m;
+  }, {});
 
   const POPULAR_HOURS = ['200', '300', '500', '100', '50'];
 
+  /* Sub-discipline filter — narrows results within a pillar. Prototype
+     mock data has no sub-slug field, so we match against the sub's
+     readable name (e.g. "Vinyasa YTT" → look for "Vinyasa"; "200 Hour
+     YTT" → require t.hours == 200). */
+  function trainingSubMatch(t) {
+    if (!state.sub || !state.discipline) return true;
+    const pillar = T.findPillar(T.TRAINING_TAXONOMY, state.discipline);
+    const sub = pillar?.subs.find(s => s.slug === state.sub);
+    if (!sub) return true;
+    const hourMatch = sub.name.match(/(\d{2,3})\s*hour/i);
+    if (hourMatch) return Number(t.hours) === Number(hourMatch[1]);
+    const tokens = sub.name
+      .replace(/(YTT|TT|Training|Teacher|Certification|Cert\.?|Course|\(.*?\))/gi, '')
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter(w => w.length >= 4);
+    if (!tokens.length) return true;
+    const hay = ((t.title || '') + ' ' + (t.school || '')).toLowerCase();
+    return tokens.some(tok => hay.includes(tok));
+  }
+
   /* ── State ─────────────────────────────────────────────── */
   const state = {
-    q: '', discipline: '', hours: '', where: '', starts: '', format: '',
+    q: '', discipline: '', sub: '', hours: '', where: '', starts: '', format: '',
     sort: 'DATE_ASC',
     selectedSlug: null,
     items: []
@@ -668,6 +664,7 @@ h1.page-title {
     const p = new URLSearchParams(location.search);
     state.q          = p.get('q') || '';
     state.discipline = p.get('discipline') || '';
+    state.sub        = p.get('sub') || '';
     state.hours      = p.get('hours') || '';
     state.where      = p.get('where') || '';
     state.starts     = p.get('starts') || '';
@@ -678,6 +675,7 @@ h1.page-title {
     const p = new URLSearchParams();
     if (state.q)          p.set('q', state.q);
     if (state.discipline) p.set('discipline', state.discipline);
+    if (state.sub)        p.set('sub', state.sub);
     if (state.hours)      p.set('hours', state.hours);
     if (state.where)      p.set('where', state.where);
     if (state.starts)     p.set('starts', state.starts);
@@ -727,6 +725,7 @@ h1.page-title {
       );
     }
     if (state.discipline) list = list.filter(t => t.discipline === state.discipline);
+    if (state.sub) list = list.filter(trainingSubMatch);
     if (state.hours) {
       const H = HOURS.find(x => x.slug === state.hours);
       if (H) list = list.filter(t => t.hours >= H.min && t.hours <= H.max);
@@ -797,12 +796,25 @@ h1.page-title {
     const wrap = document.getElementById('searchWrap');
     document.getElementById('searchInput').value = state.q;
     wrap.classList.toggle('has-text', !!state.q);
-    setPill('disciplinePill', findLabel(DISCIPLINES, state.discipline) || 'Any discipline', !!state.discipline);
+    setPill('disciplinePill', disciplinePillLabel(), !!(state.discipline || state.sub));
     setPill('hoursPill', findLabel(HOURS, state.hours) || 'Any hours', !!state.hours);
     setPill('wherePill', findLabel(PLACES, state.where) || 'Anywhere', !!state.where);
     setPill('startsPill', findLabel(STARTS, state.starts) || 'Any time', !!state.starts);
     setPill('formatPill', findLabel(FORMATS, state.format) || 'Any format', !!state.format);
     document.getElementById('sortSelect').value = state.sort;
+  }
+
+  /* ── Discipline pill label: "Yoga · Vinyasa YTT" if sub selected ─ */
+  function disciplinePillLabel() {
+    if (!state.discipline && !state.sub) return 'Any discipline';
+    const pillar = T.findPillar(T.TRAINING_TAXONOMY, state.discipline);
+    const pillarName = pillar ? pillar.name : (findLabel(DISCIPLINES, state.discipline) || '');
+    if (state.sub && pillar) {
+      const subEntry = pillar.subs.find(s => s.slug === state.sub);
+      const subName  = subEntry ? subEntry.name : state.sub;
+      return pillarName ? `${pillarName} · ${subName}` : subName;
+    }
+    return pillarName || 'Any discipline';
   }
 
   /* ── Render: chip row (cert hours — the hero axis for trainings) ── */
@@ -1009,7 +1021,28 @@ h1.page-title {
       });
     });
   }
-  wirePill('disciplinePill', DISCIPLINES, 'discipline');
+  /* Discipline pill: tree picker (pillars + sub-categories from TRAINING_TAXONOMY). */
+  document.getElementById('disciplinePill').addEventListener('click', e => {
+    if (e.target.closest('[data-clear="discipline"]')) {
+      state.discipline = ''; state.sub = '';
+      writeUrl(); render();
+      return;
+    }
+    let current = state.discipline || '';
+    if (state.discipline && state.sub) current = `${state.discipline}/${state.sub}`;
+    PillPicker.open(e.currentTarget, DISCIPLINE_TREE, current, (val) => {
+      if (!val) { state.discipline = ''; state.sub = ''; }
+      else if (val.includes('/')) {
+        const [pillarSlug, subSlug] = val.split('/');
+        state.discipline = pillarSlug;
+        state.sub = subSlug;
+      } else {
+        state.discipline = val;
+        state.sub = '';
+      }
+      writeUrl(); render();
+    });
+  });
   wirePill('hoursPill',      HOURS,       'hours');
   wirePill('wherePill',      PLACES,      'where');
   wirePill('startsPill',     STARTS,      'starts');

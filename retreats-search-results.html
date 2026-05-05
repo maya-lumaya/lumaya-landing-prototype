@@ -564,6 +564,7 @@ h1.page-title {
 <script src="header.js" defer></script>
 <script src="footer.js" defer></script>
 <script src="bottom-nav.js" defer></script>
+<script src="taxonomy.js"></script>
 <script src="pillpicker.js" defer></script>
 
 <script>
@@ -590,53 +591,40 @@ h1.page-title {
     { slug: 'azores-nature-burnout', title: 'Burnout Recovery in the Azores', cat: 'healing', sub: 'Burnout Recovery', destination: 'São Miguel, Azores', country: 'PT', flag: '🇵🇹', nights: 8, season: 'summer', startDate: '2026-08-10', priceFrom: 1640, popularity: 71, image: 'https://img.freepik.com/free-photo/azores-landscape_1417-1503.jpg' }
   ];
 
-  /* ── Practice taxonomy (lightweight, sub-set of RETREAT_TAXONOMY) ─ */
-  const PRACTICES = [
-    { slug: '',           label: 'Any practice' },
-    { slug: 'yoga',       label: 'Yoga' },
-    { slug: 'meditation', label: 'Meditation' },
-    { slug: 'healing',    label: 'Healing & Recovery' },
-    { slug: 'wellness',   label: 'Health & Wellness' },
-    { slug: 'groups',     label: 'Groups & Lifestyle' }
-  ];
+  /* ── Filter dimensions sourced from canonical Taxonomy ─── */
+  const T = window.Taxonomy;
 
-  const DESTINATIONS = [
-    { slug: '',          label: 'Anywhere' },
-    { slug: 'bali',      label: 'Bali' },
-    { slug: 'rishikesh', label: 'Rishikesh' },
-    { slug: 'portugal',  label: 'Portugal' },
-    { slug: 'spain',     label: 'Spain (Mallorca)' },
-    { slug: 'greece',    label: 'Greece' },
-    { slug: 'italy',     label: 'Italy' },
-    { slug: 'india',     label: 'India' },
-    { slug: 'thailand',  label: 'Thailand' },
-    { slug: 'costa-rica',label: 'Costa Rica' },
-    { slug: 'morocco',   label: 'Morocco' },
-    { slug: 'sweden',    label: 'Sweden' }
-  ];
-  const DEST_MATCH = {
-    bali: ['Bali'], rishikesh: ['Rishikesh'], portugal: ['Portugal', 'Azores'],
-    spain: ['Mallorca', 'Spain'], greece: ['Greece', 'Santorini', 'Crete'],
-    italy: ['Italy'], india: ['India', 'Kerala', 'Rishikesh'],
-    thailand: ['Thailand', 'Koh Phangan'], 'costa-rica': ['Costa Rica'],
-    morocco: ['Morocco'], sweden: ['Sweden']
-  };
+  // Pillar-only list (used for current-value lookup in the picker label).
+  const PRACTICES = [{ slug: '', label: 'Any practice' }].concat(
+    T.RETREAT_TAXONOMY.map(p => ({ slug: p.slug, label: p.name, sensitive: !!p.sensitive }))
+  );
 
-  const SEASONS = [
-    { slug: '',       label: 'Flexible' },
-    { slug: 'spring', label: 'Spring 2026' },
-    { slug: 'summer', label: 'Summer 2026' },
-    { slug: 'autumn', label: 'Autumn 2026' },
-    { slug: 'winter', label: 'Winter 2026/27' }
-  ];
+  // Tree items for the practice picker: pillars with their sub-categories.
+  // Child value uses "pillar/sub-slug" so we can decode back to (practice, sub).
+  const PRACTICE_TREE = [{ value: '', label: 'Any practice' }].concat(
+    T.RETREAT_TAXONOMY.map(p => ({
+      value: p.slug,
+      label: p.name,
+      count: p.count,
+      sensitive: !!p.sensitive,
+      children: p.subs.map(s => ({
+        value: `${p.slug}/${s.slug}`,
+        label: s.name,
+        count: s.count,
+        sensitive: !!s.sensitive
+      }))
+    }))
+  );
 
-  const LENGTHS = [
-    { slug: '',         label: 'Any length',         min: 0,  max: 999 },
-    { slug: 'weekend',  label: 'Weekend (2–3 nts)',  min: 2,  max: 3 },
-    { slug: 'short',    label: 'Short (4–7 nts)',    min: 4,  max: 7 },
-    { slug: 'week-plus',label: 'Week+ (8–14 nts)',   min: 8,  max: 14 },
-    { slug: 'deep',     label: 'Deep (2+ weeks)',    min: 15, max: 999 }
-  ];
+  const DESTINATIONS = [{ slug: '', label: 'Anywhere' }].concat(
+    T.RETREAT_DESTINATIONS.filter(d => d.slug).map(d => ({ slug: d.slug, label: d.label }))
+  );
+  const DEST_MATCH = T.RETREAT_DESTINATIONS.reduce((m, d) => {
+    if (d.slug && d.match) m[d.slug] = d.match; return m;
+  }, {});
+
+  const SEASONS = T.RETREAT_SEASONS.slice();
+  const LENGTHS = T.RETREAT_LENGTHS.slice();
 
   const POPULAR_SUBS = ['Yoga Teacher Training', 'Silent', 'Vinyasa Yoga', 'Ayurveda', "Women's", 'Trauma Healing', 'Kundalini Yoga', 'Yin & Restorative Yoga', 'Vipassana', 'Breathwork'];
 
@@ -769,11 +757,23 @@ h1.page-title {
     const wrap = document.getElementById('searchWrap');
     document.getElementById('searchInput').value = state.q;
     wrap.classList.toggle('has-text', !!state.q);
-    setPill('practicePill', findLabel(PRACTICES, state.practice) || 'Any practice', !!state.practice);
+    const practiceLabel = practicePillLabel();
+    setPill('practicePill', practiceLabel, !!(state.practice || state.sub));
     setPill('destPill', findLabel(DESTINATIONS, state.dest) || 'Anywhere', !!state.dest);
     setPill('seasonPill', findLabel(SEASONS, state.season) || 'Flexible', !!state.season);
     setPill('lengthPill', findLabel(LENGTHS, state.length) || 'Any length', !!state.length);
     document.getElementById('sortSelect').value = state.sort;
+  }
+
+  /* ── Practice pill label: "Yoga · Vinyasa Yoga" if sub selected ── */
+  function practicePillLabel() {
+    if (!state.practice && !state.sub) return 'Any practice';
+    const pillar = T.findPillar(T.RETREAT_TAXONOMY, state.practice);
+    const pillarName = pillar ? pillar.name : (findLabel(PRACTICES, state.practice) || '');
+    if (state.sub) {
+      return pillarName ? `${pillarName} · ${state.sub}` : state.sub;
+    }
+    return pillarName || 'Any practice';
   }
 
   /* ── Render: chip row (popular sub-categories with counts) ─ */
@@ -974,7 +974,35 @@ h1.page-title {
       });
     });
   }
-  wirePill('practicePill', PRACTICES,    'practice');
+  /* Practice pill: tree picker (pillars + sub-categories from RETREAT_TAXONOMY). */
+  document.getElementById('practicePill').addEventListener('click', e => {
+    if (e.target.closest('[data-clear="practice"]')) {
+      state.practice = ''; state.sub = '';
+      writeUrl(); render();
+      return;
+    }
+    // Current value: 'pillar/sub-slug' if sub set, else just pillar.
+    let current = state.practice || '';
+    if (state.practice && state.sub) {
+      const pillar = T.findPillar(T.RETREAT_TAXONOMY, state.practice);
+      const subEntry = pillar?.subs.find(s => s.name === state.sub);
+      if (subEntry) current = `${state.practice}/${subEntry.slug}`;
+    }
+    PillPicker.open(e.currentTarget, PRACTICE_TREE, current, (val) => {
+      if (!val) { state.practice = ''; state.sub = ''; }
+      else if (val.includes('/')) {
+        const [pillarSlug, subSlug] = val.split('/');
+        const pillar = T.findPillar(T.RETREAT_TAXONOMY, pillarSlug);
+        const sub = pillar?.subs.find(s => s.slug === subSlug);
+        state.practice = pillarSlug;
+        state.sub = sub ? sub.name : '';
+      } else {
+        state.practice = val;
+        state.sub = '';
+      }
+      writeUrl(); render();
+    });
+  });
   wirePill('destPill',     DESTINATIONS, 'dest');
   wirePill('seasonPill',   SEASONS,      'season');
   wirePill('lengthPill',   LENGTHS,      'length');

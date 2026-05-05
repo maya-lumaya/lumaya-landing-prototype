@@ -769,32 +769,32 @@ h1.page-title {
 <script src="header.js" defer></script>
 <script src="footer.js" defer></script>
 <script src="bottom-nav.js" defer></script>
+<script src="taxonomy.js"></script>
 
 <script>
   /* ── Constants ─────────────────────────────────────────── */
   const API = 'https://api.lumaya.co';
+  const T = window.Taxonomy;
 
-  const AREAS = {
-    rishikesh:   { id: 'rishikesh',   name: 'Rishikesh' },
-    berlin:      { id: 'berlin',      name: 'Berlin' },
-    freiburg:    { id: 'freiburg',    name: 'Freiburg' },
-    munich:      { id: 'munich',      name: 'München' },
-    leipzig:     { id: 'leipzig',     name: 'Leipzig' },
-    stuttgart:   { id: 'stuttgart',   name: 'Stuttgart' },
-    london:      { id: 'london',      name: 'London' },
-    pisac:       { id: 'pisac',       name: 'Písac' },
-    koh_phangan: { id: 'koh_phangan', name: 'Koh Phangan' },
-    ubud:        { id: 'ubud',        name: 'Ubud' },
-    online:      { id: 'online',      name: 'Online (Live)' }
-  };
+  // Areas: derived from canonical Taxonomy.EVENT_AREAS, kept as a slug-keyed
+  // map for the existing call-sites that look up by id.
+  const AREAS = T.EVENT_AREAS.reduce((m, a) => {
+    m[a.slug] = { id: a.slug, name: a.label }; return m;
+  }, {});
 
-  const DATE_PRESETS = {
-    any:        { label: 'Any time',        from: null, to: null },
-    this_week:  { label: 'This week',       from: 0,    to: 7 },
-    this_month: { label: 'This month',      from: 0,    to: 30 },
-    next_3m:    { label: 'Next 3 months',   from: 0,    to: 90 },
-    weekend:    { label: 'Coming weekend',  from: 'sat',to: 'sun' }
+  // Date presets: derived from Taxonomy.EVENT_DATE_PRESETS plus the
+  // from/to offsets that drive the date math below.
+  const DATE_PRESET_OFFSETS = {
+    any:        { from: null, to: null },
+    this_week:  { from: 0,    to: 7 },
+    this_month: { from: 0,    to: 30 },
+    next_3m:    { from: 0,    to: 90 },
+    weekend:    { from: 'sat',to: 'sun' }
   };
+  const DATE_PRESETS = T.EVENT_DATE_PRESETS.reduce((m, p) => {
+    m[p.slug] = Object.assign({ label: p.label }, DATE_PRESET_OFFSETS[p.slug] || {});
+    return m;
+  }, {});
 
   /* ── State ─────────────────────────────────────────────── */
   const state = {
@@ -855,7 +855,7 @@ h1.page-title {
     return (AREAS[id] && AREAS[id].name) || (id ? id.replace(/_/g, ' ') : '');
   }
   function categoryLabel(slug) {
-    return (slug || '').replace(/_/g, ' ');
+    return T.eventCategoryLabel(slug);
   }
 
   /* ── URL <-> state ─────────────────────────────────────── */
@@ -986,11 +986,8 @@ h1.page-title {
     document.getElementById('split').classList.toggle('is-grid', state.view === 'grid');
   }
 
-  /* ── Category chips ────────────────────────────────────── */
-  const POPULAR_CATEGORIES = [
-    'meditation', 'yoga', 'breathwork', 'sound_healing', 'cacao_ceremony',
-    'tantra', 'embodiment', 'kirtan', 'temple_night', 'festival'
-  ];
+  /* ── Category chips — sourced from canonical Taxonomy ─── */
+  const POPULAR_CATEGORIES = T.EVENT_CATEGORIES.map(c => c.slug);
   function renderChips() {
     const row = document.getElementById('chipRow');
     const found = new Set();
