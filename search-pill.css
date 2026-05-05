@@ -248,7 +248,7 @@
 
 /* ── Pillar-page pill: stack on mobile ── */
 @media (max-width: 720px) {
-  .search-pill-wrap .search-pill { flex-direction: column; }
+  .search-pill-wrap .search-pill { flex-direction: column; border-radius: var(--radius-lg); }
   .search-pill-wrap .search-pill .field + .field::before { display: none; }
   .search-pill-wrap .search-pill > .field:first-of-type { padding-left: 22px; }
   .search-pill-wrap .submit-wrap { padding: 4px 0 0; }
