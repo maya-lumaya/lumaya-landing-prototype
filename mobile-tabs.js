@@ -114,9 +114,10 @@
     .m-tab-bar {
       display: block;
       position: sticky; top: 60px; z-index: 55;
-      /* Match landing page: gradient fading to transparent so content bleeds through */
+      /* Continue the header gradient: header ends at 0.80, tab-bar fades to fully transparent.
+         This creates one seamless gradient zone matching the landing page aesthetic. */
       background: linear-gradient(to bottom,
-        rgba(249, 246, 239, 0.97) 42%,
+        rgba(249, 246, 239, 0.80) 0%,
         rgba(249, 246, 239, 0.0) 100%);
       backdrop-filter: saturate(120%) blur(14px);
       -webkit-backdrop-filter: saturate(120%) blur(14px);
@@ -129,11 +130,12 @@
     }
     .m-tab-bar .m-tab-row { margin-top: 0; }
 
-    /* Pull hero up so its image extends behind the transparent tab row gradient */
+    /* Pull hero up so its image extends behind the transparent header + tab-bar zone.
+       Increased from -40px to -80px to bleed behind the header gradient too. */
     .m-tab-bar + .hero,
     .m-tab-bar + section.hero {
-      margin-top: -40px;
-      padding-top: calc(40px + 44px);
+      margin-top: -80px;
+      padding-top: calc(80px + 44px);
     }
   }
 
