@@ -1476,6 +1476,7 @@
 <script src="header.js" defer></script>
 <script src="footer.js" defer></script>
 <script src="bottom-nav.js" defer></script>
+<script src="scroll-animations.js" defer></script>
 <script src="mobile-tabs.js" defer></script>
 <script src="taxonomy.js"></script>
 <script src="search-pill.js"></script>
@@ -2495,27 +2496,6 @@
     if (e.key === "Escape" && mModal.classList.contains("open")) closeMobileModal();
   });
 
-  /* ==========================================================
-   * Mobile sticky search shrink (Airbnb-style)
-   * Drives the --shrink CSS var (0..1) on .m-search based on scrollY.
-   * ========================================================== */
-  (function() {
-    const m = document.querySelector(".m-search");
-    if (!m) return;
-    const RANGE = 110; // px of scroll over which we collapse to fully compact
-    let raf = 0;
-    const apply = () => {
-      raf = 0;
-      const y = window.scrollY || window.pageYOffset || 0;
-      const s = Math.max(0, Math.min(1, y / RANGE));
-      m.style.setProperty("--shrink", s.toFixed(3));
-    };
-    window.addEventListener("scroll", () => {
-      if (raf) return;
-      raf = requestAnimationFrame(apply);
-    }, { passive: true });
-    apply();
-  })();
 
   /* ==========================================================
    * Boot
@@ -2525,53 +2505,6 @@
 
   /* Desktop account dropdown + mobile account sheet are wired by header.js / bottom-nav.js */
 
-  /* ==========================================================
-   * Bottom-nav direction-aware auto-hide
-   *   Hide when scrolled past 1.5 viewports (going down).
-   *   Reappear after 0.5 viewport of accumulated upward scroll.
-   * ========================================================== */
-  function wireBottomNavAutoHide() {
-    const nav = document.querySelector(".vb-bottom-nav");
-    if (!nav) return;
-    let lastY = window.scrollY || 0;
-    let upAccum = 0;
-    let hidden = false;
-    let raf = 0;
-    const apply = () => {
-      raf = 0;
-      const y = window.scrollY || 0;
-      const vh = window.innerHeight || 1;
-      const dy = y - lastY;
-      if (dy > 0) {
-        upAccum = 0;
-        if (!hidden && y > vh * 1.5) {
-          hidden = true;
-          nav.classList.add("is-hidden");
-        }
-      } else if (dy < 0) {
-        upAccum += -dy;
-        if (hidden && upAccum > vh * 0.5) {
-          hidden = false;
-          nav.classList.remove("is-hidden");
-        }
-      }
-      if (y < vh * 1.5 && hidden) {
-        hidden = false;
-        nav.classList.remove("is-hidden");
-      }
-      lastY = y;
-    };
-    window.addEventListener("scroll", () => {
-      if (raf) return;
-      raf = requestAnimationFrame(apply);
-    }, { passive: true });
-  }
-  // bottom-nav.js mounts on DOMContentLoaded — wait a tick then attach.
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => setTimeout(wireBottomNavAutoHide, 0));
-  } else {
-    setTimeout(wireBottomNavAutoHide, 0);
-  }
 
   // Live Pulse scroll buttons
   (function() {
