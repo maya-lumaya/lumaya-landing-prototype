@@ -251,7 +251,7 @@
 
   function actionsLoggedOut() {
     return `
-      <a href="host.html" class="btn-ghost for-hosts">For hosts ↗</a>
+      <a href="for-hosts.html" class="btn-ghost for-hosts">For hosts ↗</a>
       <a href="auth.html" class="btn-primary signup-btn">Log in</a>
     `;
   }
@@ -259,7 +259,7 @@
   function actionsLoggedIn(user) {
     const initials = (user.initials || 'YF').slice(0, 2).toUpperCase();
     return `
-      <a href="host.html" class="btn-ghost for-hosts">For hosts ↗</a>
+      <a href="for-hosts.html" class="btn-ghost for-hosts">For hosts ↗</a>
       <button class="icon-btn" aria-label="Saved">
         <span class="material-symbols-outlined">favorite</span>
       </button>
@@ -276,7 +276,7 @@
           <a href="#" class="user-dd-item" role="menuitem">
             <span class="material-symbols-outlined">confirmation_number</span> My bookings
           </a>
-          <a href="host.html" class="user-dd-item" role="menuitem">
+          <a href="for-hosts.html" class="user-dd-item" role="menuitem">
             <span class="material-symbols-outlined">home_work</span> Host an event
           </a>
           <div class="user-dd-sep"></div>

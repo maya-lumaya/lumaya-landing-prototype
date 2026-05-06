@@ -114,7 +114,7 @@
           <ul>
             <li><a href="#">About</a></li>
             <li><a href="#">Journal</a></li>
-            <li><a href="host.html">For hosts</a></li>
+            <li><a href="for-hosts.html">For hosts</a></li>
             <li><a href="#">Contact</a></li>
           </ul>
         </div>

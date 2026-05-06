@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For Hosts — List Your Conscious Events, Retreats &amp; Trainings | Viluma</title>
+<meta name="description" content="Share your yoga classes, breathwork sessions, retreats, and trainings with people who are looking for exactly what you offer. Create your host profile on Viluma — free to start.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+:root {
+  --bg: #FCF9F4;
+  --bg-2: #F6F3EE;
+  --bg-3: #EBE8E3;
+  --surface: #FFFFFF;
+  --text: #1C1C19;
+  --text-muted: #5C5C5C;
+  --text-subtle: #8A8A8A;
+  --border: #C2C8C3;
+  --primary: #182c24;
+  --surface-low: #F6F3EE;
+  --surface-container: #F0EDE8;
+  --outline-variant: rgba(194, 200, 195, 0.35);
+  --olive-100: #E4E6DB;
+  --olive-500: #41452F;
+  --olive-900: #1C1D13;
+  --orange-50: #FAF3EA;
+  --orange-100: #F3E0C9;
+  --orange-300: #E4BB86;
+  --orange-500: #D69543;
+  --orange-600: #C4812B;
+  --orange-700: #A36B24;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(29,29,33,0.04), 0 2px 6px rgba(29,29,33,0.04);
+  --shadow-md: 0 4px 14px rgba(29,29,33,0.06), 0 10px 30px rgba(29,29,33,0.05);
+  --shadow-lg: 0 20px 60px rgba(29,29,33,0.10);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; line-height: 1.55;
+}
+h1, h2, h3, h4 {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 500; letter-spacing: -0.012em; margin: 0;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+img { display: block; }
+
+.container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 640px) { .container { padding: 0 18px; } }
+
+/* ── Hero ──────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(165deg, #FCF9F4 0%, #F6F0E5 35%, #EDE4D4 100%);
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 40%, rgba(214,149,67,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(65,69,47,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 680px;
+  padding: 120px 0 96px;
+}
+.hero-eyebrow {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--orange-600);
+  margin-bottom: 20px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--orange-300);
+}
+.hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.12;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 540px;
+  margin-bottom: 36px;
+}
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--text);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  font: 600 15px/1 'Inter', sans-serif;
+  transition: opacity 0.15s, transform 0.15s var(--ease);
+}
+.hero-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+.hero-cta .material-symbols-outlined { font-size: 18px; }
+.hero-note {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-subtle);
+}
+
+/* Decorative illustration area */
+.hero-visual {
+  position: absolute;
+  right: -40px; top: 50%;
+  transform: translateY(-50%);
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(214,149,67,0.06) 0%, rgba(65,69,47,0.03) 100%);
+  pointer-events: none;
+}
+.hero-visual::after {
+  content: '';
+  position: absolute; inset: 40px;
+  border: 1px solid rgba(214,149,67,0.12);
+  border-radius: 50%;
+}
+
+/* ── Section base ─────────────────────────────────── */
+.section {
+  padding: 96px 0;
+}
+.section.alt {
+  background: var(--bg-2);
+}
+.section-eyebrow {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--orange-600);
+  margin-bottom: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.section-eyebrow::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--orange-300);
+}
+.section-heading {
+  font-size: clamp(26px, 3.5vw, 38px);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin-bottom: 56px;
+}
+
+/* ── Benefits grid ────────────────────────────────── */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+.benefit-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.benefit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+.benefit-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--orange-50);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.benefit-icon .material-symbols-outlined {
+  font-size: 24px;
+  color: var(--orange-600);
+}
+.benefit-card h3 {
+  font-size: 20px;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.benefit-card p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── Pricing section ──────────────────────────────── */
+.pricing-card {
+  max-width: 680px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  padding: 48px 44px;
+  text-align: center;
+}
+.pricing-card h3 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.pricing-card .pricing-sub {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 36px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pricing-tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+}
+.pricing-tier {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  border: 1px solid var(--outline-variant);
+}
+.pricing-tier.featured {
+  border-color: var(--orange-300);
+  background: var(--orange-50);
+}
+.pricing-tier .tier-label {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 8px;
+}
+.pricing-tier.featured .tier-label {
+  color: var(--orange-700);
+}
+.pricing-tier .tier-price {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.pricing-tier .tier-detail {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+.pricing-footnote {
+  margin-top: 28px;
+  font-size: 13px;
+  color: var(--text-subtle);
+  line-height: 1.6;
+}
+
+/* ── Social proof ─────────────────────────────────── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+}
+.testimonial-quote {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text);
+  flex: 1;
+  margin-bottom: 24px;
+  position: relative;
+  padding-left: 16px;
+  border-left: 2px solid var(--orange-300);
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--olive-100);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.testimonial-avatar .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--olive-500);
+}
+.testimonial-name {
+  font: 600 14px/1.3 'Inter', sans-serif;
+  color: var(--text);
+}
+.testimonial-role {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Channels bar ─────────────────────────────────── */
+.channels-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  padding: 28px 0;
+}
+.channel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 15px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.channel-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  display: flex; align-items: center; justify-content: center;
+}
+.channel-icon svg { width: 22px; height: 22px; }
+.channel-icon .material-symbols-outlined { font-size: 22px; color: var(--text); }
+
+/* ── Roadmap ──────────────────────────────────────── */
+.roadmap-timeline {
+  position: relative;
+  padding-left: 36px;
+  max-width: 640px;
+}
+.roadmap-timeline::before {
+  content: '';
+  position: absolute; left: 11px; top: 12px; bottom: 12px;
+  width: 1px; background: var(--border);
+}
+.roadmap-item {
+  position: relative;
+  padding-bottom: 48px;
+}
+.roadmap-item:last-child { padding-bottom: 0; }
+.roadmap-dot {
+  position: absolute; left: -36px; top: 6px;
+  width: 23px; height: 23px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--orange-300);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1;
+}
+.roadmap-dot .step-num {
+  font: 700 10px/1 'Inter', sans-serif;
+  color: var(--orange-600);
+}
+.roadmap-item.active .roadmap-dot {
+  border-color: var(--orange-500);
+  background: var(--orange-500);
+}
+.roadmap-item.active .roadmap-dot .step-num { color: #fff; }
+.roadmap-phase {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 6px;
+}
+.roadmap-item.active .roadmap-phase { color: var(--orange-600); }
+.roadmap-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 21px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.roadmap-desc {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 500px;
+}
+.roadmap-badge {
+  display: inline-block;
+  margin-top: 10px;
+  font: 600 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+.roadmap-badge.live {
+  background: #E8F0EB;
+  color: #2D5A3A;
+}
+.roadmap-badge.next {
+  background: var(--orange-50);
+  color: var(--orange-700);
+}
+.roadmap-badge.planned {
+  background: var(--bg-3);
+  color: var(--text-subtle);
+}
+
+/* ── Final CTA ────────────────────────────────────── */
+.final-cta {
+  text-align: center;
+  padding: 96px 0;
+}
+.final-cta h2 {
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.final-cta p {
+  font-size: 17px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.65;
+}
+.final-cta .hero-cta {
+  font-size: 16px;
+  padding: 16px 32px;
+}
+
+/* ── Mobile ───────────────────────────────────────── */
+@media (max-width: 900px) {
+  .benefits-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .pricing-tiers { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .hero { min-height: auto; }
+  .hero-inner { padding: 100px 0 64px; }
+  .hero-visual { display: none; }
+  .hero-sub { font-size: 16px; }
+  .section { padding: 64px 0; }
+  .section-heading { margin-bottom: 12px; }
+  .section-sub { margin-bottom: 40px; font-size: 15px; }
+  .benefit-card { padding: 28px 24px; }
+  .pricing-card { padding: 32px 24px; }
+  .channels-bar { gap: 24px; }
+  .testimonial-card { padding: 24px 20px; }
+  .roadmap-timeline { padding-left: 32px; }
+  .roadmap-item { padding-bottom: 36px; }
+  .final-cta { padding: 64px 0; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Header (shared partial) -->
+<div data-component="header" data-mode="search" data-active=""></div>
+
+<!-- Mobile pillar tabs (shared partial) -->
+<div data-component="mobile-tabs" data-bar="true" data-active=""></div>
+
+<!-- ── Hero ──────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-visual" aria-hidden="true"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">For hosts</p>
+      <h1>Share what you do with people who are looking for it</h1>
+      <p class="hero-sub">
+        You already create meaningful experiences — yoga, breathwork, retreats, trainings.
+        Viluma helps the right people find you. Build your profile, list your offerings,
+        and let your work speak for itself.
+      </p>
+      <a href="auth.html?mode=signup" class="hero-cta">
+        Create your host profile
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <p class="hero-note">Free to get started. No credit card needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Benefits ──────────────────────────────────── -->
+<section class="section" id="benefits">
+  <div class="container">
+    <p class="section-eyebrow">Why Viluma</p>
+    <h2 class="section-heading">Everything you need to be found</h2>
+    <p class="section-sub">
+      A place that puts your work front and centre — not ads, not algorithms.
+      Just honest visibility for people who facilitate conscious experiences.
+    </p>
+
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <span class="material-symbols-outlined">person</span>
+        </div>
+        <h3>Your profile, your story</h3>
+        <p>
+          Create a host profile that shows who you are — your background,
+          your path, your approach. People want to know the person behind
+          the practice before they sign up. Give them a reason to trust you.
+        </p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <span class="material-symbols-outlined">visibility</span>
+        </div>
+        <h3>Reach people who are already looking</h3>
+        <p>
+          List your events, retreats, and trainings where they can actually
+          be discovered. Viluma is built for conscious experiences — every visitor
+          is already interested in what you offer.
+        </p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <span class="material-symbols-outlined">share</span>
+        </div>
+        <h3>Visible across our channels</h3>
+        <p>
+          Your offerings are shared through our Instagram, WhatsApp, and
+          Telegram communities. Real people, curated recommendations — not
+          just another listing on a generic platform.
+        </p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <span class="material-symbols-outlined">calendar_month</span>
+        </div>
+        <h3>Recurring events, listed once</h3>
+        <p>
+          Set up your weekly classes or monthly workshops once. Viluma handles
+          the schedule, shows the next dates, and keeps everything up to date —
+          so you can focus on what you actually came here to do.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Channels ──────────────────────────────────── -->
+<section class="section alt">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:12px;">
+      <p class="section-eyebrow" style="justify-content:center;">Where you show up</p>
+    </div>
+    <h2 class="section-heading" style="text-align:center;">Shared with our growing community</h2>
+    <p class="section-sub" style="text-align:center; margin-left:auto; margin-right:auto;">
+      When you list on Viluma, your offerings reach people through multiple touchpoints
+      — not just a website that waits to be found.
+    </p>
+
+    <div class="channels-bar">
+      <div class="channel-item">
+        <div class="channel-icon">
+          <span class="material-symbols-outlined">language</span>
+        </div>
+        viluma.co
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        </div>
+        Instagram
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.243-1.213l-.303-.182-2.872.853.853-2.872-.182-.303A7.963 7.963 0 014 12a8 8 0 1116 0 8 8 0 01-8 8z"/></svg>
+        </div>
+        WhatsApp
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.88 7.97-3.44 3.8-1.58 4.59-1.86 5.1-1.87.11 0 .37.03.53.17.14.12.18.28.2.45-.01.06.01.24 0 .38z"/></svg>
+        </div>
+        Telegram
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing ───────────────────────────────────── -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div style="text-align:center;">
+      <p class="section-eyebrow" style="justify-content:center;">Pricing</p>
+      <h2 class="section-heading" style="text-align:center;">Simple and fair</h2>
+      <p class="section-sub" style="text-align:center; margin-left:auto; margin-right:auto;">
+        We believe in keeping the barrier low. List your events for free — always.
+        Retreats and trainings listed before the end of 2026 are on us, too.
+      </p>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-tiers">
+        <div class="pricing-tier featured">
+          <div class="tier-label">Events</div>
+          <div class="tier-price">Free</div>
+          <div class="tier-detail">
+            List your regular events, workshops, and classes at no cost.
+            No catch, no time limit. This is how it stays.
+          </div>
+        </div>
+        <div class="pricing-tier">
+          <div class="tier-label">Retreats &amp; Trainings</div>
+          <div class="tier-price">Free until 2027</div>
+          <div class="tier-detail">
+            List retreats and multi-day trainings for free through the end of 2026.
+            After that, a small commission covers our running costs — nothing more.
+          </div>
+        </div>
+      </div>
+      <p class="pricing-footnote">
+        We are not building a profit machine. Viluma runs on a commission-based model
+        designed to be as low as possible — just enough to keep the platform running
+        and growing. No subscription fees, no hidden costs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Social proof ──────────────────────────────── -->
+<section class="section alt" id="hosts">
+  <div class="container">
+    <p class="section-eyebrow">From our hosts</p>
+    <h2 class="section-heading">What hosts are saying</h2>
+    <p class="section-sub">
+      People who facilitate conscious experiences — and chose to list them on Viluma.
+    </p>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">
+          I was spending hours on social media trying to get the word out about my classes.
+          Since listing on Viluma, new people keep finding me — and they already know what
+          kind of experience they are looking for.
+        </div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <div class="testimonial-name">Annika S.</div>
+            <div class="testimonial-role">Yoga &amp; Breathwork, Berlin</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-quote">
+          The profile page alone is already worth it. I share the link with everyone now —
+          it shows my background, my certifications, and my upcoming sessions all in one place.
+          Way better than a complicated website I never update.
+        </div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <div class="testimonial-name">Marco T.</div>
+            <div class="testimonial-role">Sound Healing &amp; Meditation, Munich</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-quote">
+          What I appreciate most is the intention behind the platform. It does not feel like
+          a marketplace that is trying to extract something from me. It feels like a
+          community space that genuinely wants to support what we do.
+        </div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <div class="testimonial-name">Clara M.</div>
+            <div class="testimonial-role">Ecstatic Dance &amp; Cacao, Hamburg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Roadmap ───────────────────────────────────── -->
+<section class="section" id="roadmap">
+  <div class="container">
+    <p class="section-eyebrow">What we are building</p>
+    <h2 class="section-heading">A platform that grows with you</h2>
+    <p class="section-sub">
+      Viluma is just getting started. Here is what is on the horizon —
+      shaped by the needs of the hosts and practitioners who use it.
+    </p>
+
+    <div class="roadmap-timeline">
+      <div class="roadmap-item active">
+        <div class="roadmap-dot"><span class="step-num">1</span></div>
+        <div class="roadmap-phase">Now</div>
+        <h3 class="roadmap-title">Host profiles and event listings</h3>
+        <p class="roadmap-desc">
+          Create your profile, list your events, retreats, and trainings.
+          Get discovered by people searching for conscious experiences in your area.
+          Shared across Viluma's website, Instagram, WhatsApp, and Telegram.
+        </p>
+        <span class="roadmap-badge live">Live now</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"><span class="step-num">2</span></div>
+        <div class="roadmap-phase">Coming next</div>
+        <h3 class="roadmap-title">Reviews and testimonials</h3>
+        <p class="roadmap-desc">
+          Let your community speak for you. Participants will be able to leave
+          honest reviews on your profile and offerings — building trust with
+          people who haven't met you yet.
+        </p>
+        <span class="roadmap-badge next">Coming soon</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"><span class="step-num">3</span></div>
+        <div class="roadmap-phase">On the roadmap</div>
+        <h3 class="roadmap-title">Online courses and digital offerings</h3>
+        <p class="roadmap-desc">
+          Offer pre-recorded or live online courses alongside your in-person work.
+          Reach people beyond your city, share your teachings more widely,
+          and create an additional income stream — all within your Viluma profile.
+        </p>
+        <span class="roadmap-badge planned">Planned</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"><span class="step-num">4</span></div>
+        <div class="roadmap-phase">On the roadmap</div>
+        <h3 class="roadmap-title">Host space — exchange, find, and offer venues</h3>
+        <p class="roadmap-desc">
+          An exclusive area for hosts to connect with each other. Search for spaces
+          to facilitate your events, offer your own venue to fellow hosts, or simply
+          exchange ideas with people who understand what you do.
+        </p>
+        <span class="roadmap-badge planned">Planned</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Final CTA ─────────────────────────────────── -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Ready to share your work with the right people?</h2>
+    <p>
+      Create your host profile today. It takes a few minutes,
+      it costs nothing, and your first listing can be live today.
+    </p>
+    <a href="auth.html?mode=signup" class="hero-cta">
+      Get started
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </a>
+  </div>
+</section>
+
+<!-- Footer + shared partials -->
+<div data-component="footer"></div>
+<div data-component="bottom-nav"></div>
+<script src="header.js" defer></script>
+<script src="footer.js" defer></script>
+<script src="bottom-nav.js" defer></script>
+<script src="scroll-animations.js" defer></script>
+<script src="mobile-tabs.js" defer></script>
+<script src="auth-overlay.js" defer></script>
+
+</body>
+</html>
