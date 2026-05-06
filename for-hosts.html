@@ -86,6 +86,12 @@ img { display: block; }
     radial-gradient(ellipse 50% 50% at 20% 80%, rgba(65,69,47,0.04) 0%, transparent 60%);
   pointer-events: none;
 }
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
 .hero-inner {
   position: relative; z-index: 1;
   max-width: 680px;
@@ -145,21 +151,104 @@ img { display: block; }
   color: var(--text-subtle);
 }
 
-/* Decorative visual */
-.hero-visual {
-  position: absolute;
-  right: -40px; top: 50%;
-  transform: translateY(-50%);
-  width: 420px; height: 420px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgba(214,149,67,0.06) 0%, rgba(65,69,47,0.03) 100%);
-  pointer-events: none;
+/* ── Hero host cards collage ──────────────────────── */
+.hero-collage {
+  position: relative;
+  z-index: 1;
+  height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.hero-visual::after {
-  content: '';
-  position: absolute; inset: 40px;
-  border: 1px solid rgba(214,149,67,0.12);
+.hero-card {
+  position: absolute;
+  width: 180px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 8px 32px rgba(29,29,33,0.12), 0 2px 8px rgba(29,29,33,0.06);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.hero-card:hover {
+  transform: translateY(-6px) rotate(0deg) !important;
+  box-shadow: 0 16px 48px rgba(29,29,33,0.16), 0 4px 12px rgba(29,29,33,0.08);
+  z-index: 10;
+}
+.hero-card-photo {
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--bg-3);
+}
+.hero-card-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-card-info {
+  padding: 10px 13px 12px;
+  background: var(--surface);
+}
+.hero-card-name {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero-card-role {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Verified badge on card */
+.hero-card-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 24px; height: 24px;
   border-radius: 50%;
+  background: rgba(252, 249, 244, 0.92);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-card-badge .material-symbols-outlined {
+  font-size: 14px;
+  color: var(--orange-600);
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+/* Position each card */
+.hero-card:nth-child(1) {
+  top: 30px; left: 10%;
+  transform: rotate(-6deg);
+  z-index: 3;
+}
+.hero-card:nth-child(2) {
+  top: 60px; left: 42%;
+  transform: rotate(3deg);
+  z-index: 5;
+  width: 200px;
+}
+.hero-card:nth-child(3) {
+  top: 16px; right: 4%;
+  transform: rotate(7deg);
+  z-index: 2;
+  width: 170px;
+}
+.hero-card:nth-child(4) {
+  bottom: 20px; left: 18%;
+  transform: rotate(4deg);
+  z-index: 4;
+  width: 170px;
+}
+.hero-card:nth-child(5) {
+  bottom: 40px; right: 12%;
+  transform: rotate(-4deg);
+  z-index: 1;
+  width: 160px;
 }
 
 /* ── Trust bar (stats) ────────────────────────────── */
@@ -799,11 +888,36 @@ img { display: block; }
   .pricing-tiers { grid-template-columns: 1fr; }
   .trust-stats { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
 }
+@media (max-width: 960px) {
+  .hero .container { grid-template-columns: 1fr; }
+  .hero-collage {
+    height: 320px;
+    margin: -20px auto 0;
+    width: 100%;
+    max-width: 500px;
+  }
+  .hero-card { width: 130px !important; }
+  .hero-card:nth-child(2) { width: 150px !important; }
+  .hero-card:nth-child(1) { left: 2%; top: 20px; }
+  .hero-card:nth-child(2) { left: 32%; top: 40px; }
+  .hero-card:nth-child(3) { right: 0%; top: 10px; }
+  .hero-card:nth-child(4) { bottom: 10px; left: 12%; }
+  .hero-card:nth-child(5) { bottom: 20px; right: 6%; }
+}
 @media (max-width: 720px) {
   .hero { min-height: auto; }
-  .hero-inner { padding: 100px 0 64px; }
-  .hero-visual { display: none; }
+  .hero-inner { padding: 100px 0 40px; }
   .hero-sub { font-size: 16px; }
+  .hero-collage {
+    height: 260px;
+    max-width: 360px;
+    margin-bottom: 20px;
+  }
+  .hero-card { width: 110px !important; }
+  .hero-card:nth-child(2) { width: 126px !important; }
+  .hero-card-info { padding: 7px 10px 9px; }
+  .hero-card-name { font-size: 11px; }
+  .hero-card-role { font-size: 9px; }
   .section { padding: 64px 0; }
   .section-heading { margin-bottom: 12px; }
   .section-sub { margin-bottom: 40px; font-size: 15px; }
@@ -841,7 +955,6 @@ img { display: block; }
 
 <!-- ── Hero ──────────────────────────────────────── -->
 <section class="hero">
-  <div class="hero-visual" aria-hidden="true"></div>
   <div class="container">
     <div class="hero-inner">
       <p class="hero-eyebrow">For hosts</p>
@@ -856,6 +969,63 @@ img { display: block; }
         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
       <p class="hero-note">Free to get started. No credit card needed.</p>
+    </div>
+
+    <div class="hero-collage" aria-hidden="true">
+      <a class="hero-card" href="host.html?slug=kuschelraum">
+        <div class="hero-card-badge"><span class="material-symbols-outlined">verified</span></div>
+        <div class="hero-card-photo">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fe5b34281-aadd-4d01-bbf8-67fc0c71d6ad%2Favatar%2F1766403731470_kuschelraum.jpg?alt=media&token=da2a304f-4eb6-4871-86a7-96e39f6daac8" alt="" loading="eager">
+        </div>
+        <div class="hero-card-info">
+          <div class="hero-card-name">Kuschelraum</div>
+          <div class="hero-card-role">Somatic &amp; Consent · Vienna</div>
+        </div>
+      </a>
+
+      <a class="hero-card" href="host.html?slug=tanja-berni">
+        <div class="hero-card-badge"><span class="material-symbols-outlined">verified</span></div>
+        <div class="hero-card-photo">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fff7dc0ec-fb76-4c04-92bc-d4cdce7d4288%2Favatar%2F1766155114347_1-Tanja%20Berni17697-WEB-small-sRGB-72dpi1500px%C2%A9Foto%20Dieter%20Duevelmeyer.jpg?alt=media&token=3fd41cea-a9c3-4e99-9c5f-7e610a1b6e10" alt="" loading="eager">
+        </div>
+        <div class="hero-card-info">
+          <div class="hero-card-name">Tanja Berni</div>
+          <div class="hero-card-role">Yoga &amp; Body Awareness</div>
+        </div>
+      </a>
+
+      <a class="hero-card" href="host.html?slug=journey-within-tantra-institute-berlin">
+        <div class="hero-card-badge"><span class="material-symbols-outlined">verified</span></div>
+        <div class="hero-card-photo">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F9e18fa4e-19d6-4cf1-b031-61362ed6ebd8%2Favatar%2F1776453843531_Copy%20of%20Copy%20of%20JW%20-%20Intro%20(Instagram%20Post%20(45))%20(1).png?alt=media&token=37228c93-58b3-45c7-a482-08462225b2fc" alt="" loading="eager">
+        </div>
+        <div class="hero-card-info">
+          <div class="hero-card-name">JW Collective</div>
+          <div class="hero-card-role">Movement · Berlin</div>
+        </div>
+      </a>
+
+      <a class="hero-card" href="host.html?slug=petra">
+        <div class="hero-card-badge"><span class="material-symbols-outlined">verified</span></div>
+        <div class="hero-card-photo">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fb9e16bc9-adba-4e2e-8f99-884daacacf4c%2Favatar%2F1772975570462_IMG-20230228-WA0008.jpg?alt=media&token=3b22d637-5bb7-4604-9b31-49051c3d5c85" alt="" loading="eager">
+        </div>
+        <div class="hero-card-info">
+          <div class="hero-card-name">Petra</div>
+          <div class="hero-card-role">Mindfulness · Meditation</div>
+        </div>
+      </a>
+
+      <a class="hero-card" href="host.html?slug=me-moving-personal-training-yoga">
+        <div class="hero-card-badge"><span class="material-symbols-outlined">verified</span></div>
+        <div class="hero-card-photo">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F7ff29437-18a3-4cfa-bd54-6a8f604ff329%2Favatar%2F1773392725816_A7400723.jpg?alt=media&token=e645b4ad-601f-44d9-a899-df7ca7b7d117" alt="" loading="eager">
+        </div>
+        <div class="hero-card-info">
+          <div class="hero-card-name">ME moving</div>
+          <div class="hero-card-role">Embodied Leadership</div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
