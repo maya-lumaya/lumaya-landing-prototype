@@ -25,11 +25,17 @@
   --surface-low: #F6F3EE;
   --surface-container: #F0EDE8;
   --outline-variant: rgba(194, 200, 195, 0.35);
+  --olive-50: #F5F6F0;
   --olive-100: #E4E6DB;
+  --olive-200: #CDD1BE;
+  --olive-300: #B5BA9E;
   --olive-500: #41452F;
+  --olive-600: #373A28;
+  --olive-800: #25261A;
   --olive-900: #1C1D13;
   --orange-50: #FAF3EA;
   --orange-100: #F3E0C9;
+  --orange-200: #ECCDA7;
   --orange-300: #E4BB86;
   --orange-500: #D69543;
   --orange-600: #C4812B;
@@ -66,7 +72,7 @@ img { display: block; }
 /* ── Hero ──────────────────────────────────────────── */
 .hero {
   position: relative;
-  min-height: 520px;
+  min-height: 560px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -102,6 +108,10 @@ img { display: block; }
   color: var(--text);
   margin-bottom: 20px;
 }
+.hero h1 em {
+  font-style: italic;
+  color: var(--orange-600);
+}
 .hero-sub {
   font-size: 18px;
   line-height: 1.65;
@@ -113,22 +123,29 @@ img { display: block; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--text);
+  background: var(--olive-900);
   color: #fff;
   padding: 14px 28px;
   border-radius: var(--radius-pill);
   font: 600 15px/1 'Inter', sans-serif;
   transition: opacity 0.15s, transform 0.15s var(--ease);
 }
-.hero-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+.hero-cta:hover { opacity: 0.85; transform: translateY(-1px); }
 .hero-cta .material-symbols-outlined { font-size: 18px; }
+.hero-cta svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.2s var(--ease);
+}
+.hero-cta:hover svg { transform: translateX(3px); }
 .hero-note {
   margin-top: 14px;
   font-size: 13px;
   color: var(--text-subtle);
 }
 
-/* Decorative illustration area */
+/* Decorative visual */
 .hero-visual {
   position: absolute;
   right: -40px; top: 50%;
@@ -145,12 +162,46 @@ img { display: block; }
   border-radius: 50%;
 }
 
+/* ── Trust bar (stats) ────────────────────────────── */
+.trust-bar {
+  padding: 56px 0;
+  background: var(--bg-3);
+  border-top: 1px solid var(--outline-variant);
+}
+.trust-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.trust-stat {
+  text-align: center;
+}
+.trust-stat-num {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 42px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.trust-stat-label {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 /* ── Section base ─────────────────────────────────── */
 .section {
   padding: 96px 0;
 }
 .section.alt {
   background: var(--bg-2);
+}
+.section.dark {
+  background: var(--bg-3);
 }
 .section-eyebrow {
   font: 600 11px/1 'Inter', sans-serif;
@@ -167,6 +218,9 @@ img { display: block; }
   font-size: clamp(26px, 3.5vw, 38px);
   line-height: 1.2;
   margin-bottom: 16px;
+}
+.section-heading em {
+  font-style: italic;
 }
 .section-sub {
   font-size: 17px;
@@ -215,6 +269,198 @@ img { display: block; }
   color: var(--text-muted);
   margin: 0;
 }
+
+/* ── Community / Hosts showcase ───────────────────── */
+.community-section {
+  padding: 112px 0 96px;
+  background: var(--bg);
+}
+.community-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: start;
+}
+.community-kicker {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+.community-headline {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 40px; line-height: 1.2;
+  color: var(--text);
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+}
+.community-headline em { font-style: italic; }
+.community-body {
+  font-size: 16px; line-height: 1.75;
+  color: var(--text-muted);
+  max-width: 460px;
+  margin: 0 0 44px;
+}
+.community-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 44px;
+}
+.community-stat {
+  padding-left: 18px;
+  border-left: 2px solid var(--orange-300);
+}
+.community-stat-num {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 36px; font-weight: 500;
+  color: var(--text); line-height: 1;
+}
+.community-stat-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.hosts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.host-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.host-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.host-photo {
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--bg-3);
+}
+.host-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+  display: block;
+}
+.host-card:hover .host-photo img { transform: scale(1.04); }
+.host-info { padding: 13px 15px 14px; }
+.host-name {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 14px; color: var(--text); margin-bottom: 2px;
+}
+.host-role { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+.host-card--more {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg-3) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  min-height: 200px;
+}
+.host-card--more:hover { background: var(--olive-100) !important; transform: none; }
+.host-card--more-num {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 30px; color: var(--olive-500); margin-bottom: 6px;
+}
+.host-card--more-label {
+  font-size: 12px; color: var(--text-muted);
+  text-align: center; line-height: 1.5;
+}
+
+/* ── Demo events showcase ─────────────────────────── */
+.events-showcase {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.demo-event {
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s var(--ease);
+}
+.demo-event:hover { transform: translateY(-3px); }
+.demo-event-img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-3);
+  position: relative;
+  margin-bottom: 12px;
+}
+.demo-event-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.demo-event:hover .demo-event-img img { transform: scale(1.04); }
+.demo-event-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(252, 249, 244, 0.88);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font: 600 10px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.06em; color: var(--primary);
+  text-transform: capitalize;
+}
+.demo-event-date {
+  position: absolute; bottom: 10px; left: 10px;
+  background: rgba(252, 249, 244, 0.92);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font: 600 11px/1.4 'Inter', sans-serif;
+  color: var(--text);
+}
+.demo-event-title {
+  font: 600 13px/1.35 'Inter', sans-serif;
+  color: var(--text); margin-bottom: 4px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.demo-event-meta {
+  font-size: 12px; color: var(--text-muted); margin-bottom: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.demo-event-price { font-size: 12px; color: var(--text); }
+.demo-event-price strong { font-weight: 700; }
+
+/* ── Channels bar ─────────────────────────────────── */
+.channels-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  padding: 28px 0;
+}
+.channel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 15px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.channel-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  display: flex; align-items: center; justify-content: center;
+}
+.channel-icon svg { width: 22px; height: 22px; }
+.channel-icon .material-symbols-outlined { font-size: 22px; color: var(--text); }
 
 /* ── Pricing section ──────────────────────────────── */
 .pricing-card {
@@ -283,7 +529,7 @@ img { display: block; }
   line-height: 1.6;
 }
 
-/* ── Social proof ─────────────────────────────────── */
+/* ── Social proof / testimonials ──────────────────── */
 .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -317,9 +563,13 @@ img { display: block; }
 .testimonial-avatar {
   width: 40px; height: 40px;
   border-radius: 50%;
+  overflow: hidden;
   background: var(--olive-100);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+}
+.testimonial-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
 }
 .testimonial-avatar .material-symbols-outlined {
   font-size: 20px;
@@ -335,31 +585,105 @@ img { display: block; }
   margin-top: 2px;
 }
 
-/* ── Channels bar ─────────────────────────────────── */
-.channels-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 48px;
-  flex-wrap: wrap;
-  padding: 28px 0;
+/* ── Global movement (pulse) ──────────────────────── */
+.pulse-section {
+  padding: 96px 0 72px;
+  background: var(--bg-3);
+  overflow: hidden;
 }
-.channel-item {
+.pulse-header {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font: 500 15px/1 'Inter', sans-serif;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+.pulse-kicker {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.pulse-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 34px;
+  font-weight: 500;
   color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0;
 }
-.channel-icon {
+.pulse-title em { font-style: italic; }
+.pulse-nav {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.pulse-nav-btn {
   width: 44px; height: 44px;
   border-radius: 50%;
-  background: var(--surface);
-  border: 1px solid var(--outline-variant);
+  border: 1px solid var(--border);
+  background: transparent;
   display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  color: var(--text);
 }
-.channel-icon svg { width: 22px; height: 22px; }
-.channel-icon .material-symbols-outlined { font-size: 22px; color: var(--text); }
+.pulse-nav-btn:hover { background: var(--surface); border-color: var(--olive-800); }
+.pulse-nav-btn svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.pulse-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 4px 0 28px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pulse-track::-webkit-scrollbar { display: none; }
+.pulse-card {
+  flex: 0 0 268px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 24px;
+  box-shadow: var(--shadow-sm);
+}
+.pulse-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.pulse-card-icon svg {
+  width: 20px; height: 20px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.pulse-card-count {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 26px; font-weight: 500;
+  color: var(--text); margin-bottom: 4px;
+}
+.pulse-card-desc { font-size: 14px; color: var(--text-muted); }
+.pulse-card-foot {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 22px; padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.pulse-avatars { display: flex; }
+.pulse-av {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  overflow: hidden;
+}
+.pulse-av + .pulse-av { margin-left: -8px; }
+.pulse-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pulse-joining { font-size: 12px; font-weight: 500; color: var(--text-muted); }
 
 /* ── Roadmap ──────────────────────────────────────── */
 .roadmap-timeline {
@@ -448,6 +772,7 @@ img { display: block; }
   line-height: 1.15;
   margin-bottom: 16px;
 }
+.final-cta h2 em { font-style: italic; }
 .final-cta p {
   font-size: 17px;
   color: var(--text-muted);
@@ -463,10 +788,16 @@ img { display: block; }
 }
 
 /* ── Mobile ───────────────────────────────────────── */
+@media (max-width: 960px) {
+  .community-inner { grid-template-columns: 1fr; gap: 56px; }
+  .community-headline { font-size: 34px; }
+  .events-showcase { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 900px) {
   .benefits-grid { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .pricing-tiers { grid-template-columns: 1fr; }
+  .trust-stats { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
 }
 @media (max-width: 720px) {
   .hero { min-height: auto; }
@@ -483,6 +814,19 @@ img { display: block; }
   .roadmap-timeline { padding-left: 32px; }
   .roadmap-item { padding-bottom: 36px; }
   .final-cta { padding: 64px 0; }
+  .trust-bar { padding: 40px 0; }
+  .trust-stat-num { font-size: 32px; }
+  .pulse-section { padding: 64px 0 52px; }
+  .pulse-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .pulse-title { font-size: 28px; }
+  .community-section { padding: 72px 0 64px; }
+  .community-headline { font-size: 28px; }
+  .hosts-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .events-showcase { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+}
+@media (max-width: 480px) {
+  .trust-stats { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
+  .trust-stat-num { font-size: 28px; }
 }
 
 </style>
@@ -501,7 +845,7 @@ img { display: block; }
   <div class="container">
     <div class="hero-inner">
       <p class="hero-eyebrow">For hosts</p>
-      <h1>Share what you do with people who are looking for it</h1>
+      <h1>Share what you do with people who are <em>looking for it</em></h1>
       <p class="hero-sub">
         You already create meaningful experiences — yoga, breathwork, retreats, trainings.
         Viluma helps the right people find you. Build your profile, list your offerings,
@@ -509,9 +853,33 @@ img { display: block; }
       </p>
       <a href="auth.html?mode=signup" class="hero-cta">
         Create your host profile
-        <span class="material-symbols-outlined">arrow_forward</span>
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
       <p class="hero-note">Free to get started. No credit card needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Trust bar ─────────────────────────────────── -->
+<section class="trust-bar">
+  <div class="container">
+    <div class="trust-stats">
+      <div class="trust-stat">
+        <div class="trust-stat-num">512+</div>
+        <div class="trust-stat-label">Registered Hosts</div>
+      </div>
+      <div class="trust-stat">
+        <div class="trust-stat-num">4,200+</div>
+        <div class="trust-stat-label">Monthly Visitors</div>
+      </div>
+      <div class="trust-stat">
+        <div class="trust-stat-num">28</div>
+        <div class="trust-stat-label">Countries</div>
+      </div>
+      <div class="trust-stat">
+        <div class="trust-stat-num">1,400+</div>
+        <div class="trust-stat-label">Events Listed</div>
+      </div>
     </div>
   </div>
 </section>
@@ -520,7 +888,7 @@ img { display: block; }
 <section class="section" id="benefits">
   <div class="container">
     <p class="section-eyebrow">Why Viluma</p>
-    <h2 class="section-heading">Everything you need to be found</h2>
+    <h2 class="section-heading">Everything you need to <em>be found</em></h2>
     <p class="section-sub">
       A place that puts your work front and centre — not ads, not algorithms.
       Just honest visibility for people who facilitate conscious experiences.
@@ -578,13 +946,155 @@ img { display: block; }
   </div>
 </section>
 
+<!-- ── Community — real hosts ─────────────────────── -->
+<section class="community-section">
+  <div class="container">
+    <div class="community-inner">
+
+      <div>
+        <p class="community-kicker">The Community</p>
+        <h2 class="community-headline">The people behind<br><em>the practice.</em></h2>
+        <p class="community-body">Every offering on Viluma is shaped by someone who has devoted years — often decades — to their craft. Our hosts are somatic therapists, senior yoga teachers, breathwork guides, and retreat organizers who carry the trust of the communities they serve.<br><br>You are in good company. The people listed here have built something real — and Viluma is where they chose to show it.</p>
+
+        <div class="community-stats">
+          <div class="community-stat">
+            <div class="community-stat-num">512+</div>
+            <div class="community-stat-label">Registered Hosts</div>
+          </div>
+          <div class="community-stat">
+            <div class="community-stat-num">28</div>
+            <div class="community-stat-label">Countries</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hosts-grid">
+
+        <a class="host-card" href="host.html?slug=kuschelraum">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fe5b34281-aadd-4d01-bbf8-67fc0c71d6ad%2Favatar%2F1766403731470_kuschelraum.jpg?alt=media&token=da2a304f-4eb6-4871-86a7-96e39f6daac8" alt="Kuschelraum" loading="lazy">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Kuschelraum</div>
+            <div class="host-role">Somatic &amp; Consent Work · Vienna</div>
+          </div>
+        </a>
+
+        <a class="host-card" href="host.html?slug=tanja-berni">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fff7dc0ec-fb76-4c04-92bc-d4cdce7d4288%2Favatar%2F1766155114347_1-Tanja%20Berni17697-WEB-small-sRGB-72dpi1500px%C2%A9Foto%20Dieter%20Duevelmeyer.jpg?alt=media&token=3fd41cea-a9c3-4e99-9c5f-7e610a1b6e10" alt="Tanja Berni" loading="lazy">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Tanja Berni</div>
+            <div class="host-role">Yoga &amp; Body Awareness</div>
+          </div>
+        </a>
+
+        <a class="host-card" href="host.html?slug=journey-within-tantra-institute-berlin">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F9e18fa4e-19d6-4cf1-b031-61362ed6ebd8%2Favatar%2F1776453843531_Copy%20of%20Copy%20of%20JW%20-%20Intro%20(Instagram%20Post%20(45))%20(1).png?alt=media&token=37228c93-58b3-45c7-a482-08462225b2fc" alt="JW Collective" loading="lazy">
+          </div>
+          <div class="host-info">
+            <div class="host-name">JW Collective</div>
+            <div class="host-role">Movement &amp; Breathwork · Berlin</div>
+          </div>
+        </a>
+
+        <a class="host-card" href="host.html?slug=petra">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fb9e16bc9-adba-4e2e-8f99-884daacacf4c%2Favatar%2F1772975570462_IMG-20230228-WA0008.jpg?alt=media&token=3b22d637-5bb7-4604-9b31-49051c3d5c85" alt="Petra" loading="lazy">
+          </div>
+          <div class="host-info">
+            <div class="host-name">Petra</div>
+            <div class="host-role">Mindfulness · Meditation</div>
+          </div>
+        </a>
+
+        <a class="host-card" href="host.html?slug=me-moving-personal-training-yoga">
+          <div class="host-photo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F7ff29437-18a3-4cfa-bd54-6a8f604ff329%2Favatar%2F1773392725816_A7400723.jpg?alt=media&token=e645b4ad-601f-44d9-a899-df7ca7b7d117" alt="ME moving" loading="lazy">
+          </div>
+          <div class="host-info">
+            <div class="host-name">ME moving</div>
+            <div class="host-role">Embodied Leadership · Berlin</div>
+          </div>
+        </a>
+
+        <div class="host-card host-card--more">
+          <div class="host-card--more-num">512+</div>
+          <div class="host-card--more-label">more hosts<br>to discover</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Demo events ───────────────────────────────── -->
+<section class="section alt" id="events-demo">
+  <div class="container">
+    <p class="section-eyebrow">What it looks like</p>
+    <h2 class="section-heading">Your offerings, <em>beautifully presented</em></h2>
+    <p class="section-sub">
+      Every listing gets a clean, focused page — designed to build trust
+      and give visitors exactly what they need to sign up.
+    </p>
+
+    <div class="events-showcase">
+      <a class="demo-event" href="event.html?slug=ecstatic-dance-kreuzberg">
+        <div class="demo-event-img">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/events%2F7e08f6d0-9b2b-4c0e-b0b7-88917fe17a1f%2Fmedia%2F1774489626543_ecstatic-dance-flow.jpg?alt=media&token=5bd4b1ac-5937-47c7-87c7-b89bcce17e51" alt="Ecstatic Dance" loading="lazy">
+          <span class="demo-event-badge">ecstatic dance</span>
+          <span class="demo-event-date">Every Friday</span>
+        </div>
+        <div class="demo-event-title">Ecstatic Dance Kreuzberg</div>
+        <div class="demo-event-meta">Berlin, Kreuzberg · 2.5h</div>
+        <div class="demo-event-price"><strong>€15</strong></div>
+      </a>
+
+      <a class="demo-event" href="event.html?slug=morning-breathwork-circle">
+        <div class="demo-event-img">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/events%2F63f68e55-fa08-4a41-ab67-4ed1f76e0e11%2Fmedia%2F1773393108924_breathwork.jpg?alt=media&token=a3d5e2a7-c8c5-4f27-a98c-3e9f5fea7b34" alt="Morning Breathwork" loading="lazy">
+          <span class="demo-event-badge">breathwork</span>
+          <span class="demo-event-date">12 Jun</span>
+        </div>
+        <div class="demo-event-title">Morning Breathwork Circle</div>
+        <div class="demo-event-meta">Berlin, Neukölln · 60 min</div>
+        <div class="demo-event-price"><strong>€18</strong></div>
+      </a>
+
+      <a class="demo-event" href="event.html?slug=kundalini-awakening-retreat">
+        <div class="demo-event-img">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/events%2Fa91c3c44-5e6d-4f28-85f5-2f9c1f5eaa8e%2Fmedia%2F1774490101234_kundalini-retreat.jpg?alt=media&token=c1e89f5d-2a5d-4b42-bb91-6a81f3f42cc1" alt="Kundalini Retreat" loading="lazy">
+          <span class="demo-event-badge">retreat</span>
+          <span class="demo-event-date">28 Jun – 2 Jul</span>
+        </div>
+        <div class="demo-event-title">Kundalini Awakening Retreat</div>
+        <div class="demo-event-meta">Mallorca · 5 days</div>
+        <div class="demo-event-price"><strong>€890</strong></div>
+      </a>
+
+      <a class="demo-event" href="event.html?slug=200hr-vinyasa-ytt">
+        <div class="demo-event-img">
+          <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/events%2Fb4c1d9a2-8f3a-4e71-a4c5-3f2e8d6b7c09%2Fmedia%2F1774490555678_yoga-training.jpg?alt=media&token=d7a93e2f-1b5c-4f8a-9e2d-8c7b6a5f4e3d" alt="Yoga Teacher Training" loading="lazy">
+          <span class="demo-event-badge">training</span>
+          <span class="demo-event-date">Sep – Dec 2026</span>
+        </div>
+        <div class="demo-event-title">200hr Vinyasa Yoga Teacher Training</div>
+        <div class="demo-event-meta">Rishikesh, India · 4 weeks</div>
+        <div class="demo-event-price"><strong>€2,400</strong></div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ── Channels ──────────────────────────────────── -->
-<section class="section alt">
+<section class="section">
   <div class="container">
     <div style="text-align:center; margin-bottom:12px;">
       <p class="section-eyebrow" style="justify-content:center;">Where you show up</p>
     </div>
-    <h2 class="section-heading" style="text-align:center;">Shared with our growing community</h2>
+    <h2 class="section-heading" style="text-align:center;">Shared with our <em>growing community</em></h2>
     <p class="section-sub" style="text-align:center; margin-left:auto; margin-right:auto;">
       When you list on Viluma, your offerings reach people through multiple touchpoints
       — not just a website that waits to be found.
@@ -619,12 +1129,128 @@ img { display: block; }
   </div>
 </section>
 
+<!-- ── Global movement ───────────────────────────── -->
+<section class="pulse-section">
+  <div class="container pulse-header">
+    <div>
+      <p class="pulse-kicker">Live Pulse</p>
+      <h2 class="pulse-title">A <em>growing</em> movement</h2>
+    </div>
+    <div class="pulse-nav">
+      <button class="pulse-nav-btn" id="pulse-prev" aria-label="Scroll left">
+        <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="pulse-nav-btn" id="pulse-next" aria-label="Scroll right">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="pulse-track" id="pulse-track">
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--orange-100);color:var(--orange-700)">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
+      <div class="pulse-card-count">12 Retreats</div>
+      <div class="pulse-card-desc">starting in Bali this week</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+          <div class="pulse-av" style="background:var(--orange-200)"></div>
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+        </div>
+        <span class="pulse-joining">+124 joining</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--olive-100);color:var(--olive-500)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="pulse-card-count">87 Events</div>
+      <div class="pulse-card-desc">listed in Berlin this month</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--orange-300)"></div>
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+        </div>
+        <span class="pulse-joining">+340 attending</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--bg-2);color:var(--orange-600)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="pulse-card-count">38 New Hosts</div>
+      <div class="pulse-card-desc">joined in the last 30 days</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-400)"></div>
+          <div class="pulse-av" style="background:var(--orange-200)"></div>
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+          <div class="pulse-av" style="background:var(--orange-100)"></div>
+        </div>
+        <span class="pulse-joining">from 9 countries</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--orange-50);color:var(--orange-700)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="pulse-card-count">18 Retreats</div>
+      <div class="pulse-card-desc">opening in Portugal next month</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+          <div class="pulse-av" style="background:var(--orange-300)"></div>
+        </div>
+        <span class="pulse-joining">+97 interested</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--olive-100);color:var(--olive-600)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="pulse-card-count">6 Trainings</div>
+      <div class="pulse-card-desc">residential in Germany this season</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--orange-200)"></div>
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+          <div class="pulse-av" style="background:var(--orange-100)"></div>
+        </div>
+        <span class="pulse-joining">+41 enrolled</span>
+      </div>
+    </div>
+
+    <div class="pulse-card">
+      <div class="pulse-card-icon" style="background:var(--orange-100);color:var(--orange-700)">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="pulse-card-count">31 Events</div>
+      <div class="pulse-card-desc">across Vienna &amp; Budapest</div>
+      <div class="pulse-card-foot">
+        <div class="pulse-avatars">
+          <div class="pulse-av" style="background:var(--olive-200)"></div>
+          <div class="pulse-av" style="background:var(--orange-300)"></div>
+          <div class="pulse-av" style="background:var(--olive-300)"></div>
+        </div>
+        <span class="pulse-joining">+153 attending</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ── Pricing ───────────────────────────────────── -->
 <section class="section" id="pricing">
   <div class="container">
     <div style="text-align:center;">
       <p class="section-eyebrow" style="justify-content:center;">Pricing</p>
-      <h2 class="section-heading" style="text-align:center;">Simple and fair</h2>
+      <h2 class="section-heading" style="text-align:center;">Simple and <em>fair</em></h2>
       <p class="section-sub" style="text-align:center; margin-left:auto; margin-right:auto;">
         We believe in keeping the barrier low. List your events for free — always.
         Retreats and trainings listed before the end of 2026 are on us, too.
@@ -660,10 +1286,10 @@ img { display: block; }
 </section>
 
 <!-- ── Social proof ──────────────────────────────── -->
-<section class="section alt" id="hosts">
+<section class="section alt" id="testimonials">
   <div class="container">
     <p class="section-eyebrow">From our hosts</p>
-    <h2 class="section-heading">What hosts are saying</h2>
+    <h2 class="section-heading">What hosts are <em>saying</em></h2>
     <p class="section-sub">
       People who facilitate conscious experiences — and chose to list them on Viluma.
     </p>
@@ -677,11 +1303,11 @@ img { display: block; }
         </div>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
-            <span class="material-symbols-outlined">person</span>
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fff7dc0ec-fb76-4c04-92bc-d4cdce7d4288%2Favatar%2F1766155114347_1-Tanja%20Berni17697-WEB-small-sRGB-72dpi1500px%C2%A9Foto%20Dieter%20Duevelmeyer.jpg?alt=media&token=3fd41cea-a9c3-4e99-9c5f-7e610a1b6e10" alt="Tanja B." loading="lazy">
           </div>
           <div>
-            <div class="testimonial-name">Annika S.</div>
-            <div class="testimonial-role">Yoga &amp; Breathwork, Berlin</div>
+            <div class="testimonial-name">Tanja B.</div>
+            <div class="testimonial-role">Yoga &amp; Body Awareness</div>
           </div>
         </div>
       </div>
@@ -694,11 +1320,11 @@ img { display: block; }
         </div>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
-            <span class="material-symbols-outlined">person</span>
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2Fb9e16bc9-adba-4e2e-8f99-884daacacf4c%2Favatar%2F1772975570462_IMG-20230228-WA0008.jpg?alt=media&token=3b22d637-5bb7-4604-9b31-49051c3d5c85" alt="Petra" loading="lazy">
           </div>
           <div>
-            <div class="testimonial-name">Marco T.</div>
-            <div class="testimonial-role">Sound Healing &amp; Meditation, Munich</div>
+            <div class="testimonial-name">Petra</div>
+            <div class="testimonial-role">Mindfulness &amp; Meditation</div>
           </div>
         </div>
       </div>
@@ -711,11 +1337,11 @@ img { display: block; }
         </div>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
-            <span class="material-symbols-outlined">person</span>
+            <img src="https://firebasestorage.googleapis.com/v0/b/conscious-events-calendar.firebasestorage.app/o/profiles%2F7ff29437-18a3-4cfa-bd54-6a8f604ff329%2Favatar%2F1773392725816_A7400723.jpg?alt=media&token=e645b4ad-601f-44d9-a899-df7ca7b7d117" alt="ME moving" loading="lazy">
           </div>
           <div>
-            <div class="testimonial-name">Clara M.</div>
-            <div class="testimonial-role">Ecstatic Dance &amp; Cacao, Hamburg</div>
+            <div class="testimonial-name">ME moving</div>
+            <div class="testimonial-role">Embodied Leadership · Berlin</div>
           </div>
         </div>
       </div>
@@ -727,7 +1353,7 @@ img { display: block; }
 <section class="section" id="roadmap">
   <div class="container">
     <p class="section-eyebrow">What we are building</p>
-    <h2 class="section-heading">A platform that grows with you</h2>
+    <h2 class="section-heading">A platform that <em>grows with you</em></h2>
     <p class="section-sub">
       Viluma is just getting started. Here is what is on the horizon —
       shaped by the needs of the hosts and practitioners who use it.
@@ -788,14 +1414,14 @@ img { display: block; }
 <!-- ── Final CTA ─────────────────────────────────── -->
 <section class="final-cta">
   <div class="container">
-    <h2>Ready to share your work with the right people?</h2>
+    <h2>Ready to share your work with the <em>right people</em>?</h2>
     <p>
       Create your host profile today. It takes a few minutes,
       it costs nothing, and your first listing can be live today.
     </p>
     <a href="auth.html?mode=signup" class="hero-cta">
       Get started
-      <span class="material-symbols-outlined">arrow_forward</span>
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
   </div>
 </section>
@@ -809,6 +1435,19 @@ img { display: block; }
 <script src="scroll-animations.js" defer></script>
 <script src="mobile-tabs.js" defer></script>
 <script src="auth-overlay.js" defer></script>
+
+<script>
+/* ── Pulse carousel scroll ──────────────────────── */
+(() => {
+  const track = document.getElementById('pulse-track');
+  const prev = document.getElementById('pulse-prev');
+  const next = document.getElementById('pulse-next');
+  if (!track || !prev || !next) return;
+  const step = 284;
+  prev.addEventListener('click', () => track.scrollBy({ left: -step, behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: step, behavior: 'smooth' }));
+})();
+</script>
 
 </body>
 </html>
