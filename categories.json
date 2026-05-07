@@ -170,7 +170,7 @@
         { "slug": "handpan",               "name": "Handpan",                "count": 75, "trending": true },
         { "slug": "drum-circle",           "name": "Drum Circle",            "count": 145 }
       ]
-    },
+    }
   ],
   "retreats": [
     {
