@@ -1210,7 +1210,7 @@
     <div class="section-header">
       <div>
         <h2>Browse by category.</h2>
-        <p>Events stay flat — events are local and modality-driven. Retreats and trainings open into a pillar taxonomy with sub-categories, so you can go as deep as you want.</p>
+        <p>Each pillar opens into a full taxonomy of sub-categories — events span workshops, ceremonies, dance, music and talks; retreats and trainings dive into discipline-specific paths. Go as broad or as deep as you want.</p>
       </div>
       <a href="events-search-results.html" class="all">All categories →</a>
     </div>
@@ -1479,6 +1479,7 @@
 <script src="scroll-animations.js" defer></script>
 <script src="mobile-tabs.js" defer></script>
 <script src="taxonomy.js"></script>
+<script src="category-model.js"></script>
 <script src="search-pill.js"></script>
 
 <script>
@@ -1630,7 +1631,7 @@
   const state = pillInstance.state;
   const el  = SearchPill.domEl;
   const fmt = SearchPill.fmt;
-  const { RETREAT_TAXONOMY, TRAINING_TAXONOMY, EVENT_CATEGORIES, TAB_CONFIG, ALL_CATEGORIES,
+  const { RETREAT_TAXONOMY, TRAINING_TAXONOMY, EVENT_TAXONOMY, TAB_CONFIG, ALL_CATEGORIES,
           PLACE_SUGGESTIONS,
           DATE_QUICK, CERT_SUGGESTIONS, LENGTH_SUGGESTIONS, TIME_SUGGESTIONS,
           TICKET_ICON, SUN_ICON, CAP_ICON, FIGURE_ICON, CIRCLE_ICON,
@@ -1647,15 +1648,15 @@
     const host = document.getElementById("catsPillars");
     host.innerHTML = "";
 
-    // 1. Events — flat
-    host.appendChild(buildFlatPillarCard({
+    // 1. Events — taxonomy
+    host.appendChild(buildTaxonomyPillarCard({
       key: "events",
       title: "Events",
       subtitle: "Local · drop-in",
       icon: TICKET_ICON,
-      count: EVENT_CATEGORIES.launch.length,
-      cats: EVENT_CATEGORIES.launch,
-      baseUrl: "/events/"
+      taxonomy: EVENT_TAXONOMY,
+      baseUrl: "/events/",
+      kind: "events"
     }));
 
     // 2. Retreats — taxonomy
@@ -1679,30 +1680,6 @@
       baseUrl: "/trainings/",
       kind: "trainings"
     }));
-  }
-
-  function buildFlatPillarCard(p) {
-    const group = document.createElement("div");
-    group.className = "cat-group";
-    group.innerHTML = `
-      <div class="cat-head">
-        <h3><span class="icon">${p.icon}</span>${p.title}</h3>
-        <span class="cnt">${p.count} categories · ${p.subtitle}</span>
-      </div>
-      <div class="cat-list"></div>
-      <div class="cat-footer">
-        <a class="card-cta" href="events-search-results.html">All ${p.title.toLowerCase()} →</a>
-      </div>
-    `;
-    const list = group.querySelector(".cat-list");
-    p.cats.forEach(c => {
-      const a = document.createElement("a");
-      a.href = "events-search-results.html";
-      a.className = "cat-link" + (c.trending ? " trending" : "");
-      a.textContent = c.name;
-      list.appendChild(a);
-    });
-    return group;
   }
 
   function buildTaxonomyPillarCard(p) {
@@ -2372,7 +2349,8 @@
   }
 
   function mRenderFlatCats(body, f) {
-    const source = mState.tab === "events" ? EVENT_CATEGORIES.launch : ALL_CATEGORIES;
+    // Only the "all" tab still uses the flat picker; events/retreats/trainings use mRenderTaxonomy.
+    const source = ALL_CATEGORIES;
     const grid = document.createElement("div");
     grid.className = "m-cat-grid";
     source.forEach(c => {
@@ -2387,8 +2365,14 @@
   }
 
   function mRenderTaxonomy(body, f) {
-    const taxonomy = f.taxSource === "retreats" ? RETREAT_TAXONOMY : TRAINING_TAXONOMY;
-    const kind = f.taxSource === "retreats" ? "retreats" : "trainings";
+    const taxonomy = f.taxSource === "retreats"  ? RETREAT_TAXONOMY
+                   : f.taxSource === "trainings" ? TRAINING_TAXONOMY
+                   : f.taxSource === "events"    ? EVENT_TAXONOMY
+                   : RETREAT_TAXONOMY;
+    const kind     = f.taxSource === "retreats"  ? "retreats"
+                   : f.taxSource === "trainings" ? "trainings"
+                   : f.taxSource === "events"    ? "events"
+                   : "retreats";
     const list = document.createElement("div");
     list.className = "m-tax-list";
 
@@ -2426,7 +2410,14 @@
         const item = el(`<div class="m-tax-sub" role="option"><span>${sub.name}</span><span class="cnt">${fmt(sub.count)}</span></div>`);
         item.addEventListener("click", (e) => {
           e.stopPropagation();
-          mSetFieldValue("cat", sub.name, `${pillar.slug}/${sub.slug}`);
+          const value = { pillar: pillar.slug, sub: sub.slug };
+          const display = window.CategoryModel
+            ? window.CategoryModel.formatLabel(taxonomy, value, "")
+            : sub.name;
+          const path = window.CategoryModel
+            ? window.CategoryModel.encodePath(value)
+            : `${pillar.slug}/${sub.slug}`;
+          mSetFieldValue("cat", display, path);
           mAdvance();
         });
         subs.appendChild(item);
@@ -2467,7 +2458,17 @@
     if (window.Haptics) window.Haptics.fire("success");
     const p = new URLSearchParams();
     if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
-    if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+    // Per-tab URL contract for the pillar slot (state field name varies per page).
+    const PILLAR_KEY = { events: "pillar", retreats: "practice", trainings: "discipline" };
+    const M = window.CategoryModel;
+    const value = M ? M.decodePath(state.catPath) : null;
+    const pillarKey = PILLAR_KEY[mState.tab];
+    if (value && value.pillar && pillarKey) {
+      p.set(pillarKey, value.pillar);
+      if (value.sub) p.set("sub", value.sub);
+    } else if (state.catSlug) {
+      p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+    }
     location.href = searchResultsUrlFor(mState.tab) + (p.toString() ? `?${p.toString()}` : "");
   }
 
@@ -2501,7 +2502,9 @@
    * Boot
    * ========================================================== */
   renderFields();
-  renderCatsPillars();
+  // Browse-by-category cards iterate EVENT/RETREAT/TRAINING_TAXONOMY
+  // — wait for /categories.json to load before first render.
+  window.Taxonomy.ready.then(renderCatsPillars);
 
   /* Desktop account dropdown + mobile account sheet are wired by header.js / bottom-nav.js */
 

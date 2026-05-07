@@ -39,16 +39,7 @@
   }
   const T = window.Taxonomy;
 
-  // SearchPill consumers (mobile modal in index.html, taxonomy dropdown
-  // renderer below) expect { name }; Taxonomy event categories use { label }.
-  const EVENT_CATEGORIES = {
-    launch: T.EVENT_CATEGORIES.map(c => ({
-      slug: c.slug.replace(/_/g, "-"),
-      name: c.label,
-      trending: c.trending || false
-    }))
-  };
-
+  const EVENT_TAXONOMY    = T.EVENT_TAXONOMY;
   const RETREAT_TAXONOMY  = T.RETREAT_TAXONOMY;
   const TRAINING_TAXONOMY = T.TRAINING_TAXONOMY;
 
@@ -75,15 +66,16 @@
     events: {
       chipsLabel: "Popular",
       chips: [
-        { label: "Tonight",      date: "tonight" },
-        { label: "This weekend", date: "weekend" },
-        { label: "Yoga",         cat: "yoga" },
-        { label: "Sound healing",cat: "sound-healing" }
+        { label: "Tonight",        date: "tonight" },
+        { label: "This weekend",   date: "weekend" },
+        { label: "Ecstatic dance", cat: "dance/ecstatic-dance" },
+        { label: "Sound bath",     cat: "music/sound-bath" },
+        { label: "Cacao ceremony", cat: "ceremonies/cacao-ceremony" }
       ],
       fields: [
         { key: "where", label: "Where",    placeholder: "Berlin",       defaultValue: "Berlin",       type: "place",    defaultSlug: "berlin" },
         { key: "when",  label: "When",     placeholder: "Next 7 days",  defaultValue: "Next 7 days",  type: "date" },
-        { key: "cat",   label: "Category", placeholder: "Any practice",                               type: "category", catMode: "flat" },
+        { key: "cat",   label: "Category", placeholder: "Any practice",                               type: "category", catMode: "taxonomy", taxSource: "events" },
         { key: "time",  label: "Time",     placeholder: "Any time",                                   type: "time" }
       ]
     },
@@ -513,11 +505,11 @@
       });
     }
 
-    /* ── Flat category dropdown ── */
+    /* ── Flat category dropdown — only used by the "all" tab now ── */
     function renderFlatCategoryDropdown(dd, fieldEl, f) {
       dd.classList.add("wide");
-      const source = state.tab === "events" ? EVENT_CATEGORIES.launch : ALL_CATEGORIES;
-      const title  = state.tab === "events" ? "Event categories" : "Categories across the marketplace";
+      const source = ALL_CATEGORIES;
+      const title  = "Categories across the marketplace";
       dd.appendChild(domEl(`<div class="dd-title">${title}</div>`));
       const grid = domEl(`<div class="dd-grid"></div>`);
       dd.appendChild(grid);
@@ -544,8 +536,14 @@
     /* ── Taxonomy dropdown (two-panel) ── */
     function renderTaxonomyDropdown(dd, fieldEl, f) {
       dd.classList.add("taxonomy");
-      const taxonomy = f.taxSource === "retreats" ? RETREAT_TAXONOMY : TRAINING_TAXONOMY;
-      const kind     = f.taxSource === "retreats" ? "retreats" : "trainings";
+      const taxonomy = f.taxSource === "retreats"  ? RETREAT_TAXONOMY
+                     : f.taxSource === "trainings" ? TRAINING_TAXONOMY
+                     : f.taxSource === "events"    ? EVENT_TAXONOMY
+                     : RETREAT_TAXONOMY;
+      const kind     = f.taxSource === "retreats"  ? "retreats"
+                     : f.taxSource === "trainings" ? "trainings"
+                     : f.taxSource === "events"    ? "events"
+                     : "retreats";
 
       const pillars = domEl(`<div class="tax-pillars" role="tablist"></div>`);
       const panel   = domEl(`<div class="tax-panel"></div>`);
@@ -576,8 +574,13 @@
         ev.stopPropagation();
         const sub = pillar.subs.find(s => s.slug === subSlug);
         if (!sub) return;
-        const display = `${pillar.name} · ${sub.name}`;
-        const path    = `${pillar.slug}/${sub.slug}`;
+        const value   = { pillar: pillar.slug, sub: sub.slug };
+        const display = window.CategoryModel
+          ? window.CategoryModel.formatLabel(taxonomy, value, "")
+          : `${pillar.name} · ${sub.name}`;
+        const path    = window.CategoryModel
+          ? window.CategoryModel.encodePath(value)
+          : `${pillar.slug}/${sub.slug}`;
         state.cat = display; state.catSlug = sub.slug; state.catPath = path;
         setFieldValue(fieldEl, display);
         closeActive(); updateUrlPreview();
@@ -671,19 +674,18 @@
         if (whenField) setFieldValue(whenField, c.label);
       }
       if (c.cat) {
-        if (c.cat.includes("/")) {
-          const [pillarSlug, subSlug] = c.cat.split("/");
-          const taxonomy = state.tab === "retreats" ? RETREAT_TAXONOMY
-                         : state.tab === "trainings" ? TRAINING_TAXONOMY
-                         : RETREAT_TAXONOMY;
-          const pillar = taxonomy.find(p => p.slug === pillarSlug);
-          const sub    = pillar?.subs.find(s => s.slug === subSlug);
-          if (pillar && sub) {
-            state.cat = `${pillar.name} · ${sub.name}`;
-            state.catSlug = sub.slug;
-            state.catPath = c.cat;
-          }
+        const taxonomy = state.tab === "retreats"  ? RETREAT_TAXONOMY
+                       : state.tab === "trainings" ? TRAINING_TAXONOMY
+                       : state.tab === "events"    ? EVENT_TAXONOMY
+                       : null;
+        const M = window.CategoryModel;
+        if (taxonomy && M) {
+          const value = M.decodePath(c.cat);
+          state.cat     = M.formatLabel(taxonomy, value, c.label);
+          state.catSlug = value.sub || value.pillar || c.cat;
+          state.catPath = M.encodePath(value);
         } else {
+          // 'all' tab — flat slug, no pillar/sub structure.
           state.cat = c.label; state.catSlug = c.cat; state.catPath = c.cat;
         }
         const catField = pillEl.querySelector('[data-key="cat"]');
@@ -742,7 +744,18 @@
       if (window.Haptics) window.Haptics.fire("success");
       const p = new URLSearchParams();
       if (state.whereSlug && state.whereSlug !== "near-me") p.set("areaId", state.whereSlug);
-      if (state.catSlug) p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+      // Per-tab URL contract for the pillar slot (state field name varies).
+      const PILLAR_KEY = { events: "pillar", retreats: "practice", trainings: "discipline" };
+      const M = window.CategoryModel;
+      const value = M ? M.decodePath(state.catPath) : null;
+      const pillarKey = PILLAR_KEY[state.tab];
+      if (value && value.pillar && pillarKey) {
+        p.set(pillarKey, value.pillar);
+        if (value.sub) p.set("sub", value.sub);
+      } else if (state.catSlug) {
+        // 'all' tab: flat category id.
+        p.set("categoryId", state.catSlug.replace(/-/g, "_"));
+      }
       location.href = searchResultsUrlFor(state.tab) + (p.toString() ? "?" + p.toString() : "");
     });
 
@@ -781,7 +794,7 @@
     addrHistoryRemove,
     fetchAddressSuggestions,
     /* Data — used by index.html's mobile modal and renderCatsPillars */
-    EVENT_CATEGORIES,
+    EVENT_TAXONOMY,
     RETREAT_TAXONOMY,
     TRAINING_TAXONOMY,
     ALL_CATEGORIES,

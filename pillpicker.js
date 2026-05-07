@@ -5,11 +5,14 @@
  *   PillPicker.open(triggerEl, items, currentValue, onSelect);
  *   items: [{ value: 'bali', label: 'Bali', count: 12 }, ...]
  *
- * Use (tree — pillars + sub-categories):
- *   Items may have a `children` array. Parents are clickable (select
- *   the pillar slug); children are indented and clickable (select the
- *   child's value, e.g. "yoga/vinyasa-yoga"). A `sensitive: true`
- *   flag adds a small "review" badge.
+ * Use (tree — pillars + sub-categories, accordion):
+ *   Items with a `children` array render as collapsed accordions: only
+ *   the parent row shows initially with a chevron indicator. Clicking
+ *   the parent toggles its children open/closed without selecting.
+ *   Inside an expanded group, an "All [Parent]" row selects the pillar
+ *   value, and each child selects its child value. The accordion that
+ *   matches the current selection auto-expands on open. A
+ *   `sensitive: true` flag adds a small "review" badge.
  *
  *   items: [
  *     { value: '', label: 'Any practice' },
@@ -60,33 +63,66 @@
     const hasTree = items.some(it => Array.isArray(it.children) && it.children.length);
     if (hasTree) pop.classList.add('pill-popover--tree');
 
-    function renderItem(it, isChild) {
+    // Determine which parent (if any) should be auto-expanded — the one
+    // matching the current selection (either pillar value or pillar/sub
+    // child value).
+    function pillarOfCurrent() {
+      const cur = currentValue || '';
+      if (!cur) return '';
+      // Child value form: "<pillar>/<sub>"
+      if (cur.includes('/')) return cur.split('/')[0];
+      return cur;
+    }
+    const initialOpenPillar = pillarOfCurrent();
+
+    function renderItem(it, kind) {
+      // kind: 'parent' | 'child' | 'flat' | 'all-of'
       const sel = (it.value || '') === (currentValue || '');
       const cls = [
         'pill-popover-item',
-        isChild ? 'pill-popover-item--child' : '',
-        it.children && it.children.length ? 'pill-popover-item--parent' : '',
+        kind === 'child'   ? 'pill-popover-item--child'   : '',
+        kind === 'parent'  ? 'pill-popover-item--parent'  : '',
+        kind === 'all-of'  ? 'pill-popover-item--all-of'  : '',
         sel ? 'is-selected' : '',
         it.sensitive ? 'is-sensitive' : ''
       ].filter(Boolean).join(' ');
       const badge = it.sensitive ? '<span class="pill-popover-badge">review</span>' : '';
-      return `<button class="${cls}" type="button" role="option" aria-selected="${sel}" data-value="${escape(it.value || '')}">
+      const chevron = kind === 'parent'
+        ? '<span class="pill-popover-chevron material-symbols-outlined" aria-hidden="true">expand_more</span>'
+        : '';
+      // Parents: data-toggle (expand/collapse). Selectors: data-value.
+      const trigger = kind === 'parent'
+        ? `data-toggle="${escape(it.value || '')}"`
+        : `data-value="${escape(it.value || '')}"`;
+      return `<button class="${cls}" type="button" role="option" aria-selected="${sel}" ${trigger}>
         <span class="pill-popover-label">${escape(it.label)}${badge}</span>
         ${it.count != null ? `<span class="pill-popover-count">${escape(it.count)}</span>` : ''}
+        ${chevron}
       </button>`;
     }
 
     pop.innerHTML = items.map(it => {
-      let html = renderItem(it, false);
-      if (Array.isArray(it.children) && it.children.length) {
-        html += '<div class="pill-popover-children">' +
-          it.children.map(child => renderItem(child, true)).join('') +
-          '</div>';
-      }
-      return html;
+      const isParent = Array.isArray(it.children) && it.children.length;
+      if (!isParent) return renderItem(it, 'flat');
+      const isOpen = it.value && it.value === initialOpenPillar;
+      const groupCls = 'pill-popover-group' + (isOpen ? ' is-open' : '');
+      const childrenHtml = '<div class="pill-popover-children">' +
+        renderItem({ value: it.value, label: `All ${it.label}` }, 'all-of') +
+        it.children.map(child => renderItem(child, 'child')).join('') +
+        '</div>';
+      return `<div class="${groupCls}" data-group="${escape(it.value || '')}">` +
+        renderItem(it, 'parent') +
+        childrenHtml +
+        '</div>';
     }).join('');
 
     pop.addEventListener('click', e => {
+      const toggle = e.target.closest('[data-toggle]');
+      if (toggle) {
+        const group = toggle.closest('.pill-popover-group');
+        if (group) group.classList.toggle('is-open');
+        return;
+      }
       const btn = e.target.closest('[data-value]');
       if (!btn) return;
       const value = btn.getAttribute('data-value');
@@ -173,8 +209,9 @@
       flex-shrink: 0;
     }
 
-    /* Tree mode (pillars + sub-categories) */
+    /* Tree mode (pillars + sub-categories — accordion) */
     .pill-popover--tree { padding: 8px 6px; max-height: 440px; }
+    .pill-popover-group { display: contents; }
     .pill-popover--tree .pill-popover-item--parent {
       font-weight: 600;
       letter-spacing: 0.01em;
@@ -183,11 +220,32 @@
     .pill-popover--tree .pill-popover-item--parent:not(.is-selected):hover {
       background: var(--bg-2, #F6F3EE);
     }
+    .pill-popover-chevron {
+      font-size: 18px !important;
+      color: var(--text-subtle, #8A8A8A);
+      transition: transform 0.18s cubic-bezier(.2,.7,.2,1);
+      flex-shrink: 0;
+      margin-left: -6px;
+    }
+    .pill-popover-group.is-open > .pill-popover-item--parent .pill-popover-chevron {
+      transform: rotate(180deg);
+    }
+    .pill-popover-item--parent.is-selected .pill-popover-chevron {
+      color: rgba(255,255,255,0.7);
+    }
     .pill-popover-children {
-      display: flex; flex-direction: column;
-      padding: 0 0 6px 0;
-      border-bottom: 1px solid rgba(0,0,0,0.04);
+      display: none;
+      flex-direction: column;
+      padding: 2px 0 6px 0;
       margin-bottom: 4px;
+    }
+    .pill-popover-group.is-open > .pill-popover-children {
+      display: flex;
+      animation: pillTreeOpen 0.16s cubic-bezier(.2,.7,.2,1);
+    }
+    @keyframes pillTreeOpen {
+      from { opacity: 0; transform: translateY(-2px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .pill-popover-item--child {
       font-weight: 500;
@@ -197,6 +255,17 @@
     }
     .pill-popover-item--child .pill-popover-count {
       font-size: 11.5px;
+    }
+    .pill-popover-item--all-of {
+      font-weight: 600;
+      font-size: 12.5px;
+      padding: 6px 14px 6px 30px;
+      color: var(--primary, #182c24);
+      letter-spacing: 0.01em;
+    }
+    .pill-popover-item--all-of .pill-popover-count { display: none; }
+    .pill-popover-item--all-of.is-selected {
+      background: var(--primary, #182c24); color: #fff;
     }
     .pill-popover-badge {
       display: inline-block;

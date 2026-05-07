@@ -571,6 +571,8 @@ h1.page-title {
 <script src="scroll-animations.js" defer></script>
 <script src="mobile-tabs.js" defer></script>
 <script src="taxonomy.js"></script>
+<script src="category-model.js"></script>
+<script src="category-chips.js"></script>
 <script src="pillpicker.js" defer></script>
 
 <script>
@@ -603,22 +605,6 @@ h1.page-title {
     T.TRAINING_TAXONOMY.map(p => ({ slug: p.slug, label: p.name, sensitive: !!p.sensitive }))
   );
 
-  // Tree items for the discipline picker.
-  const DISCIPLINE_TREE = [{ value: '', label: 'Any discipline' }].concat(
-    T.TRAINING_TAXONOMY.map(p => ({
-      value: p.slug,
-      label: p.name,
-      count: p.count,
-      sensitive: !!p.sensitive,
-      children: p.subs.map(s => ({
-        value: `${p.slug}/${s.slug}`,
-        label: s.name,
-        count: s.count,
-        sensitive: !!s.sensitive
-      }))
-    }))
-  );
-
   const HOURS   = T.TRAINING_HOURS.slice();
   const STARTS  = T.TRAINING_STARTS.slice();
   const FORMATS = T.TRAINING_FORMATS.slice();
@@ -634,6 +620,14 @@ h1.page-title {
   }, {});
 
   const POPULAR_HOURS = ['200', '300', '500', '100', '50'];
+
+  // Popular training sub-slugs — featured shortcuts when no pillar is
+  // selected. Pads with top-by-count if shorter than the chip cap.
+  const POPULAR_TRAINING_SUBS = [
+    '200-hour-ytt', '300-hour-ytt', 'somatic-experiencing', 'meditation-tt',
+    'life-coach', 'breathwork-facilitator', 'sound-healing-cert', 'doula',
+    'reiki', 'mindfulness-tt'
+  ];
 
   /* Sub-discipline filter — narrows results within a pillar. Prototype
      mock data has no sub-slug field, so we match against the sub's
@@ -809,38 +803,19 @@ h1.page-title {
     document.getElementById('sortSelect').value = state.sort;
   }
 
-  /* ── Discipline pill label: "Yoga · Vinyasa YTT" if sub selected ─ */
+  /* ── Discipline pill label (delegated to CategoryModel) ─ */
   function disciplinePillLabel() {
-    if (!state.discipline && !state.sub) return 'Any discipline';
-    const pillar = T.findPillar(T.TRAINING_TAXONOMY, state.discipline);
-    const pillarName = pillar ? pillar.name : (findLabel(DISCIPLINES, state.discipline) || '');
-    if (state.sub && pillar) {
-      const subEntry = pillar.subs.find(s => s.slug === state.sub);
-      const subName  = subEntry ? subEntry.name : state.sub;
-      return pillarName ? `${pillarName} · ${subName}` : subName;
-    }
-    return pillarName || 'Any discipline';
+    return window.CategoryModel.formatLabel(
+      T.TRAINING_TAXONOMY,
+      { pillar: state.discipline, sub: state.sub },
+      'Any discipline'
+    );
   }
 
-  /* ── Render: chip row (cert hours — the hero axis for trainings) ── */
+  /* ── Render: chip row — delegated to shared CategoryChips module.
+     Cert-hour buckets remain available via the "Any hours" filterbar pill. */
   function renderChips() {
-    const row = document.getElementById('chipRow');
-    const counts = new Map();
-    for (const t of TRAININGS) {
-      const h = String(t.hours);
-      const bucket = (h >= 500) ? '500' : (h >= 300 ? '300' : (h >= 200 ? '200' : (h >= 100 ? '100' : '50')));
-      counts.set(bucket, (counts.get(bucket) || 0) + 1);
-    }
-    const html = [
-      `<button class="chip${!state.hours ? ' is-active' : ''}" type="button" data-hours="">All hours</button>`,
-      ...POPULAR_HOURS.filter(h => counts.has(h)).map(h => {
-        const isActive = state.hours === h;
-        const c = counts.get(h) || 0;
-        const label = h === '500' ? '500hr +' : `${h}hr`;
-        return `<button class="chip${isActive ? ' is-active' : ''}" type="button" data-hours="${htmlEscape(h)}">${htmlEscape(label)} <span class="chip-count">· ${c}</span></button>`;
-      })
-    ].join('');
-    row.innerHTML = html;
+    CategoryChips.render(document.getElementById('chipRow'));
   }
 
   /* ── Render: result list ─────────────────────────────── */
@@ -1026,27 +1001,16 @@ h1.page-title {
       });
     });
   }
-  /* Discipline pill: tree picker (pillars + sub-categories from TRAINING_TAXONOMY). */
-  document.getElementById('disciplinePill').addEventListener('click', e => {
-    if (e.target.closest('[data-clear="discipline"]')) {
-      state.discipline = ''; state.sub = '';
+  /* Discipline pill: tree picker (CategoryModel + PillPicker). */
+  CategoryModel.wireCategoryPill({
+    pillEl: document.getElementById('disciplinePill'),
+    taxonomy: T.TRAINING_TAXONOMY,
+    anyLabel: 'Any discipline',
+    getValue: () => ({ pillar: state.discipline, sub: state.sub }),
+    onChange: ({ pillar, sub }) => {
+      state.discipline = pillar; state.sub = sub;
       writeUrl(); render();
-      return;
     }
-    let current = state.discipline || '';
-    if (state.discipline && state.sub) current = `${state.discipline}/${state.sub}`;
-    PillPicker.open(e.currentTarget, DISCIPLINE_TREE, current, (val) => {
-      if (!val) { state.discipline = ''; state.sub = ''; }
-      else if (val.includes('/')) {
-        const [pillarSlug, subSlug] = val.split('/');
-        state.discipline = pillarSlug;
-        state.sub = subSlug;
-      } else {
-        state.discipline = val;
-        state.sub = '';
-      }
-      writeUrl(); render();
-    });
   });
   wirePill('hoursPill',      HOURS,       'hours');
   wirePill('wherePill',      PLACES,      'where');
@@ -1057,18 +1021,24 @@ h1.page-title {
     state.sort = e.target.value; writeUrl(); render();
   });
 
-  document.getElementById('chipRow').addEventListener('click', e => {
-    const btn = e.target.closest('[data-hours]');
-    if (!btn) return;
-    const h = btn.dataset.hours;
-    state.hours = (state.hours === h) ? '' : h;
-    writeUrl(); render();
+  // Chip row — pillar+sub shortcut. Hours filtering stays accessible via
+  // the "Any hours" filterbar pill.
+  CategoryChips.mount({
+    rowEl: document.getElementById('chipRow'),
+    taxonomy: T.TRAINING_TAXONOMY,
+    anyLabel: 'disciplines',
+    popular: POPULAR_TRAINING_SUBS,
+    getValue: () => ({ pillar: state.discipline, sub: state.sub }),
+    onChange: ({ pillar, sub }) => {
+      state.discipline = pillar; state.sub = sub;
+      writeUrl(); render();
+    }
   });
 
   /* Card click → open detail. Reset button → clear filters. */
   document.getElementById('resultsList').addEventListener('click', e => {
     if (e.target.closest('#resetBtn')) {
-      state.q = state.discipline = state.hours = state.where = state.starts = state.format = '';
+      state.q = state.discipline = state.sub = state.hours = state.where = state.starts = state.format = '';
       closeDetail();
       writeUrl(); render();
       return;
@@ -1117,7 +1087,9 @@ h1.page-title {
     readUrl();
     render();
   }
-  init();
+  // Wait for /categories.json to load before first render — chip rows
+  // and pillar lists iterate T.TRAINING_TAXONOMY at boot.
+  T.ready.then(init);
 </script>
 
 <script src="auth-overlay.js"></script>

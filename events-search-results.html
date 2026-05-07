@@ -690,6 +690,12 @@ h1.page-title {
         </button>
       </label>
 
+      <button class="fb-pill" id="categoryPill" type="button">
+        <span class="material-symbols-outlined">spa</span>
+        <span class="label">Any practice</span>
+        <span class="pill-clear material-symbols-outlined" data-clear="category" hidden>close</span>
+      </button>
+
       <button class="fb-pill" id="areaPill" type="button" data-empty>
         <span class="material-symbols-outlined">place</span>
         <span class="label">Anywhere</span>
@@ -775,6 +781,9 @@ h1.page-title {
 <script src="scroll-animations.js" defer></script>
 <script src="mobile-tabs.js" defer></script>
 <script src="taxonomy.js"></script>
+<script src="category-model.js"></script>
+<script src="category-chips.js"></script>
+<script src="pillpicker.js" defer></script>
 
 <script>
   /* ── Constants ─────────────────────────────────────────── */
@@ -802,12 +811,16 @@ h1.page-title {
   }, {});
 
   /* ── State ─────────────────────────────────────────────── */
+  // Category is now a pillar+sub pair (matching the EVENT_TAXONOMY shape used
+  // on retreats/trainings results). categoryId is preserved for legacy URLs
+  // and is normalised into pillar/sub on read.
   const state = {
     q: '',
     areaId: '',
     from: '',
     to: '',
-    categoryId: '',
+    pillar: '',
+    sub: '',
     lat: null, lng: null, radiusMeters: null,
     label: '',
     datePreset: 'any',
@@ -870,7 +883,17 @@ h1.page-title {
     state.areaId     = p.get('areaId') || '';
     state.from       = p.get('from') || '';
     state.to         = p.get('to') || '';
-    state.categoryId = p.get('categoryId') || '';
+    state.pillar     = p.get('pillar') || '';
+    state.sub        = p.get('sub') || '';
+    // Legacy ?categoryId=<slug> support — resolves to either a pillar or a sub.
+    if (!state.pillar && !state.sub) {
+      const legacy = p.get('categoryId');
+      if (legacy) {
+        const node = T.findEventNode(legacy);
+        if (node.pillar) state.pillar = node.pillar.slug;
+        if (node.sub)    state.sub    = node.sub.slug;
+      }
+    }
     state.label      = p.get('label') || '';
     const lat = p.get('lat'), lng = p.get('lng'), r = p.get('radiusMeters');
     state.lat = lat ? parseFloat(lat) : null;
@@ -886,7 +909,8 @@ h1.page-title {
     if (state.areaId)       p.set('areaId', state.areaId);
     if (state.from)         p.set('from', state.from);
     if (state.to)           p.set('to', state.to);
-    if (state.categoryId)   p.set('categoryId', state.categoryId);
+    if (state.pillar)       p.set('pillar', state.pillar);
+    if (state.sub)          p.set('sub', state.sub);
     if (state.lat != null)  p.set('lat', String(state.lat));
     if (state.lng != null)  p.set('lng', String(state.lng));
     if (state.radiusMeters != null) p.set('radiusMeters', String(state.radiusMeters));
@@ -896,6 +920,20 @@ h1.page-title {
     if (state.view && state.view !== 'split') p.set('view', state.view);
     const url = location.pathname + (p.toString() ? `?${p.toString()}` : '');
     history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+
+  /* ── Category labelling helpers (delegated to CategoryModel) ── */
+  function categoryPillLabel() {
+    return window.CategoryModel.formatLabel(
+      T.EVENT_TAXONOMY,
+      { pillar: state.pillar, sub: state.sub },
+      'Any practice'
+    );
+  }
+  function categorySummaryLabel() {
+    if (state.sub) return categoryLabel(state.sub);
+    if (state.pillar) return categoryLabel(state.pillar);
+    return '';
   }
 
   /* ── Date preset ───────────────────────────────────────── */
@@ -934,8 +972,9 @@ h1.page-title {
     else if (state.areaId)               { t = `Events in ${areaName(state.areaId)}`; e = 'Regional hub'; }
     else if (state.label)                { t = `Events near ${state.label}`; e = 'Nearby'; }
 
-    if (state.categoryId) {
-      s = `Filtered by ${categoryLabel(state.categoryId)}`;
+    const catSummary = categorySummaryLabel();
+    if (catSummary) {
+      s = `Filtered by ${catSummary}`;
     } else if (state.datePreset && state.datePreset !== 'any') {
       s = DATE_PRESETS[state.datePreset]?.label || '';
     } else {
@@ -954,6 +993,18 @@ h1.page-title {
     const inp = document.getElementById('searchInput');
     if (inp.value !== state.q) inp.value = state.q;
     wrap.classList.toggle('has-text', !!state.q);
+
+    const catPill = document.getElementById('categoryPill');
+    const catLabel = catPill.querySelector('.label');
+    const catClear = catPill.querySelector('[data-clear="category"]');
+    catLabel.textContent = categoryPillLabel();
+    if (state.pillar || state.sub) {
+      catPill.classList.add('is-active');
+      catClear.hidden = false;
+    } else {
+      catPill.classList.remove('is-active');
+      catClear.hidden = true;
+    }
 
     const areaPill = document.getElementById('areaPill');
     const areaLabel = areaPill.querySelector('.label');
@@ -991,22 +1042,9 @@ h1.page-title {
     document.getElementById('split').classList.toggle('is-grid', state.view === 'grid');
   }
 
-  /* ── Category chips — sourced from canonical Taxonomy ─── */
-  const POPULAR_CATEGORIES = T.EVENT_CATEGORIES.map(c => c.slug);
+  /* ── Category chips — delegated to shared CategoryChips module ── */
   function renderChips() {
-    const row = document.getElementById('chipRow');
-    const found = new Set();
-    for (const ev of state.events) {
-      const cats = ev.basicDetails?.categories || [];
-      cats.forEach(c => found.add(c));
-    }
-    const list = Array.from(new Set(['', ...POPULAR_CATEGORIES.filter(c => found.has(c) || !state.events.length), ...Array.from(found)]));
-    row.innerHTML = list.map(slug => {
-      const isAll = slug === '';
-      const label = isAll ? 'All practices' : categoryLabel(slug);
-      const active = (state.categoryId === slug) || (isAll && !state.categoryId);
-      return `<button class="chip${active ? ' is-active' : ''}" type="button" data-cat="${htmlEscape(slug)}">${htmlEscape(label)}</button>`;
-    }).join('');
+    CategoryChips.render(document.getElementById('chipRow'));
   }
 
   /* ── Sorting ───────────────────────────────────────────── */
@@ -1479,7 +1517,9 @@ h1.page-title {
     if (state.areaId)        p.set('areaId', state.areaId);
     if (state.from)          p.set('from', state.from);
     if (state.to)            p.set('to', state.to);
-    if (state.categoryId)    p.set('categories', state.categoryId);
+    // Send most specific category to API: sub if chosen, else the pillar slug.
+    const apiCategory = state.sub || state.pillar;
+    if (apiCategory)         p.set('categories', apiCategory);
     if (state.lat != null)   p.set('lat', String(state.lat));
     if (state.lng != null)   p.set('lng', String(state.lng));
     if (state.radiusMeters != null) p.set('radiusMeters', String(state.radiusMeters));
@@ -1578,6 +1618,18 @@ h1.page-title {
     writeUrl(); fetchEvents();
   });
 
+  CategoryModel.wireCategoryPill({
+    pillEl: document.getElementById('categoryPill'),
+    taxonomy: T.EVENT_TAXONOMY,
+    anyLabel: 'Any practice',
+    getValue: () => ({ pillar: state.pillar, sub: state.sub }),
+    onChange: ({ pillar, sub }) => {
+      state.pillar = pillar; state.sub = sub;
+      state.selectedSlug = null;
+      writeUrl(); fetchEvents();
+    }
+  });
+
   document.getElementById('areaPill').addEventListener('click', e => {
     if (e.target.closest('[data-clear="area"]')) {
       state.areaId = ''; state.label = ''; state.lat = state.lng = state.radiusMeters = null;
@@ -1630,13 +1682,17 @@ h1.page-title {
     state.view = 'grid'; writeUrl(); render();
   });
 
-  document.getElementById('chipRow').addEventListener('click', e => {
-    const btn = e.target.closest('[data-cat]');
-    if (!btn) return;
-    const slug = btn.dataset.cat;
-    state.categoryId = (state.categoryId === slug) ? '' : slug;
-    state.selectedSlug = null;
-    writeUrl(); fetchEvents();
+  CategoryChips.mount({
+    rowEl: document.getElementById('chipRow'),
+    taxonomy: T.EVENT_TAXONOMY,
+    anyLabel: 'practices',
+    getValue: () => ({ pillar: state.pillar, sub: state.sub }),
+    onChange: ({ pillar, sub }) => {
+      state.pillar = pillar;
+      state.sub = sub;
+      state.selectedSlug = null;
+      writeUrl(); fetchEvents();
+    }
   });
 
   // Card click — select + open detail
@@ -1653,7 +1709,7 @@ h1.page-title {
     }
     if (e.target.closest('#retryBtn')) { fetchEvents(); return; }
     if (e.target.closest('#resetBtn')) {
-      state.q = ''; state.categoryId = ''; applyDatePreset('any');
+      state.q = ''; state.pillar = ''; state.sub = ''; applyDatePreset('any');
       document.getElementById('searchInput').value = '';
       writeUrl(); fetchEvents();
       return;
@@ -1701,7 +1757,9 @@ h1.page-title {
     render();
     fetchEvents();
   }
-  init();
+  // Wait for /categories.json to load before first render — chip rows
+  // and pillar lists iterate T.EVENT_TAXONOMY at boot.
+  T.ready.then(init);
 </script>
 
 <script async defer

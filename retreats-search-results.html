@@ -570,6 +570,8 @@ h1.page-title {
 <script src="scroll-animations.js" defer></script>
 <script src="mobile-tabs.js" defer></script>
 <script src="taxonomy.js"></script>
+<script src="category-model.js"></script>
+<script src="category-chips.js"></script>
 <script src="pillpicker.js" defer></script>
 
 <script>
@@ -604,23 +606,6 @@ h1.page-title {
     T.RETREAT_TAXONOMY.map(p => ({ slug: p.slug, label: p.name, sensitive: !!p.sensitive }))
   );
 
-  // Tree items for the practice picker: pillars with their sub-categories.
-  // Child value uses "pillar/sub-slug" so we can decode back to (practice, sub).
-  const PRACTICE_TREE = [{ value: '', label: 'Any practice' }].concat(
-    T.RETREAT_TAXONOMY.map(p => ({
-      value: p.slug,
-      label: p.name,
-      count: p.count,
-      sensitive: !!p.sensitive,
-      children: p.subs.map(s => ({
-        value: `${p.slug}/${s.slug}`,
-        label: s.name,
-        count: s.count,
-        sensitive: !!s.sensitive
-      }))
-    }))
-  );
-
   const DESTINATIONS = [{ slug: '', label: 'Anywhere' }].concat(
     T.RETREAT_DESTINATIONS.filter(d => d.slug).map(d => ({ slug: d.slug, label: d.label }))
   );
@@ -631,7 +616,40 @@ h1.page-title {
   const SEASONS = T.RETREAT_SEASONS.slice();
   const LENGTHS = T.RETREAT_LENGTHS.slice();
 
-  const POPULAR_SUBS = ['Yoga Teacher Training', 'Silent', 'Vinyasa Yoga', 'Ayurveda', "Women's", 'Trauma Healing', 'Kundalini Yoga', 'Yin & Restorative Yoga', 'Vipassana', 'Breathwork'];
+  // Popular sub-slugs (canonical) — featured shortcuts when no pillar is
+  // selected. Order matters; pads with top-by-count if shorter than the
+  // chip cap. Names are resolved via Taxonomy at render time.
+  const POPULAR_RETREAT_SUBS = [
+    'yoga-teacher-training', 'silent', 'vinyasa-yoga', 'ayurveda', 'womens',
+    'trauma-healing', 'kundalini-yoga', 'yin-restorative', 'vipassana', 'breathwork'
+  ];
+
+  // Look up a sub by slug across all retreat pillars; returns sub object or null.
+  function findRetreatSubBySlug(slug) {
+    if (!slug) return null;
+    for (const p of T.RETREAT_TAXONOMY) {
+      const s = p.subs.find(x => x.slug === slug);
+      if (s) return { pillar: p, sub: s };
+    }
+    return null;
+  }
+  // Resolve sub-slug → display name (records reference subs by name).
+  function subSlugToName(slug) {
+    const found = findRetreatSubBySlug(slug);
+    return found ? found.sub.name : '';
+  }
+  // Build a sub-slug → record-count map (records carry sub by name, so we
+  // bridge through taxonomy first).
+  function buildRetreatSubCounts() {
+    const nameToSlug = new Map();
+    T.RETREAT_TAXONOMY.forEach(p => p.subs.forEach(s => nameToSlug.set(s.name, s.slug)));
+    const counts = new Map();
+    for (const r of RETREATS) {
+      const slug = nameToSlug.get(r.sub);
+      if (slug) counts.set(slug, (counts.get(slug) || 0) + 1);
+    }
+    return counts;
+  }
 
   /* ── State ─────────────────────────────────────────────── */
   const state = {
@@ -715,7 +733,10 @@ h1.page-title {
       const L = LENGTHS.find(x => x.slug === state.length);
       if (L) list = list.filter(r => r.nights >= L.min && r.nights <= L.max);
     }
-    if (state.sub) list = list.filter(r => r.sub === state.sub);
+    if (state.sub) {
+      const subName = subSlugToName(state.sub);
+      if (subName) list = list.filter(r => r.sub === subName);
+    }
 
     const dir = (k) => k === 'PRICE_ASC' ? 1 : k === 'DURATION_ASC' ? 1 : k === 'DATE_ASC' ? 1 : -1;
     list.sort((a, b) => {
@@ -742,7 +763,7 @@ h1.page-title {
     else if (state.practice && state.dest) { t = `${practice} retreats in ${dest}`; e = 'Filtered'; }
     else if (state.practice) { t = `${practice} retreats`; e = 'Practice'; }
     else if (state.dest) { t = `Retreats in ${dest}`; e = 'Destination'; }
-    if (state.sub) s = `Filtered by ${state.sub}`;
+    if (state.sub) s = `Filtered by ${subSlugToName(state.sub) || state.sub}`;
     else if (state.season) s = findLabel(SEASONS, state.season);
     title.textContent = t;
     eyebrow.textContent = e;
@@ -770,32 +791,18 @@ h1.page-title {
     document.getElementById('sortSelect').value = state.sort;
   }
 
-  /* ── Practice pill label: "Yoga · Vinyasa Yoga" if sub selected ── */
+  /* ── Practice pill label (delegated to CategoryModel) ── */
   function practicePillLabel() {
-    if (!state.practice && !state.sub) return 'Any practice';
-    const pillar = T.findPillar(T.RETREAT_TAXONOMY, state.practice);
-    const pillarName = pillar ? pillar.name : (findLabel(PRACTICES, state.practice) || '');
-    if (state.sub) {
-      return pillarName ? `${pillarName} · ${state.sub}` : state.sub;
-    }
-    return pillarName || 'Any practice';
+    return window.CategoryModel.formatLabel(
+      T.RETREAT_TAXONOMY,
+      { pillar: state.practice, sub: state.sub },
+      'Any practice'
+    );
   }
 
-  /* ── Render: chip row (popular sub-categories with counts) ─ */
+  /* ── Render: chip row — delegated to shared CategoryChips module ── */
   function renderChips() {
-    const row = document.getElementById('chipRow');
-    const counts = new Map();
-    for (const r of RETREATS) counts.set(r.sub, (counts.get(r.sub) || 0) + 1);
-    const subs = POPULAR_SUBS.filter(s => counts.has(s));
-    const html = [
-      `<button class="chip${!state.sub ? ' is-active' : ''}" type="button" data-sub="">All practices</button>`,
-      ...subs.map(s => {
-        const isActive = state.sub === s;
-        const c = counts.get(s) || 0;
-        return `<button class="chip${isActive ? ' is-active' : ''}" type="button" data-sub="${htmlEscape(s)}">${htmlEscape(s)} <span class="chip-count">· ${c}</span></button>`;
-      })
-    ].join('');
-    row.innerHTML = html;
+    CategoryChips.render(document.getElementById('chipRow'));
   }
 
   /* ── Render: result list — events-style row-card ─────── */
@@ -979,34 +986,16 @@ h1.page-title {
       });
     });
   }
-  /* Practice pill: tree picker (pillars + sub-categories from RETREAT_TAXONOMY). */
-  document.getElementById('practicePill').addEventListener('click', e => {
-    if (e.target.closest('[data-clear="practice"]')) {
-      state.practice = ''; state.sub = '';
+  /* Practice pill: tree picker (CategoryModel + PillPicker). */
+  CategoryModel.wireCategoryPill({
+    pillEl: document.getElementById('practicePill'),
+    taxonomy: T.RETREAT_TAXONOMY,
+    anyLabel: 'Any practice',
+    getValue: () => ({ pillar: state.practice, sub: state.sub }),
+    onChange: ({ pillar, sub }) => {
+      state.practice = pillar; state.sub = sub;
       writeUrl(); render();
-      return;
     }
-    // Current value: 'pillar/sub-slug' if sub set, else just pillar.
-    let current = state.practice || '';
-    if (state.practice && state.sub) {
-      const pillar = T.findPillar(T.RETREAT_TAXONOMY, state.practice);
-      const subEntry = pillar?.subs.find(s => s.name === state.sub);
-      if (subEntry) current = `${state.practice}/${subEntry.slug}`;
-    }
-    PillPicker.open(e.currentTarget, PRACTICE_TREE, current, (val) => {
-      if (!val) { state.practice = ''; state.sub = ''; }
-      else if (val.includes('/')) {
-        const [pillarSlug, subSlug] = val.split('/');
-        const pillar = T.findPillar(T.RETREAT_TAXONOMY, pillarSlug);
-        const sub = pillar?.subs.find(s => s.slug === subSlug);
-        state.practice = pillarSlug;
-        state.sub = sub ? sub.name : '';
-      } else {
-        state.practice = val;
-        state.sub = '';
-      }
-      writeUrl(); render();
-    });
   });
   wirePill('destPill',     DESTINATIONS, 'dest');
   wirePill('seasonPill',   SEASONS,      'season');
@@ -1016,12 +1005,19 @@ h1.page-title {
     state.sort = e.target.value; writeUrl(); render();
   });
 
-  document.getElementById('chipRow').addEventListener('click', e => {
-    const btn = e.target.closest('[data-sub]');
-    if (!btn) return;
-    const sub = btn.dataset.sub;
-    state.sub = (state.sub === sub) ? '' : sub;
-    writeUrl(); render();
+  // Chip row — pillar+sub shortcut. Counts derive from RETREATS records,
+  // bridged through the taxonomy because records reference subs by name.
+  CategoryChips.mount({
+    rowEl: document.getElementById('chipRow'),
+    taxonomy: T.RETREAT_TAXONOMY,
+    anyLabel: 'practices',
+    popular: POPULAR_RETREAT_SUBS,
+    counts: buildRetreatSubCounts(),
+    getValue: () => ({ pillar: state.practice, sub: state.sub }),
+    onChange: ({ pillar, sub }) => {
+      state.practice = pillar; state.sub = sub;
+      writeUrl(); render();
+    }
   });
 
   /* Card click → open detail. Reset button → clear filters. */
@@ -1077,7 +1073,9 @@ h1.page-title {
     state.loading = false;
     render();
   }
-  init();
+  // Wait for /categories.json to load before first render — chip rows
+  // and pillar lists iterate T.RETREAT_TAXONOMY at boot.
+  T.ready.then(init);
 </script>
 
 <script src="auth-overlay.js"></script>
