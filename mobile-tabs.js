@@ -24,9 +24,9 @@
   'use strict';
 
   const HREFS = {
-    events:    'events.html',
-    retreats:  'retreats.html',
-    trainings: 'trainings.html',
+    events:    'events-search-results.html',
+    retreats:  'retreats-search-results.html',
+    trainings: 'trainings-search-results.html',
   };
 
   const ICONS = {

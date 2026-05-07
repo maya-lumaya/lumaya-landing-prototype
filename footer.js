@@ -104,8 +104,8 @@
           <h4 class="footer-col-heading">Explore</h4>
           <ul>
             <li><a href="events.html">Events</a></li>
-            <li><a href="index.html#retreats">Retreats</a></li>
-            <li><a href="index.html#trainings">Trainings</a></li>
+            <li><a href="retreats.html">Retreats</a></li>
+            <li><a href="trainings.html">Trainings</a></li>
             <li><a href="events-hub.html">Berlin</a></li>
           </ul>
         </div>

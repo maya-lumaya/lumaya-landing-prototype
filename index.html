@@ -1111,10 +1111,6 @@
 
       <div class="search-foot">
         <div class="chips" id="chips"></div>
-        <div class="url-preview">
-          <span>opens</span>
-          <code id="urlPreview">/</code>
-        </div>
       </div>
     </div>
   </div>
@@ -1126,7 +1122,6 @@
     <div class="section-header">
       <div>
         <h2>Here's what's happening.</h2>
-        <p>Three windows into the marketplace — local tonight, trending destinations, and trainings you'd otherwise miss.</p>
       </div>
       <a href="#" class="all">Browse everything →</a>
     </div>
@@ -1210,7 +1205,6 @@
     <div class="section-header">
       <div>
         <h2>Browse by category.</h2>
-        <p>Each pillar opens into a full taxonomy of sub-categories — events span workshops, ceremonies, dance, music and talks; retreats and trainings dive into discipline-specific paths. Go as broad or as deep as you want.</p>
       </div>
       <a href="events-search-results.html" class="all">All categories →</a>
     </div>
@@ -1624,8 +1618,7 @@
     mode: 'all',
     formEl: document.getElementById('searchPill'),
     tabsEl: document.getElementById('tabs'),
-    chipsEl: document.getElementById('chips'),
-    urlPreviewEl: document.getElementById('urlPreview')
+    chipsEl: document.getElementById('chips')
   });
   // Aliases — used by renderCatsPillars and the mobile step-flow modal below
   const state = pillInstance.state;

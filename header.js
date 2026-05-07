@@ -17,9 +17,9 @@
  *            Used on detail / hub / host pages.
  *
  * Context (only meaningful when mode = hero):
- *   landing (default) — nav links go to hub pages (events.html etc.).
- *   search            — nav links go to the corresponding *-search-results.html.
- *                       Lets the header act as a pillar switcher inside search.
+ *   landing (default) — nav links go to the corresponding *-search-results.html.
+ *   search            — same as landing — nav links go to *-search-results.html.
+ *                       Lets the header act as a pillar switcher across pages.
  *
  * Auth:
  *   out (default) — "Log in"  +  "Sign up" buttons in nav-actions.
@@ -213,9 +213,9 @@
   // --------------------------------------------------------
   const NAV_HREFS = {
     landing: {
-      events:    'events.html',
-      retreats:  'retreats.html',
-      trainings: 'trainings.html',
+      events:    'events-search-results.html',
+      retreats:  'retreats-search-results.html',
+      trainings: 'trainings-search-results.html',
     },
     search: {
       events:    'events-search-results.html',
