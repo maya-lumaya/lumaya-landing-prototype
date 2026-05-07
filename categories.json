@@ -171,15 +171,6 @@
         { "slug": "drum-circle",           "name": "Drum Circle",            "count": 145 }
       ]
     },
-    {
-      "slug": "talks-performances", "name": "Talks & Performances", "icon": "people", "count": 288,
-      "subs": [
-        { "slug": "lecture",              "name": "Lecture",                "count": 65 },
-        { "slug": "experiential-lecture", "name": "Experiential Lectures",  "count": 35 },
-        { "slug": "storytelling",         "name": "Storytelling",           "count": 25 },
-        { "slug": "presentation",         "name": "Presentation",           "count": 30 }
-      ]
-    }
   ],
   "retreats": [
     {
