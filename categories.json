@@ -24,7 +24,6 @@
         { "slug": "qi-gong",               "name": "Qi Gong",               "count": 210  },
         { "slug": "tai-chi",               "name": "Tai Chi",               "count": 180  },
         { "slug": "acro-yoga",             "name": "Acro Yoga",             "count": 130  },
-        { "slug": "martial-arts",          "name": "Martial Arts",          "count": 110  },
         { "slug": "ice-bath",              "name": "Ice Bath",              "count": 195, "trending": true },
         { "slug": "shamanism",             "name": "Shamanism",             "count": 230, "sensitive": true },
         { "slug": "reiki",                 "name": "Reiki",                 "count": 220  },
@@ -42,7 +41,6 @@
         { "slug": "nvc",                   "name": "Nonviolent Communication", "count": 130 },
         { "slug": "cuddle-workshop",       "name": "Cuddle Workshop",       "count": 95   },
         { "slug": "shibari",               "name": "Shibari",               "count": 65, "sensitive": true },
-        { "slug": "dating",                "name": "Dating",                "count": 75   },
         { "slug": "womens-circle",         "name": "Women's Circle",        "count": 320  },
         { "slug": "womens-workshop",       "name": "Women's Workshop",      "count": 240  },
         { "slug": "mens-circle",           "name": "Men's Circle",          "count": 215  },
@@ -72,10 +70,6 @@
         { "slug": "childrens-workshop",    "name": "Children's Workshop",   "count": 110  },
         { "slug": "childrens-yoga",        "name": "Children's Yoga",       "count": 65   },
         { "slug": "playfulness",           "name": "Playfulness",           "count": 110  },
-        { "slug": "cooking",               "name": "Cooking",               "count": 65   },
-        { "slug": "entrepreneurship",      "name": "Entrepreneurship",      "count": 55   },
-        { "slug": "course",                "name": "Course",                "count": 90   },
-        { "slug": "training",              "name": "Training",              "count": 80   },
         { "slug": "queer",                 "name": "Queer",                 "count": 70   },
         { "slug": "hsp",                   "name": "HSP",                   "count": 55   },
         { "slug": "shiatsu",               "name": "Shiatsu",               "count": 50   },
@@ -150,20 +144,10 @@
         { "slug": "shamanic-dance",         "name": "Shamanic Dance",         "count": 75  },
         { "slug": "sacred-dance",           "name": "Sacred Dance",           "count": 65  },
         { "slug": "sufi-dance",             "name": "Sufi Dance",             "count": 40  },
-        { "slug": "spinning",               "name": "Spinning",               "count": 25  },
         { "slug": "trance-dance",           "name": "Trance Dance",           "count": 95  },
         { "slug": "ritual-dance",           "name": "Ritual Dance",           "count": 45  },
-        { "slug": "bellydance",             "name": "Bellydance",             "count": 55  },
-        { "slug": "zouk",                   "name": "Zouk",                   "count": 35  },
-        { "slug": "balfolk",                "name": "Balfolk",                "count": 25  },
-        { "slug": "latin-dance",            "name": "Latin Dance",            "count": 40  },
-        { "slug": "forro",                  "name": "Forró",                  "count": 30  },
-        { "slug": "folk-dance",             "name": "Folk Dance",             "count": 30  },
-        { "slug": "haka",                   "name": "Haka",                   "count": 10  },
         { "slug": "intuitive-dance",        "name": "Intuitive Dance",        "count": 65  },
         { "slug": "dance-workshop",         "name": "Dance Workshop",         "count": 95  },
-        { "slug": "dance-coaching",         "name": "Dance Coaching",         "count": 35  },
-        { "slug": "dance-performance",      "name": "Dance Performance",      "count": 25  },
         { "slug": "yin-dance",              "name": "Yin Dance",              "count": 20  },
         { "slug": "childrens-dance",        "name": "Children's Dance",       "count": 30  }
       ]
@@ -183,17 +167,8 @@
         { "slug": "sanskrit-mantra",       "name": "Sanskrit Mantra Recitation", "count": 40 },
         { "slug": "live-music",            "name": "Live Music",             "count": 165 },
         { "slug": "lying-concert",         "name": "Lying Concert",          "count": 75  },
-        { "slug": "performance",           "name": "Performance",            "count": 95  },
-        { "slug": "concert",               "name": "Concert",                "count": 130 },
-        { "slug": "music-evening",         "name": "Music Evening",          "count": 50  },
-        { "slug": "music-lesson",          "name": "Music Lesson",           "count": 35  },
-        { "slug": "jam-session",           "name": "Jam Session",            "count": 65  },
         { "slug": "handpan",               "name": "Handpan",                "count": 75, "trending": true },
-        { "slug": "drum-circle",           "name": "Drum Circle",            "count": 145 },
-        { "slug": "harp",                  "name": "Harp",                   "count": 25  },
-        { "slug": "ukulele",               "name": "Ukulele",                "count": 20  },
-        { "slug": "didgeridoo",            "name": "Didgeridoo",             "count": 30  },
-        { "slug": "psy-trance",            "name": "Psy Trance",             "count": 75  }
+        { "slug": "drum-circle",           "name": "Drum Circle",            "count": 145 }
       ]
     },
     {
@@ -201,17 +176,8 @@
       "subs": [
         { "slug": "lecture",              "name": "Lecture",                "count": 65 },
         { "slug": "experiential-lecture", "name": "Experiential Lectures",  "count": 35 },
-        { "slug": "theater",              "name": "Theater",                "count": 30 },
         { "slug": "storytelling",         "name": "Storytelling",           "count": 25 },
-        { "slug": "presentation",         "name": "Presentation",           "count": 30 },
-        { "slug": "performance",          "name": "Performance",            "count": 35 },
-        { "slug": "concert",              "name": "Concert",                "count": 25 },
-        { "slug": "webinar",              "name": "Webinar",                "count": 20 },
-        { "slug": "film",                 "name": "Film",                   "count": 15 },
-        { "slug": "book-presentation",    "name": "Book Presentation",      "count": 10 },
-        { "slug": "congress",             "name": "Congress",               "count": 10 },
-        { "slug": "cabaret",              "name": "Cabaret",                "count": 8  },
-        { "slug": "podcast",              "name": "Podcast",                "count": 12 }
+        { "slug": "presentation",         "name": "Presentation",           "count": 30 }
       ]
     }
   ],
