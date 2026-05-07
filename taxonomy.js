@@ -23,18 +23,26 @@
 
   /* ── Event categories (flat list) ─────────────────────── */
   const EVENT_CATEGORIES = [
-    { slug: 'yoga',            label: 'Yoga',             trending: true },
-    { slug: 'meditation',      label: 'Meditation',       trending: true },
-    { slug: 'breathwork',      label: 'Breathwork' },
-    { slug: 'sound_healing',   label: 'Sound healing' },
-    { slug: 'tantra',          label: 'Tantra' },
-    { slug: 'cacao_ceremony',  label: 'Cacao ceremony' },
-    { slug: 'conscious_dance', label: 'Conscious dance' },
-    { slug: 'embodiment',      label: 'Embodiment' },
-    { slug: 'kirtan',          label: 'Kirtan' },
-    { slug: 'temple_night',    label: 'Temple night' },
-    { slug: 'festival',        label: 'Festival' },
-    { slug: 'retreat',         label: 'Retreat (one-off)' }
+    { slug: 'yoga',                 label: 'Yoga',                 trending: true },
+    { slug: 'meditation',           label: 'Meditation',           trending: true },
+    { slug: 'breathwork',           label: 'Breathwork' },
+    { slug: 'sound_healing',        label: 'Sound healing' },
+    { slug: 'tantra',               label: 'Tantra' },
+    { slug: 'cacao_ceremony',       label: 'Cacao ceremony' },
+    { slug: 'conscious_dance',      label: 'Conscious dance' },
+    { slug: 'embodiment',           label: 'Embodiment' },
+    { slug: 'kirtan',               label: 'Kirtan' },
+    { slug: 'temple_night',         label: 'Temple night' },
+    { slug: 'festival',             label: 'Festival' },
+    { slug: 'retreat',              label: 'Retreat (one-off)' },
+    { slug: 'circle',               label: 'Circle',              trending: true },
+    { slug: 'ceremony',             label: 'Ceremony' },
+    { slug: 'conscious_party',      label: 'Conscious party',     trending: true },
+    { slug: 'ice_bath',             label: 'Ice bath' },
+    { slug: 'energy_healing',       label: 'Energy healing' },
+    { slug: 'conscious_touch',      label: 'Conscious touch' },
+    { slug: 'mystical_arts',        label: 'Mystical arts' },
+    { slug: 'family_constellation', label: 'Family constellation' }
   ];
 
   /* ── Retreat taxonomy (pillars + sub-categories) ──────── */

@@ -31,7 +31,9 @@ INPUTS — READ THESE FIRST
    Each file: { city, category, keywords[], en: { headline, body }, de, es }.
    Read all categories — yoga, meditation, breathwork, sound_healing,
    cacao_ceremony, conscious_dance, kirtan, tantra, temple_night,
-   embodiment, retreat, festival, other.
+   embodiment, retreat, festival, circle, ceremony, conscious_party,
+   ice_bath, energy_healing, conscious_touch, mystical_arts,
+   family_constellation, other.
 2. Existing page: lumaya-landing-prototype/{city-slug}.html
    Match the structure of berlin.html exactly.
 3. If a Berlin equivalent exists already, READ IT — your job is to
@@ -66,8 +68,10 @@ HTML STRUCTURE (output exactly this skeleton, filled in)
        lineage / modality / tradition for the practice. Cover:
        meditation, breathwork, sound healing, ecstatic / conscious
        dance, tantra, cacao ceremony, kirtan, embodiment,
-       temple nights. Bold the strongest navigational keyword
-       in each segment.}
+       temple nights, circles, ceremonies, conscious parties,
+       ice baths, energy healing, conscious touch, mystical arts,
+       family constellations. Bold the strongest navigational
+       keyword in each segment.}
     </p>
 
     <h3>Neighborhoods, Venues, and the Wider Region</h3>
@@ -130,6 +134,14 @@ terms with search volume. Aim to cover the top keyword from each:
   - {city} kirtan
   - {city} tantra (if scene exists)
   - {city} temple night (if scene exists)
+  - {city} women's circle / men's circle / sharing circle
+  - {city} moon ceremony / fire ceremony
+  - {city} conscious party / sober rave / morning rave
+  - {city} ice bath / cold plunge / Wim Hof
+  - {city} energy healing / reiki / kundalini activation
+  - {city} contact improv / cuddle party / conscious touch
+  - {city} human design / astrology / tarot
+  - {city} family constellation / systemic constellation
   - {city} retreat / wellness retreat / yoga retreat near {city}
   - conscious festival {city}
 Bold 3–5 of these per major paragraph. NEVER bold every keyword —
@@ -198,7 +210,7 @@ Keyword research JSON files for every supported city + practice combination live
 ../stack/frontend/docs/seo-research/{city-slug}-{category}.json
 ```
 
-Categories: `breathwork`, `cacao_ceremony`, `conscious_dance`, `embodiment`, `festival`, `kirtan`, `meditation`, `other`, `retreat`, `sound_healing`, `tantra`, `temple_night`, `yoga`.
+Categories: `breathwork`, `cacao_ceremony`, `ceremony`, `circle`, `conscious_dance`, `conscious_party`, `conscious_touch`, `embodiment`, `energy_healing`, `family_constellation`, `festival`, `ice_bath`, `kirtan`, `meditation`, `mystical_arts`, `other`, `retreat`, `sound_healing`, `tantra`, `temple_night`, `yoga`.
 
 Schema:
 
